@@ -18,23 +18,23 @@ from typing import Any
 import httpx
 import pytest
 
-from canvas_mcp.core import audit
-from canvas_mcp.core.selfhost import account_api
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.account_core import (
+from steward import audit
+from steward import account_api
+from steward import accounts as acc
+from steward.account_core import (
     SESSION_COOKIE,
     CanvasCheckError,
     CanvasIdentity,
 )
-from canvas_mcp.core.selfhost.accounts import AccessPolicy, AccessRule
-from canvas_mcp.core.selfhost.custody import CUSTODY_NOTICE_VERSION
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
-from canvas_mcp.core.selfhost.schools import (
+from steward.accounts import AccessPolicy, AccessRule
+from steward.custody import CUSTODY_NOTICE_VERSION
+from steward.db.errors import StoreUnavailable
+from steward.schools import (
     DirectoryEntry,
     School,
 )
-from canvas_mcp.core.selfhost.token_store import ToolPrefs
-from canvas_mcp.core.selfhost.tool_prefs import ToolPrefsCache, WriteToolCatalog
+from steward.token_store import ToolPrefs
+from steward.tool_prefs import ToolPrefsCache, WriteToolCatalog
 
 from .account_fixture import (
     BASE,
@@ -513,7 +513,7 @@ class TestMe:
     ) -> None:
         from zoneinfo import ZoneInfo
 
-        from canvas_mcp.core.selfhost import account_core
+        from steward import account_core
 
         monkeypatch.setattr(
             account_core, "_display_tz", lambda: ZoneInfo("America/Los_Angeles")
@@ -530,14 +530,14 @@ class TestMe:
         assert user.get("/me").json()["ui_locale"] is None
 
     def test_a_disabled_account_is_signed_out(self, h: Harness, user: Api) -> None:
-        from canvas_mcp.core.selfhost.token_store import OPERATOR
+        from steward.token_store import OPERATOR
 
         assert user.get("/me").status_code == 200
         h.store.disable_principal(KEY, actor=OPERATOR, reason="operator_disabled")
         error_of(user.get("/me"), 401, "not_authenticated")
 
     def test_a_changed_session_epoch_is_signed_out(self, h: Harness, user: Api) -> None:
-        from canvas_mcp.core.selfhost.token_store import OPERATOR
+        from steward.token_store import OPERATOR
 
         h.store.disable_principal(KEY, actor=OPERATOR, reason="operator_disabled")
         h.store.enable_principal(KEY, actor=OPERATOR)
@@ -1092,7 +1092,7 @@ class TestCanvasTokenSave:
         events: list[dict[str, Any]],
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
-        from canvas_mcp.core.selfhost.token_store import OPERATOR
+        from steward.token_store import OPERATOR
 
         real = h.store.read_session_snapshot
 
@@ -1414,7 +1414,7 @@ class TestRecheck:
     def test_an_unreadable_token(
         self, h: Harness, user: Api, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        from canvas_mcp.core.selfhost.token_store import TokenDecryptionError
+        from steward.token_store import TokenDecryptionError
 
         self.invalid(h, "decrypt_failed")
 
@@ -2138,7 +2138,7 @@ class TestWriteToolsSave:
         )
 
     def test_a_disabled_account_cannot_save(self, tmp_path: pathlib.Path) -> None:
-        from canvas_mcp.core.selfhost.token_store import OPERATOR
+        from steward.token_store import OPERATOR
 
         r = wt_rig(tmp_path)
         sign_in(r.h)
@@ -2158,7 +2158,7 @@ def wt_rig_with(r: WtRig, *, ceiling: set[str]) -> Api:
     from starlette.applications import Starlette
     from starlette.testclient import TestClient
 
-    from canvas_mcp.core.selfhost.account_core import build_account_app
+    from steward.account_core import build_account_app
 
     async def listing() -> list[str]:
         return list(REGISTERED)
@@ -2454,7 +2454,7 @@ class TestOwnerRead:
     def test_a_disabled_account_shows_why(self, h: Harness, api: Api) -> None:
         seed_people(h)
         sign_in_owner(h)
-        from canvas_mcp.core.selfhost.token_store import OPERATOR
+        from steward.token_store import OPERATOR
 
         h.store.disable_principal(KEY_2, actor=OPERATOR, reason="operator_disabled")
         bob = next(
@@ -2684,7 +2684,7 @@ class TestOwnerActions:
         monkeypatch: pytest.MonkeyPatch,
         events: list[dict[str, Any]],
     ) -> None:
-        from canvas_mcp.core.selfhost.token_store import AccessActionRefused
+        from steward.token_store import AccessActionRefused
 
         seed_people(h)
         sign_in_owner(h)

@@ -24,13 +24,13 @@ from dbbackend import IS_POSTGRES, make_store, raw_sql
 from sqlalchemy import text
 from sqlalchemy.exc import DBAPIError
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.authz.models import ExchangeOutcome as X
-from canvas_mcp.core.selfhost.authz.models import RotateOutcome as R
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.authz.transactions import SqlLoginStateStore
-from canvas_mcp.core.selfhost.settings import AuthzSettings
-from canvas_mcp.core.selfhost.token_store import OPERATOR, Keyring, TokenStore
+from steward.authz import tokens as tk
+from steward.authz.models import ExchangeOutcome as X
+from steward.authz.models import RotateOutcome as R
+from steward.authz.store import AuthzStore
+from steward.authz.transactions import SqlLoginStateStore
+from steward.settings import AuthzSettings
+from steward.token_store import OPERATOR, Keyring, TokenStore
 
 from ..conftest import OID_A, make_account
 from .conftest import KEYS_RAW, Clock

@@ -8,7 +8,7 @@ from fastmcp import Client, FastMCP
 from fastmcp.server.auth import AccessToken
 from sqlalchemy import select
 
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     RequestTokenState,
     get_request_token_state,
@@ -16,22 +16,22 @@ from canvas_mcp.core.credentials import (
     set_request_principal,
     set_request_token_state,
 )
-from canvas_mcp.core.selfhost import tool_gate
-from canvas_mcp.core.selfhost.custody import (
+from steward import tool_gate
+from steward.custody import (
     CUSTODY_NOTICE_VERSION,
     CustodyAcknowledgement,
 )
-from canvas_mcp.core.selfhost.db import schema
-from canvas_mcp.core.selfhost.mcp_state import MCP_READ, McpRead
-from canvas_mcp.core.selfhost.request_context import (
+from steward.db import schema
+from steward.mcp_state import MCP_READ, McpRead
+from steward.request_context import (
     invalid_token_message,
     not_enrolled_message,
     token_rejected_message,
     token_revoked_message,
     unreadable_token_message,
 )
-from canvas_mcp.core.selfhost.token_health import TokenHealth
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_health import TokenHealth
+from steward.token_store import (
     REASON_CANVAS_TOKEN_REJECTED,
     REASON_DECRYPT_FAILED,
     REASON_REVOKED_BY_ADMIN,
@@ -40,7 +40,7 @@ from canvas_mcp.core.selfhost.token_store import (
     TokenDecryptionError,
     TokenStore,
 )
-from canvas_mcp.core.selfhost.tool_gate import SelfhostCredentialGate
+from steward.tool_gate import SelfhostCredentialGate
 
 from .conftest import OID_A, acct_key, make_account, make_principal
 from .test_request_context import (
@@ -300,7 +300,7 @@ class TestToolGate:
     async def test_dead_token_stops_initial_and_later_calls(
         self, server, verified_oid, mounted
     ):
-        from canvas_mcp.core.credentials import set_missing_credentials_message
+        from steward.request_state import set_missing_credentials_message
 
         message = token_rejected_message(ACCOUNT_URL)
         set_request_principal(make_principal(OID_A))

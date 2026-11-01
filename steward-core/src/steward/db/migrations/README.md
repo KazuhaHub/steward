@@ -157,11 +157,11 @@ Run these with the server's database and matching `CANVAS_TOKEN_KEYS`. The
 commands live in this package and are lazily registered by `token_admin`.
 
 ```sh
-python -m canvas_mcp.core.selfhost.token_admin db current
-python -m canvas_mcp.core.selfhost.token_admin db upgrade --dry-run
-python -m canvas_mcp.core.selfhost.token_admin db upgrade
+python -m steward.token_admin db current
+python -m steward.token_admin db upgrade --dry-run
+python -m steward.token_admin db upgrade
 # SQLite: choose a new private backup file in an existing protected directory.
-python -m canvas_mcp.core.selfhost.token_admin db upgrade --backup /data/backups/pre-upgrade.sqlite3
+python -m steward.token_admin db upgrade --backup /data/backups/pre-upgrade.sqlite3
 ```
 
 `db current` returns 0 for a compatible database, 4 for an empty or behind
@@ -180,9 +180,9 @@ before import. From `deploy/selfhost`, with the reviewed v1 image selected:
 docker compose stop canvas-mcp
 docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d postgres
 docker compose -f docker-compose.yml -f docker-compose.postgres.yml run --rm --no-deps \
-  canvas-mcp python -m canvas_mcp.core.selfhost.token_admin db import-sqlite /data/canvas-mcp/tokens.sqlite3
+  canvas-mcp python -m steward.token_admin db import-sqlite /data/canvas-mcp/tokens.sqlite3
 docker compose -f docker-compose.yml -f docker-compose.postgres.yml run --rm --no-deps \
-  canvas-mcp python -m canvas_mcp.core.selfhost.token_admin check
+  canvas-mcp python -m steward.token_admin check
 docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d
 ```
 

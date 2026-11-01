@@ -13,12 +13,12 @@ import pytest
 import respx
 from dbbackend import raw_connection
 
-from canvas_mcp.core.selfhost.request_context import (
+from steward.request_context import (
     token_rejected_message,
     token_revoked_message,
     unreadable_token_message,
 )
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_store import (
     REASON_CANVAS_TOKEN_REJECTED,
     REASON_DECRYPT_FAILED,
     REASON_REVOKED_BY_ADMIN,
@@ -27,9 +27,9 @@ from canvas_mcp.core.selfhost.token_store import (
 )
 from canvas_mcp.tools import register_course_tools
 
-from .account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
-from .authz.stack import User
-from .conftest import OID_A, OID_B, acct_key
+from ..account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
+from ..authz.stack import User
+from ..conftest import OID_A, OID_B, acct_key
 from .test_selfhost_integration import call_tool, rpc, text_of
 
 BASE = "https://canvas.example.test"

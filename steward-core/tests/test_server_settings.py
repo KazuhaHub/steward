@@ -7,16 +7,16 @@ import pytest
 from dbbackend import IS_POSTGRES, pg_database
 from sqlalchemy import bindparam, text
 
-from canvas_mcp.core.selfhost.db.engine import Database
-from canvas_mcp.core.selfhost.db.migrations import runner as migrate
-from canvas_mcp.core.selfhost.db.settings_repo import (
+from steward.db.engine import Database
+from steward.db.migrations import runner as migrate
+from steward.db.settings_repo import (
     SettingsAccessDenied,
     SettingsConflict,
     read_settings,
     save_setting,
 )
-from canvas_mcp.core.selfhost.db.types import JsonDoc, new_id
-from canvas_mcp.core.selfhost.server_settings import (
+from steward.db.types import JsonDoc, new_id
+from steward.server_settings import (
     SETTINGS,
     provider_display_name,
     validate_provider_names,

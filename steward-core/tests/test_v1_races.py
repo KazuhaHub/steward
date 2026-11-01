@@ -7,13 +7,13 @@ import pytest
 from dbbackend import IS_POSTGRES
 from sqlalchemy import insert, select
 
-from canvas_mcp.core.selfhost.authz import tokens
-from canvas_mcp.core.selfhost.authz.models import ExchangeOutcome
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.maintenance import DAY, MaintenanceRunner
-from canvas_mcp.core.selfhost.token_store import DISABLE_REASON_OPERATOR, OPERATOR
+from steward.authz import tokens
+from steward.authz.models import ExchangeOutcome
+from steward.authz.store import AuthzStore
+from steward.db import schema as s
+from steward.db.types import new_id
+from steward.maintenance import DAY, MaintenanceRunner
+from steward.token_store import DISABLE_REASON_OPERATOR, OPERATOR
 
 from .test_v1_store import account, put, stores  # noqa: F401
 

@@ -61,7 +61,7 @@ def require_backend() -> None:
 
 def install_tracking() -> None:
     """Remember every ``Database`` built during the run so the tests can dispose it."""
-    from canvas_mcp.core.selfhost.db.engine import Database
+    from steward.db.engine import Database
 
     original = Database.__init__
 
@@ -101,8 +101,8 @@ def pg_database(path: str | os.PathLike[str], url: str | None = None) -> Any:
     """A ``Database`` on PostgreSQL whose tables live in a schema derived from ``path``."""
     from sqlalchemy import event
 
-    from canvas_mcp.core.selfhost.db.engine import Database
-    from canvas_mcp.core.selfhost.db.url import parse_database_url
+    from steward.db.engine import Database
+    from steward.db.url import parse_database_url
 
     schema = schema_for(path)
     if schema not in _SCHEMAS:
@@ -140,12 +140,12 @@ def make_store(
     different, empty one. ``public=True`` uses the default schema instead, which is
     where a server or the ``token_admin`` CLI started from ``DATABASE_URL`` looks.
     """
-    from canvas_mcp.core.selfhost.token_store import TokenStore
+    from steward.token_store import TokenStore
 
     if IS_POSTGRES:
         if public:
-            from canvas_mcp.core.selfhost.db.engine import Database
-            from canvas_mcp.core.selfhost.db.url import parse_database_url
+            from steward.db.engine import Database
+            from steward.db.url import parse_database_url
 
             db = Database(parse_database_url(PG_URL, pathlib.Path("/data")))
             return TokenStore(db, keyring, clock=clock)

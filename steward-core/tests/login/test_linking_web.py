@@ -8,8 +8,8 @@ from typing import Any
 import pytest
 from dbbackend import raw_sql
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward import accounts as acc
+from steward.token_store import OPERATOR
 
 from ..authz.stack import ALICE, BOB, Browser
 from .fake_idp import GitHubUser
@@ -431,7 +431,7 @@ class TestLinkFailsBeforeTheRecordIsPopped:
         assert response.headers["location"] == "/account/sign-in?error=provider_error"
 
     def test_a_cookie_without_a_purpose_is_refused(self, ps: ProviderStack) -> None:
-        from canvas_mcp.core.selfhost.login.ceremony import (
+        from steward.login.ceremony import (
             FlowCookie,
             new_cookie_payload,
         )

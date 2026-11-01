@@ -3,8 +3,8 @@
 import re
 from pathlib import Path
 
-from canvas_mcp.core.selfhost.account_api import ApiApp
-from canvas_mcp.core.selfhost.routes import (
+from steward.account_api import ApiApp
+from steward.routes import (
     API_PREFIX,
     AUTH_LOGIN,
     auth_callback,
@@ -12,7 +12,7 @@ from canvas_mcp.core.selfhost.routes import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-DEPLOY = ROOT / "deploy/selfhost"
+DEPLOY = ROOT / "deploy"
 
 
 def read(path):
@@ -22,12 +22,12 @@ def read(path):
 def test_frontend_api_contract_and_calls_name_actual_server_routes():
     # route_table only binds endpoints; construction needs no live database here.
     actual = ApiApp.__new__(ApiApp).route_keys()
-    contract = read("web/src/api/contract.ts")
+    contract = read("steward-web/src/api/contract.ts")
     declared = {(method, API_PREFIX + path) for method, path in re.findall(r"['\"](GET|POST|PUT|DELETE|PATCH) (/[^'\"]+)['\"]", contract)}
     assert len(declared) >= 20 and declared == actual
-    calls = {(method, API_PREFIX + path) for method, path in re.findall(r"call\('([A-Z]+) (/[^']+)'", read("web/src/api/endpoints.ts"))}
+    calls = {(method, API_PREFIX + path) for method, path in re.findall(r"call\('([A-Z]+) (/[^']+)'", read("steward-web/src/api/endpoints.ts"))}
     assert calls and calls <= actual
-    assert f"API_BASE_URL = '{API_PREFIX}'" in read("web/src/api/client.ts")
+    assert f"API_BASE_URL = '{API_PREFIX}'" in read("steward-web/src/api/client.ts")
 
 
 def test_proxy_prefixes_do_not_capture_authorize_or_miss_bare_login():
@@ -54,7 +54,7 @@ def test_smoke_and_development_proxy_follow_the_native_paths():
     assert f"status 200 {API_PREFIX}/providers" in smoke
     assert f"status 303 {AUTH_LOGIN}?txn=bogus" in smoke
     assert "status 302 " + auth_login("entra") in smoke
-    vite = read("web/vite.config.ts")
+    vite = read("steward-web/vite.config.ts")
     for prefix in (API_PREFIX, AUTH_LOGIN, "/auth/callback"):
         assert "'" + prefix + "':" in vite
     assert "ACCOUNT_UI=react" not in vite

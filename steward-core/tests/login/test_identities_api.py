@@ -13,7 +13,7 @@ from typing import Any
 import httpx
 import pytest
 
-from canvas_mcp.core.selfhost import account_api
+from steward import account_api
 
 from ..authz.stack import ALICE, BOB, OWNER, Browser, User
 from ..spa_fixture import make_dist
@@ -533,7 +533,7 @@ class TestUnlink:
 
     @staticmethod
     def _entra_issuer_subject(ps: ProviderStack) -> tuple[str, str]:
-        from canvas_mcp.core.selfhost import accounts as acc
+        from steward import accounts as acc
 
         return f"{acc.ENTRA_ISSUER_PREFIX}{ps.stack.settings.tenant_id}/v2.0", ALICE.oid
 

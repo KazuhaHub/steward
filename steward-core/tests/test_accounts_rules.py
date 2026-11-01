@@ -13,8 +13,8 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.accounts import (
+from steward import accounts as acc
+from steward.accounts import (
     AccessPolicy,
     AccessRule,
     AccountFacts,

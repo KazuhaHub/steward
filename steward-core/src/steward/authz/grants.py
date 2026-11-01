@@ -9,7 +9,8 @@ from typing import Any
 from mcp.server.auth.provider import TokenError
 from mcp.shared.auth import OAuthToken
 
-from ...logging import log_info, log_warning
+from steward.common.logging import log_info, log_warning
+
 from ..db.types import new_id
 from ..db.workers import run_store
 from ..settings import AuthzSettings

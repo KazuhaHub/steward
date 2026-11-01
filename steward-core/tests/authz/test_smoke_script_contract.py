@@ -10,7 +10,7 @@ import pytest
 from .stack import BASE as PUBLIC_URL
 from .stack import SCOPE, local_stack
 
-SMOKE = pathlib.Path(__file__).resolve().parents[3] / "deploy" / "selfhost" / "smoke-test.sh"
+SMOKE = pathlib.Path(__file__).resolve().parents[3] / "deploy" / "smoke-test.sh"
 BASE = "http://127.0.0.1:18819"
 PUBLIC = PUBLIC_URL
 UNKNOWN = "00000000-0000-4000-8000-000000000000"
@@ -154,7 +154,7 @@ class TestSectionN:
         [{"SELFHOST_AUTH_MODE": ""}, {"ACCESS_TOKEN_TTL": "1"}],
     )
     def test_a_bad_value_stops_the_server(self, tmp_path, monkeypatch, extra) -> None:
-        from canvas_mcp.core.selfhost.settings import SelfhostConfigError
+        from steward.settings import SelfhostConfigError
 
         with pytest.raises(SelfhostConfigError) as raised:
             with local_stack(tmp_path, monkeypatch, env=extra):

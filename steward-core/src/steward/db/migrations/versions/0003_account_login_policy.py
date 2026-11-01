@@ -7,7 +7,7 @@ from typing import cast
 import sqlalchemy as sa
 from alembic import op
 
-from canvas_mcp.core.selfhost.db.migrations.policy import rebuild_sqlite_table
+from steward.db.migrations.policy import rebuild_sqlite_table
 
 revision = "0003_account_login_policy"
 down_revision = "0002_local_credentials"

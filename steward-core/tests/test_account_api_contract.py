@@ -12,13 +12,13 @@ import re
 
 import pytest
 
-from canvas_mcp.core.selfhost import account_api
-from canvas_mcp.core.selfhost.account_core import (
+from steward import account_api
+from steward.account_core import (
     SIGN_IN_ERROR_CODES,
     AccountConfig,
     build_account_app,
 )
-from canvas_mcp.core.selfhost.login.registry import build_login_runtime
+from steward.login.registry import build_login_runtime
 
 from .authz.stack import BASE, local_stack
 

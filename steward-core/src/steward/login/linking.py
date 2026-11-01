@@ -39,7 +39,7 @@ if TYPE_CHECKING:
     from ..account_core import AccountCore, _Session
     from .registry import LoginRuntime
 
-logger = logging.getLogger("canvas_mcp.selfhost.account")
+logger = logging.getLogger("steward.account")
 
 #: Per account: link starts and unlinks in ten minutes.
 LINK_START_LIMIT = 5

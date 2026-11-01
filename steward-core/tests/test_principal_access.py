@@ -3,10 +3,10 @@
 import pytest
 from sqlalchemy import select
 
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.mcp_state import McpRead
-from canvas_mcp.core.selfhost.principal_access import (
+from steward.authz.store import AuthzStore
+from steward.db import schema as s
+from steward.mcp_state import McpRead
+from steward.principal_access import (
     access_disabled_message,
     access_not_provisioned_message,
     access_pending_message,
@@ -14,7 +14,7 @@ from canvas_mcp.core.selfhost.principal_access import (
     access_unavailable_message,
     snapshot_status,
 )
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_store import (
     DISABLE_REASON_OPERATOR,
     OPERATOR,
     PrincipalStatus,

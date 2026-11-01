@@ -8,7 +8,7 @@ from typing import Any
 import httpx
 import pytest
 
-from canvas_mcp.core.selfhost.schools import (
+from steward.schools import (
     CONFIRM_RESULTS,
     DIRECTORY_SEARCH_PATH,
     INSTRUCTURE_DIRECTORY_URL,
@@ -214,7 +214,7 @@ async def test_resolver_errors_are_unresolvable(error: BaseException) -> None:
 
 
 async def test_system_resolve_uses_getaddrinfo(monkeypatch: pytest.MonkeyPatch) -> None:
-    from canvas_mcp.core.selfhost import schools
+    from steward import schools
 
     def fake_getaddrinfo(host: str, port: int, family: int, kind: int) -> list[Any]:
         assert (host, port) == ("x.edu", 443)
@@ -227,7 +227,7 @@ async def test_system_resolve_uses_getaddrinfo(monkeypatch: pytest.MonkeyPatch) 
 async def test_system_resolve_times_out(monkeypatch: pytest.MonkeyPatch) -> None:
     import time
 
-    from canvas_mcp.core.selfhost import schools
+    from steward import schools
 
     monkeypatch.setattr(schools, "RESOLVE_TIMEOUT_SECONDS", 0.05)
 

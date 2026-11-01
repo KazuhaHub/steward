@@ -6,8 +6,8 @@ import pathlib
 
 import pytest
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.accounts import (
+from steward import accounts as acc
+from steward.accounts import (
     AccessPolicy,
     AccountFacts,
     BootstrapOwner,
@@ -15,11 +15,11 @@ from canvas_mcp.core.selfhost.accounts import (
     bootstrap_sign_in_gives_owner,
     evaluate_admission,
 )
-from canvas_mcp.core.selfhost.app import prepare_selfhost
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.app import prepare_selfhost
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     SelfhostConfigError,
 )
 
@@ -219,7 +219,7 @@ def historic_google_only(store) -> None:  # type: ignore[no-untyped-def]
     """Seed a stranded historical inventory, bypassing current last-owner safeguards."""
     from sqlalchemy import update
 
-    from canvas_mcp.core.selfhost.db import schema
+    from steward.db import schema
 
     with store.database.write() as conn:
         conn.execute(
@@ -405,7 +405,7 @@ def test_the_record_of_a_refused_start_is_the_list_it_was_refused_for(
     monkeypatch: pytest.MonkeyPatch,
     capsys: pytest.CaptureFixture[str],
 ) -> None:
-    from canvas_mcp.core.selfhost import token_admin
+    from steward import token_admin
 
     base_env = default_env(tmp_path, **BOTH)
     first = prepare_selfhost(load_provider_environment(base_env))

@@ -38,7 +38,8 @@ from mcp.server.auth.provider import RegistrationError
 from mcp.shared.auth import InvalidRedirectUriError, OAuthClientInformationFull
 from pydantic import AnyHttpUrl, AnyUrl, PrivateAttr, ValidationError
 
-from ...logging import log_info, log_warning
+from steward.common.logging import log_info, log_warning
+
 from ..db.errors import StoreUnavailable
 from ..db.workers import run_store
 from ..limits import InMemorySlidingWindowLimiter

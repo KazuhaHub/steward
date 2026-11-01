@@ -5,11 +5,11 @@ from concurrent.futures import ThreadPoolExecutor
 import pytest
 from sqlalchemy import delete, select, update
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.login.local_accounts import LocalAccounts
-from canvas_mcp.core.selfhost.login.policy_store import AccountPolicyStore
-from canvas_mcp.core.selfhost.login.provider_config import ProviderConfigurationError
-from canvas_mcp.core.selfhost.token_store import OPERATOR, AccessActionRefused
+from steward.db import schema as s
+from steward.login.local_accounts import LocalAccounts
+from steward.login.policy_store import AccountPolicyStore
+from steward.login.provider_config import ProviderConfigurationError
+from steward.token_store import OPERATOR, AccessActionRefused
 
 from ..authz.stack import BASE
 from .test_database_login_api import installation

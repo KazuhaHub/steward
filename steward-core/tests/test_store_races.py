@@ -21,12 +21,12 @@ import pytest
 from dbbackend import make_store
 from sqlalchemy import text
 
-from canvas_mcp.core.selfhost.custody import (
+from steward.custody import (
     CUSTODY_NOTICE_VERSION,
     CustodyAcknowledgement,
 )
-from canvas_mcp.core.selfhost.db.migrations import runner as migrate
-from canvas_mcp.core.selfhost.token_store import (
+from steward.db.migrations import runner as migrate
+from steward.token_store import (
     DISABLE_REASON_ADMIN,
     DISABLE_REASON_OPERATOR,
     OPERATOR,

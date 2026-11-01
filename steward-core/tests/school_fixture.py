@@ -3,7 +3,7 @@
 from collections.abc import Sequence
 from urllib.parse import urlsplit
 
-from canvas_mcp.core.selfhost.schools import (
+from steward.schools import (
     DirectoryEntry,
     DirectoryError,
     School,

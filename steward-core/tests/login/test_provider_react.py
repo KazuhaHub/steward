@@ -98,7 +98,7 @@ def test_failures_are_closed_codes_on_the_sign_in_page(ps: ProviderStack, provid
 
 @pytest.mark.parametrize("request_delay", [0, 0.25], ids=["immediate", "scheduler-delay"])
 def test_every_failure_kind_has_a_code_the_page_knows(ps: ProviderStack, request_delay: float) -> None:
-    from canvas_mcp.core.selfhost.account_core import SIGN_IN_ERROR_CODES
+    from steward.account_core import SIGN_IN_ERROR_CODES
 
     person = ps.person()
     # state_invalid: no cookie

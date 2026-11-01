@@ -28,7 +28,8 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 
-from ..credentials import note_credential_generation
+from steward.request_state import note_credential_generation
+
 from . import accounts as acc
 from .accounts import (
     AccessPolicy,

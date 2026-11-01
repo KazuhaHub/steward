@@ -15,13 +15,15 @@ from typing import Any
 import pytest
 from dbbackend import make_store
 
-import canvas_mcp
-from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore
+import steward
+from steward.token_store import Keyring, TokenStore
 
 #: The checkout under test must be the code that runs (a stale site-packages copy of an
 #: older checkout would silently test the wrong implementation).
 REPO = pathlib.Path(__file__).resolve().parents[3]
-assert pathlib.Path(canvas_mcp.__file__).resolve().is_relative_to(REPO), canvas_mcp.__file__
+assert pathlib.Path(steward.__file__).resolve().is_relative_to(
+    REPO / "steward-core" / "src" / "steward"
+), steward.__file__
 
 KEYS_RAW = (
     "k1:"

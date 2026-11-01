@@ -4,7 +4,7 @@ import ast
 import pathlib
 import re
 
-ROOT = pathlib.Path(__file__).resolve().parents[2] / "src/canvas_mcp/core/selfhost"
+ROOT = pathlib.Path(__file__).resolve().parents[1] / "src/steward"
 
 
 def test_upgrade_ddl_and_alembic_remain_inside_the_migration_package():
@@ -65,7 +65,7 @@ def test_only_documented_startup_and_cli_bridges_import_upgrade_tooling():
         "token_admin.py": {
             "db.migrations.provider_environment",
             "db.migrations.cli",
-            "canvas_mcp.core.selfhost.db.migrations.transfer",
+            "steward.db.migrations.transfer",
         },
     }
     violations = []

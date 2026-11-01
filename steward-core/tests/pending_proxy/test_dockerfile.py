@@ -187,7 +187,7 @@ def test_the_image_points_the_server_at_the_built_account_ui(instructions):
     copies = [args for name, args in instructions if name == "COPY" and "--from=web" in args]
     assert copies == ["--from=web /web/dist /app/web-dist"]
     assert "ACCOUNT_UI" not in env
-    from canvas_mcp.core.selfhost.settings import DEFAULT_ACCOUNT_WEB_DIST
+    from steward.settings import DEFAULT_ACCOUNT_WEB_DIST
 
     assert DEFAULT_ACCOUNT_WEB_DIST == "/app/web-dist"
 

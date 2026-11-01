@@ -16,10 +16,9 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse, Response
 from starlette.types import ASGIApp
 
-from ..config import Config
-from ..health import HEALTH_PATH, health_body
-from ..logging import log_info
-from ..token_health import set_token_health_monitor
+from steward.common.health import HEALTH_PATH, health_body
+from steward.common.logging import log_info
+
 from .accounts import STATUS_DISABLED, EntraClaimsPolicy, bootstrap_sign_in_gives_owner
 from .identity import IdentityService
 from .limits import RateLimiters, build_rate_limiters
@@ -29,7 +28,8 @@ from .tool_gate import SelfhostCredentialGate
 from .tool_prefs import ToolPrefsCache, WriteToolCatalog
 
 if TYPE_CHECKING:
-    from ..tool_policy import ToolPolicy
+    from steward.connectors.canvas.tool_policy import ToolPolicy
+
     from .authz.runtime import AuthzRuntime
     from .config_snapshot import ConfigSnapshots
     from .login.installation import InstallationAuthority
@@ -92,29 +92,15 @@ def _ssrf_trust_proxy_enabled() -> bool:
     return bool(getattr(fastmcp_settings, "ssrf_trust_proxy", False))
 
 
-def validate_selfhost_startup(config: Config, settings: SelfhostSettings) -> list[str]:
+def validate_selfhost_startup(settings: SelfhostSettings) -> list[str]:
     """Every reason the server must refuse to start in this mode (empty = fine).
 
-    Messages name settings and never include their values.
+    Messages name settings and never include their values. The checks of the
+    MCP server behind Steward (no shared upstream token, no code execution,
+    the pilot profile's limits) belong to its connector; see
+    :mod:`steward.connectors.canvas.startup`.
     """
     problems: list[str] = []
-
-    if config.canvas_api_token:
-        problems.append(
-            "CANVAS_API_TOKEN must NOT be set: every user brings their own Canvas "
-            "token, and a server token could be used by mistake"
-        )
-    if config.mcp_access_keys:
-        problems.append("MCP_ACCESS_KEYS must not be set in this mode")
-    if config.entra_auth_enabled:
-        problems.append(
-            "ENTRA_AUTH_ENABLED must not be set: the Easy Auth header path is "
-            "spoofable off Azure and is never consulted in this mode"
-        )
-    if config.mcp_allow_unauthenticated:
-        problems.append("MCP_ALLOW_UNAUTHENTICATED must not be set in this mode")
-    if config.access_request_enabled:
-        problems.append("ACCESS_REQUEST_ENABLED must not be set in this mode")
 
     if _ssrf_trust_proxy_enabled():
         problems.append(
@@ -123,28 +109,6 @@ def validate_selfhost_startup(config: Config, settings: SelfhostSettings) -> lis
             "and key fetches that unauthenticated clients can trigger, and leaves "
             "that protection to an outbound proxy this server cannot verify"
         )
-
-    allowed = {
-        part.strip().lower()
-        for part in (config.allowed_write_tools or "").replace(",", " ").split()
-        if part.strip()
-    }
-    if config.execute_typescript_enabled or "execute_typescript" in allowed:
-        problems.append(
-            "EXECUTE_TYPESCRIPT_ENABLED must be false and ALLOWED_WRITE_TOOLS must "
-            "not name execute_typescript: code execution would run with users' "
-            "tokens on the shared host"
-        )
-
-    if settings.profile == "pilot":
-        if config.allowed_write_tools:
-            problems.append(
-                "SELFHOST_PROFILE=pilot requires ALLOWED_WRITE_TOOLS to be unset"
-            )
-        if settings.course_state != "request_local":
-            problems.append(
-                "SELFHOST_PROFILE=pilot requires SELFHOST_COURSE_STATE=request_local"
-            )
 
     problem = _writable_directory_problem("SELFHOST_DATA_DIR", settings.data_dir)
     if problem:
@@ -237,14 +201,14 @@ def _owner_path_problem(settings: SelfhostSettings, store: TokenStore) -> str | 
             return (
                 "no owner can sign in: the account of SELFHOST_BOOTSTRAP_OWNER is disabled and "
                 "no other usable owner exists; enable it with: "
-                "python -m canvas_mcp.core.selfhost.token_admin enable ACCOUNT, or make another "
-                "account an owner with: python -m canvas_mcp.core.selfhost.token_admin "
+                "python -m steward.token_admin enable ACCOUNT, or make another "
+                "account an owner with: python -m steward.token_admin "
                 "promote-owner ACCOUNT"
             )
         return (
             "no owner can sign in: signing in as SELFHOST_BOOTSTRAP_OWNER would not give an owner "
             f"session (its account is {status.status}) and no other usable owner exists; make "
-            "another account an owner with: python -m canvas_mcp.core.selfhost.token_admin "
+            "another account an owner with: python -m steward.token_admin "
             "promote-owner ACCOUNT"
         )
     stranded = store.count_active_owners()
@@ -255,14 +219,14 @@ def _owner_path_problem(settings: SelfhostSettings, store: TokenStore) -> str | 
             "holds a role the Entra owner rule granted, which only an Entra sign-in can use; "
             "list entra again, set SELFHOST_BOOTSTRAP_OWNER to a listed provider's identity "
             "(it applies while no owner can sign in), or make another account an owner with: "
-            "python -m canvas_mcp.core.selfhost.token_admin promote-owner ACCOUNT"
+            "python -m steward.token_admin promote-owner ACCOUNT"
         )
     return (
         "no owner can be made: SELFHOST_LOGIN_PROVIDERS does not list entra, "
         "SELFHOST_BOOTSTRAP_OWNER is unset and the database has no active owner; set "
         "SELFHOST_BOOTSTRAP_OWNER to the first owner's identity (google:<subject>, "
         "github:<numeric user id> or oidc:<slug>:<subject>), or to token_admin and then run: "
-        "python -m canvas_mcp.core.selfhost.token_admin promote-owner ACCOUNT"
+        "python -m steward.token_admin promote-owner ACCOUNT"
     )
 
 
@@ -472,7 +436,6 @@ def load_account_spa(settings: SelfhostSettings) -> Any:
 def install_selfhost(
     mcp: FastMCP,
     runtime: SelfhostRuntime,
-    config: Config,
     *,
     tool_policy: ToolPolicy | None = None,
     **account_options: Any,
@@ -496,9 +459,6 @@ def install_selfhost(
         if code is not None:
             print(f"Setup URL: {settings.public_base_url}/account/setup", flush=True)
             print(f"Installation code (expires in 30 minutes): {code}", flush=True)
-    from .. import course_files
-
-    course_files.ALLOW_OFF_CANVAS_DOWNLOADS = settings.profile != "pilot"
     from .login.registry import build_login_runtime
 
     login_transport = account_options.pop("login_transport", None)
@@ -525,8 +485,6 @@ def install_selfhost(
             write_ceiling=ceiling,
         )
     )
-    # The Canvas client confirms a suspected dead token through this service.
-    set_token_health_monitor(runtime.health)
 
     register_account_routes(
         mcp,
@@ -576,7 +534,6 @@ def install_selfhost(
 def build_selfhost_asgi_app(
     mcp: FastMCP,
     runtime: SelfhostRuntime,
-    config: Config,
     *,
     clock: Callable[[], float] | None = None,
 ) -> ASGIApp:

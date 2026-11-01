@@ -5,8 +5,8 @@ from __future__ import annotations
 import pytest
 from joserfc.jwk import ECKey, RSAKey
 
-from canvas_mcp.core.selfhost.login.http import SafeHttp
-from canvas_mcp.core.selfhost.login.jwks import (
+from steward.login.http import SafeHttp
+from steward.login.jwks import (
     MAX_KEYS,
     JwksCache,
     alg_fits_key,

@@ -8,7 +8,7 @@ from typing import Any
 import httpx
 import pytest
 
-from canvas_mcp.core.selfhost.login.http import SafeHttp, UpstreamError, check_url
+from steward.login.http import SafeHttp, UpstreamError, check_url
 
 URL = "https://idp.example.edu/.well-known/openid-configuration"
 

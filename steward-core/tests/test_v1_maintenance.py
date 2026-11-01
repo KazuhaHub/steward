@@ -8,14 +8,14 @@ import pytest
 from dbbackend import IS_POSTGRES
 from sqlalchemy import event, insert, select, text, update
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.maintenance import (
+from steward.db import schema as s
+from steward.db.types import new_id
+from steward.maintenance import (
     DAY,
     MaintenanceRunner,
     MaintenanceScheduler,
 )
-from canvas_mcp.core.selfhost.token_store import OPERATOR, AccessActionRefused
+from steward.token_store import OPERATOR, AccessActionRefused
 
 from .test_server_settings import db  # noqa: F401
 from .test_v1_store import account, put, stores  # noqa: F401
@@ -253,7 +253,7 @@ def test_account_delete_last_owner_and_nonoperator_are_refused(stores):  # noqa:
 
 
 def test_operator_account_delete_cli_validates_uuid_and_retains_audit(stores, capsys):  # noqa: F811
-    from canvas_mcp.core.selfhost.token_admin import _build_parser, _run
+    from steward.token_admin import _build_parser, _run
 
     one, _, _ = stores
     key = account(one)
@@ -268,8 +268,8 @@ def test_operator_account_delete_cli_validates_uuid_and_retains_audit(stores, ca
 
 
 def test_grant_retention_deletes_refresh_only_by_cascade(stores):  # noqa: F811
-    from canvas_mcp.core.selfhost.authz import tokens
-    from canvas_mcp.core.selfhost.authz.store import AuthzStore
+    from steward.authz import tokens
+    from steward.authz.store import AuthzStore
 
     from .test_v1_races import code
 

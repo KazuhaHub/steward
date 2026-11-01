@@ -11,15 +11,15 @@ import pytest
 from dbbackend import IS_POSTGRES, make_store
 from sqlalchemy import select, update
 
-from canvas_mcp.core.selfhost.authz import tokens
-from canvas_mcp.core.selfhost.authz.models import ExchangeOutcome, RotateOutcome
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.authz.transactions import SqlLoginStateStore
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.repos import Repositories
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.token_store import (
+from steward.authz import tokens
+from steward.authz.models import ExchangeOutcome, RotateOutcome
+from steward.authz.store import AuthzStore
+from steward.authz.transactions import SqlLoginStateStore
+from steward.custody import CustodyAcknowledgement
+from steward.db import schema as s
+from steward.db.repos import Repositories
+from steward.db.types import new_id
+from steward.token_store import (
     OPERATOR,
     Keyring,
     TokenDecryptionError,

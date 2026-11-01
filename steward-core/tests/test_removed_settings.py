@@ -4,7 +4,7 @@ import base64
 
 import pytest
 
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     SelfhostConfigError,
     auth_mode,
     load_selfhost_settings,

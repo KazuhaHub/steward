@@ -6,17 +6,17 @@ import pytest
 from dbbackend import pg_database
 from sqlalchemy import insert, inspect, select, text, update
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.migrations import runner, transfer
-from canvas_mcp.core.selfhost.db.sealed import verify
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.login.local_accounts import (
+from steward.db import schema as s
+from steward.db.migrations import runner, transfer
+from steward.db.sealed import verify
+from steward.db.types import new_id
+from steward.login.local_accounts import (
     LOCAL_ISSUER,
     LocalAccounts,
     password_hash,
 )
-from canvas_mcp.core.selfhost.login.provider_store import ProviderConfigStore
-from canvas_mcp.core.selfhost.token_store import (
+from steward.login.provider_store import ProviderConfigStore
+from steward.token_store import (
     KeyringError,
     TokenStore,
     TokenStoreError,

@@ -1,9 +1,9 @@
 {
-  "name": "canvas-mcp-account-web",
+  "name": "steward-web",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Account UI for the self-hosted Canvas MCP server (served under /account).",
+  "description": "Account and admin UI for Steward (served under /account).",
   "engines": {
     "node": ">=24"
   },

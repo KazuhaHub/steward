@@ -10,17 +10,17 @@ from pathlib import Path
 
 import pytest
 
-from canvas_mcp.core.selfhost.runtime_secrets import (
+from steward.runtime_secrets import (
     SECRETS_FILE,
     RuntimeSecretsError,
     initialize_secrets,
     with_saved_secrets,
 )
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     SelfhostConfigError,
     load_selfhost_settings,
 )
-from canvas_mcp.core.selfhost.token_store import Keyring
+from steward.token_store import Keyring
 
 
 def minimal(directory: Path) -> dict[str, str]:

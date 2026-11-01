@@ -38,7 +38,7 @@ from .http import CAP_GITHUB, CAP_TOKEN, HttpResult, SafeHttp, UpstreamError
 from .oidc import clean_text
 from .protocol import ProviderDisplay, SignInRejected
 
-logger = logging.getLogger("canvas_mcp.selfhost.login")
+logger = logging.getLogger("steward.login")
 
 GITHUB_START_PATH = auth_login(PROVIDER_GITHUB)
 GITHUB_CALLBACK_PATH = auth_callback(PROVIDER_GITHUB)

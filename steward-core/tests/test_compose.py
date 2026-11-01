@@ -9,7 +9,7 @@ import pytest
 
 yaml = pytest.importorskip("yaml")
 
-COMPOSE = Path(__file__).resolve().parents[1] / "deploy" / "selfhost" / "docker-compose.yml"
+COMPOSE = Path(__file__).resolve().parents[2] / "deploy" / "docker-compose.yml"
 
 
 @pytest.fixture(scope="module")
@@ -70,5 +70,5 @@ def test_source_build_override_uses_the_reviewed_checkout_without_pulling():
     app = override["services"]["canvas-mcp"]
     assert app["pull_policy"] == "build"
     assert app["build"]["dockerfile"] == "Dockerfile.selfhost"
-    assert (COMPOSE.parent / app["build"]["context"]).resolve() == COMPOSE.parents[2]
+    assert (COMPOSE.parent / app["build"]["context"]).resolve() == COMPOSE.parents[1]
     assert set(app) == {"build", "pull_policy"}

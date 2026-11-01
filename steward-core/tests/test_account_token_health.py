@@ -4,7 +4,7 @@ import pathlib
 
 import pytest
 
-from canvas_mcp.core.selfhost.account_core import CanvasCheckError
+from steward.account_core import CanvasCheckError
 
 from .account_fixture import (  # noqa: F401
     CANVAS_TOKEN,

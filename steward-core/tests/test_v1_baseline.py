@@ -6,10 +6,10 @@ import pytest
 from dbbackend import IS_POSTGRES, pg_available, pg_database
 from sqlalchemy import inspect
 
-from canvas_mcp.core.selfhost.db.engine import Database
-from canvas_mcp.core.selfhost.db.errors import TokenStoreError
-from canvas_mcp.core.selfhost.db.migrations import baseline_v1
-from canvas_mcp.core.selfhost.db.migrations.connections import sqlite_migration
+from steward.db.engine import Database
+from steward.db.errors import TokenStoreError
+from steward.db.migrations import baseline_v1
+from steward.db.migrations.connections import sqlite_migration
 
 TABLES = {
     "server_state",

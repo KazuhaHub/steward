@@ -6,18 +6,18 @@ from threading import Barrier
 import pytest
 from sqlalchemy import insert, select, update
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.sealed import rotate, verify
-from canvas_mcp.core.selfhost.db.settings_repo import (
+from steward.db import schema as s
+from steward.db.sealed import rotate, verify
+from steward.db.settings_repo import (
     SettingsAccessDenied,
     SettingsConflict,
 )
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.login.provider_config import ProviderConfigurationError
-from canvas_mcp.core.selfhost.login.provider_settings import settings_from_database
-from canvas_mcp.core.selfhost.login.provider_store import ProviderConfigStore
-from canvas_mcp.core.selfhost.settings import load_selfhost_settings
-from canvas_mcp.core.selfhost.token_store import (
+from steward.db.types import new_id
+from steward.login.provider_config import ProviderConfigurationError
+from steward.login.provider_settings import settings_from_database
+from steward.login.provider_store import ProviderConfigStore
+from steward.settings import load_selfhost_settings
+from steward.token_store import (
     OPERATOR,
     AccessActionRefused,
     Keyring,

@@ -1,6 +1,6 @@
 """The smoke test's optional provider section (o), replayed in process, and its static contract.
 
-``deploy/selfhost/smoke-test.sh`` needs Docker. With ``SMOKE_EXPECT_PROVIDERS`` it boots local mode
+``deploy/smoke-test.sh`` needs Docker. With ``SMOKE_EXPECT_PROVIDERS`` it boots local mode
 with made-up Google and GitHub credentials and checks, with curl, that ``/api/v1/providers``
 lists them and that each start link answers 302 to the provider's own https authorize host. This
 file replays those requests against the same app (``Host: 127.0.0.1:18819`` as curl sends it) so an
@@ -20,7 +20,7 @@ import pytest
 from ..spa_fixture import make_dist
 from .stack_providers import ProviderStack, provider_stack, query_of
 
-SMOKE = pathlib.Path(__file__).resolve().parents[3] / "deploy" / "selfhost" / "smoke-test.sh"
+SMOKE = pathlib.Path(__file__).resolve().parents[3] / "deploy" / "smoke-test.sh"
 BASE = "http://127.0.0.1:18819"
 
 

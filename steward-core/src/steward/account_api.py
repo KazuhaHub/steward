@@ -53,16 +53,17 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.routing import Route
 
-from canvas_mcp.core.selfhost import account_core as web
-from canvas_mcp.core.selfhost.account_ops import Refusal, Unlinked, WriteToolsSnapshot
-from canvas_mcp.core.selfhost.accounts import valid_account_key
-from canvas_mcp.core.selfhost.schools import (
+from steward import account_core as web
+from steward.account_ops import Refusal, Unlinked, WriteToolsSnapshot
+from steward.accounts import valid_account_key
+from steward.connectors.canvas.tool_policy import TOOL_EFFECTS, Effect
+from steward.schools import (
     MAX_QUERY_CHARS,
     MIN_QUERY_CHARS,
     DirectoryError,
     is_blocked_hostname,
 )
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_store import (
     DISABLE_REASON_ADMIN,
     DISABLE_REASON_DENIED,
     DISABLE_REASON_OPERATOR,
@@ -76,12 +77,11 @@ from canvas_mcp.core.selfhost.token_store import (
     PrincipalStatus,
     TokenStoreError,
 )
-from canvas_mcp.core.selfhost.tool_prefs import (
+from steward.tool_prefs import (
     OTHER_GROUP,
     WRITE_TOOL_GROUPS,
     user_can_enable,
 )
-from canvas_mcp.core.tool_policy import TOOL_EFFECTS, Effect
 
 from . import custody
 from .build_info import build_info
@@ -97,9 +97,9 @@ from .profile import PilotProfileViolation
 from .routes import API_PREFIX
 
 if TYPE_CHECKING:
-    from canvas_mcp.core.selfhost.authz.models import GrantRecord
+    from steward.authz.models import GrantRecord
 
-logger = logging.getLogger("canvas_mcp.selfhost.account_api")
+logger = logging.getLogger("steward.account_api")
 
 
 #: Every error code the API can answer with, and its HTTP status. The frontend's
@@ -2487,7 +2487,7 @@ class ApiApp:
         return ctx.request.cookies.get(self.app.authz.binding_cookie)
 
     async def get_consent(self, ctx: _Ctx) -> Response:
-        from canvas_mcp.core.selfhost.authz.consent import ConsentRefusal
+        from steward.authz.consent import ConsentRefusal
 
         session = ctx.session
         assert session is not None and self.app.authz is not None
@@ -2530,7 +2530,7 @@ class ApiApp:
         )
 
     async def post_consent(self, ctx: _Ctx) -> Response:
-        from canvas_mcp.core.selfhost.authz.consent import ConsentRefusal
+        from steward.authz.consent import ConsentRefusal
 
         session, body = ctx.session, ctx.body
         assert session is not None and body is not None and self.app.authz is not None

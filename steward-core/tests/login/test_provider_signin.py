@@ -6,7 +6,7 @@ import pathlib
 
 import pytest
 
-from canvas_mcp.core.selfhost import accounts as acc
+from steward import accounts as acc
 
 from ..authz.stack import ALICE
 from .fake_idp import GitHubUser, IdpUser

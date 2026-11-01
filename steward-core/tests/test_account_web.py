@@ -13,7 +13,7 @@ from typing import Any
 import httpx
 import pytest
 
-from canvas_mcp.core.selfhost.account_core import CanvasCheckError, _CookieCodec
+from steward.account_core import CanvasCheckError, _CookieCodec
 
 from .account_fixture import (  # noqa: F401
     KEY,

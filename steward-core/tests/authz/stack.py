@@ -16,6 +16,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import os
 import re
 import secrets
 import socket
@@ -38,26 +39,26 @@ from dbbackend import stack_env
 from fastmcp import FastMCP
 from starlette.testclient import TestClient
 
-from canvas_mcp.core.credentials import get_request_principal
-from canvas_mcp.core.selfhost.app import (
+from steward.request_state import get_request_principal
+from steward.app import (
     SelfhostRuntime,
     build_selfhost_asgi_app,
     install_selfhost,
     prepare_selfhost,
 )
-from canvas_mcp.core.selfhost.authz import fastmcp_compat as compat
-from canvas_mcp.core.selfhost.authz.runtime import (
+from steward.authz import fastmcp_compat as compat
+from steward.authz.runtime import (
     build_auth_provider,
     build_authz_runtime,
 )
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.custody import CustodyAcknowledgement
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     SelfhostSettings,
 )
-from canvas_mcp.core.selfhost.token_store import Keyring
+from steward.token_store import Keyring
 
 from ..conftest import CLIENT as ENTRA_CLIENT_ID
 from ..conftest import TENANT as ENTRA_TENANT
@@ -122,7 +123,7 @@ class FakeIdp:
     """Entra discovery, JWKS and a PKCE-protected token endpoint, entirely offline."""
 
     def __init__(self, clock: Clock) -> None:
-        from canvas_mcp.core.selfhost.accounts import entra_issuer
+        from steward.accounts import entra_issuer
 
         from ..login.fake_idp import FakeNetwork, FakeOidcIdp
 
@@ -604,9 +605,6 @@ def _build(
     monkeypatch.setenv("CANVAS_API_URL", f"https://{CANVAS_HOST}")
     for name in ("CANVAS_API_TOKEN", "CANVAS_ROLE", "MCP_ACCESS_KEYS"):
         monkeypatch.delenv(name, raising=False)
-    from canvas_mcp.core.config import reset_config
-
-    reset_config()
     clock = clock or Clock()
     settings = load_provider_environment(default_env(tmp_path, **dict(env or {})))
     cimd = FakeCimd()
@@ -624,7 +622,6 @@ def _build(
         fetch=cimd,
     )
     runtime = replace(runtime, authz=authz)
-    config: Any = SimpleNamespace(canvas_api_url=f"https://{CANVAS_HOST}/api/v1")
     mcp = FastMCP("local-authz", auth=build_auth_provider(settings, runtime))
     if tools:
         # A read tool by name, so the credential gate treats it like one.
@@ -638,24 +635,21 @@ def _build(
     if register_tools is not None:
         import asyncio
 
-        from canvas_mcp.core.config import get_config
-        from canvas_mcp.core.selfhost.app import apply_disabled_tools
-        from canvas_mcp.core.tool_policy import apply_tool_policy, resolve_tool_policy
+        from steward.app import apply_disabled_tools
+        from steward.connectors.canvas.tool_policy import apply_tool_policy, resolve_tool_policy
 
-        config = get_config()
         register_tools(mcp)
-        tool_policy = resolve_tool_policy(config.allowed_write_tools, "http")
+        tool_policy = resolve_tool_policy(os.environ.get("ALLOWED_WRITE_TOOLS"), "http")
         asyncio.run(apply_tool_policy(mcp, tool_policy))
         asyncio.run(apply_disabled_tools(mcp, settings.disabled_tools))
     install_selfhost(
         mcp,
         runtime,
-        config,
         tool_policy=tool_policy,
         clock=clock,
         **{"login_transport": idp.net.transport, **dict(account_options or {})},
     )
-    app = build_selfhost_asgi_app(mcp, runtime, config)
+    app = build_selfhost_asgi_app(mcp, runtime)
     return app, Stack(None, runtime, settings, mcp, idp, cimd, clock, tmp_path)
 
 

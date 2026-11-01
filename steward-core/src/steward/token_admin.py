@@ -1,6 +1,6 @@
 """Operator commands for v1 accounts, credentials, grants and configuration.
 
-Run ``python -m canvas_mcp.core.selfhost.token_admin --help`` for all commands.
+Run ``python -m steward.token_admin --help`` for all commands.
 Account targets are canonical bare UUIDs printed by ``accounts``; identity
 operations use the identity UUID printed by ``identities``. Provider subjects,
 Entra tenant/object pairs and pre-v1 principal-key forms are not account ids.
@@ -38,15 +38,15 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.db.url import (
+from steward import accounts as acc
+from steward.db.url import (
     ALLOW_OUTSIDE_ENV,
     DATABASE_URL_ENV,
     default_sqlite_path,
     parse_database_url,
 )
-from canvas_mcp.core.selfhost.settings import AUTO_MIGRATE_ENV, _parse_auto_migrate
-from canvas_mcp.core.selfhost.token_store import (
+from steward.settings import AUTO_MIGRATE_ENV, _parse_auto_migrate
+from steward.token_store import (
     DISABLE_REASON_OPERATOR,
     OPERATOR,
     AccessActionRefused,
@@ -58,7 +58,7 @@ from canvas_mcp.core.selfhost.token_store import (
 )
 
 if TYPE_CHECKING:
-    from canvas_mcp.core.selfhost.db.engine import Database
+    from steward.db.engine import Database
 
 EXIT_OK = 0
 EXIT_NOT_FOUND = 1
@@ -90,7 +90,7 @@ def _cell(value: str) -> str:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="python -m canvas_mcp.core.selfhost.token_admin",
+        prog="python -m steward.token_admin",
         description="Inspect and maintain the accounts and the encrypted Canvas token store.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
@@ -225,7 +225,7 @@ def _data_dir() -> pathlib.Path:
 def _database() -> Database:
     """The configured database (``DATABASE_URL`` or the SQLite file), not yet opened."""
     try:
-        from canvas_mcp.core.selfhost.db.engine import Database
+        from steward.db.engine import Database
     except ImportError:
         raise TokenStoreError(
             "the self-hosted mode needs SQLAlchemy and Alembic: "
@@ -268,7 +268,7 @@ def _open_store() -> TokenStore:
     """Open and initialize the store; raises TokenStoreError/OSError."""
     keyring = Keyring.parse(os.environ.get(KEYS_ENV, ""))
     database = _database()
-    from canvas_mcp.core.selfhost.db.migrations.transfer import refuse_silent_switch
+    from steward.db.migrations.transfer import refuse_silent_switch
 
     # Before anything is created or written: a command that ran on an empty target
     # next to a SQLite file with data would lose that file's disablements.
@@ -336,7 +336,7 @@ def _grant_state(grant: object, now: int) -> str:
 
 def _live_grants(store: TokenStore) -> str:
     """How many connected apps are live (``check``); "-" if the table cannot be read."""
-    from canvas_mcp.core.selfhost.authz.store import AuthzStore
+    from steward.authz.store import AuthzStore
 
     try:
         count = AuthzStore(store.database).count_live_grants()
@@ -349,7 +349,7 @@ def _run_grants(args: argparse.Namespace, store: TokenStore) -> int:
     """The commands of the local authorization server (``list-grants`` and friends)."""
     import time
 
-    from canvas_mcp.core.selfhost.authz.store import AuthzStore
+    from steward.authz.store import AuthzStore
 
     authz = AuthzStore(store.database)
     command: str = args.command
@@ -763,12 +763,12 @@ def _note_assumed_entra_only(store: TokenStore) -> None:
 
 def _run_login_providers(args: argparse.Namespace) -> int:
     """``login-providers``: what is configured, and with ``--check`` whether the providers answer."""
-    from canvas_mcp.core.selfhost.login.provider_config import (
+    from steward.login.provider_config import (
         ProviderConfigurationError,
     )
-    from canvas_mcp.core.selfhost.login.provider_settings import settings_from_database
-    from canvas_mcp.core.selfhost.login.provider_store import ProviderConfigStore
-    from canvas_mcp.core.selfhost.settings import (
+    from steward.login.provider_settings import settings_from_database
+    from steward.login.provider_store import ProviderConfigStore
+    from steward.settings import (
         SelfhostConfigError,
         load_selfhost_settings,
     )
@@ -857,8 +857,8 @@ def _run_login_providers(args: argparse.Namespace) -> int:
 
     import asyncio
 
-    from canvas_mcp.core.selfhost.login.registry import build_login_runtime
-    from canvas_mcp.core.selfhost.login_state import InMemoryLoginStateStore
+    from steward.login.registry import build_login_runtime
+    from steward.login_state import InMemoryLoginStateStore
 
     runtime = build_login_runtime(settings, flow_store=InMemoryLoginStateStore())
     assert runtime is not None

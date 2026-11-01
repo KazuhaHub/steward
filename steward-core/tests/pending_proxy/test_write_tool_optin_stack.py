@@ -21,9 +21,9 @@ from canvas_mcp.core.config import reset_config
 from canvas_mcp.core.course_policy import reset_policy_cache
 from canvas_mcp.server import register_all_tools
 
-from .account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
-from .authz.stack import User
-from .conftest import OID_A, OID_B, acct_key
+from ..account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
+from ..authz.stack import User
+from ..conftest import OID_A, OID_B, acct_key
 
 BASE = "https://canvas.example.test"
 CANVAS = "https://canvas.example.edu"
@@ -254,7 +254,7 @@ class TestServerCeiling:
     def test_switching_on_everything_exposes_exactly_what_the_operator_allows(
         self, stack
     ):
-        from canvas_mcp.core.tool_policy import SIDE_EFFECT_TOOLS
+        from steward.connectors.canvas.tool_policy import SIDE_EFFECT_TOOLS
 
         switch_on(stack, OID_A, *sorted(SIDE_EFFECT_TOOLS))
         names = tool_names(stack, "bearer-A")

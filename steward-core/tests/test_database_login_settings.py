@@ -2,11 +2,11 @@
 
 import base64
 
-from canvas_mcp.core.selfhost.app import prepare_selfhost
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.app import prepare_selfhost
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.settings import load_selfhost_settings
+from steward.settings import load_selfhost_settings
 
 
 def infrastructure():

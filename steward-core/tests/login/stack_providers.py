@@ -71,7 +71,7 @@ class ProviderStack:
 
     def enroll_canvas(self, key: str) -> str:
         """Give an account a Canvas token (the tool call of the stack needs one) and return the key."""
-        from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
+        from steward.custody import CustodyAcknowledgement
 
         from ..authz.stack import CANVAS_HOST
 
@@ -210,7 +210,7 @@ class Person:
         return self._account_from_session(cookie)
 
     def _account_from_session(self, cookie: str) -> str:
-        from canvas_mcp.core.selfhost.account_core import SESSION_COOKIE, _CookieCodec
+        from steward.account_core import SESSION_COOKIE, _CookieCodec
 
         codec = _CookieCodec(self.ps.stack.settings.account_session_secret)
         payload = codec.unseal(SESSION_COOKIE, cookie)

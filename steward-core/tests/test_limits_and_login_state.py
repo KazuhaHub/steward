@@ -11,8 +11,8 @@ import asyncio
 
 import pytest
 
-from canvas_mcp.core.selfhost import edge_guard, limits
-from canvas_mcp.core.selfhost.login_state import (
+from steward import edge_guard, limits
+from steward.login_state import (
     InMemoryLoginStateStore,
     LoginStateStore,
 )
