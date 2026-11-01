@@ -1,14 +1,20 @@
 """Shared helpers for the self-hosted mode tests."""
 
+import os
 import uuid
 from collections.abc import Iterator
 from typing import Any
 
 import pytest
 
+os.environ["PYTHON_DOTENV_DISABLED"] = "1"
+
+import dbbackend  # noqa: E402
+
 from steward.request_state import (
     RequestPrincipal,
     clear_http_request_context,
+    reset_credential_generations,
     set_request_principal,
 )
 from steward.accounts import (
@@ -20,6 +26,50 @@ from steward.accounts import (
 )
 from steward.identity import IdentityService
 from steward.token_store import PrincipalStatus
+
+# PostgreSQL requested but unusable fails the run here instead of skipping tests.
+dbbackend.require_backend()
+if dbbackend.PG_URL:
+    dbbackend.install_tracking()
+
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "sqlite_only: needs a SQLite file (skipped when the backend is PostgreSQL)"
+    )
+    config.addinivalue_line(
+        "markers", "postgres: needs CANVAS_MCP_TEST_DATABASE_URL (skipped without it)"
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    for item in items:
+        if dbbackend.IS_POSTGRES and item.get_closest_marker("sqlite_only"):
+            item.add_marker(pytest.mark.skip(reason="SQLite-specific; backend is postgres"))
+        if item.get_closest_marker("postgres") and not dbbackend.pg_available():
+            item.add_marker(
+                pytest.mark.skip(reason="set CANVAS_MCP_TEST_DATABASE_URL to run PostgreSQL tests")
+            )
+
+
+@pytest.fixture(autouse=True)
+def drop_postgres_test_schemas():
+    """Leave the scratch PostgreSQL database empty after each test."""
+    yield
+    if dbbackend.PG_URL:
+        dbbackend.drop_test_schemas()
+
+
+@pytest.fixture(autouse=True)
+def reset_credential_generations_between_tests():
+    """Start and end every test with no remembered credential generations."""
+    reset_credential_generations()
+    yield
+    reset_credential_generations()
+
+
+# Tests of the Canvas tools running in-process; they return in proxy mode.
+collect_ignore = ["pending_proxy"]
 
 TENANT = "11111111-2222-3333-4444-555555555555"
 CLIENT = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
