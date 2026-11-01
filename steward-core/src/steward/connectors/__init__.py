@@ -71,6 +71,10 @@ def load_connector(name: str | None = None) -> Connector:
     try:
         module = importlib.import_module(f"steward.connectors.{name}")
     except ModuleNotFoundError as exc:
+        if exc.name != f"steward.connectors.{name}":
+            raise ConnectorError(
+                f"connector {name!r} cannot be loaded: missing module {exc.name!r}"
+            ) from exc
         raise ConnectorError(f"unknown connector {name!r}") from exc
     connector = getattr(module, "CONNECTOR", None)
     if not isinstance(connector, Connector):

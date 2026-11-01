@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, NoReturn
 
 from fastmcp import FastMCP
 
@@ -20,6 +20,7 @@ from .connectors import ConnectorError, load_connector
 from .settings import (
     SelfhostConfigError,
     SelfhostSettings,
+    auth_mode,
     format_duration,
     load_selfhost_settings,
 )
@@ -141,7 +142,7 @@ def _run_http_server(app: ASGIApp, host: str, port: int) -> None:
     anyio.run(server.serve)
 
 
-def _fail(problems: list[str]) -> None:
+def _fail(problems: list[str]) -> NoReturn:
     for problem in problems:
         log_error(problem)
     sys.exit(1)
@@ -159,6 +160,12 @@ def serve(args: argparse.Namespace) -> None:
     from .audit import init_audit_logging
     from .authz.runtime import build_auth_provider
 
+    try:
+        # Kept from the Canvas server, where it chose the mode: a mistyped value
+        # is refused rather than ignored.
+        auth_mode()
+    except SelfhostConfigError as exc:
+        _fail(exc.problems)
     try:
         connector = load_connector()
     except ConnectorError as exc:
