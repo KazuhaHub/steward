@@ -7,7 +7,7 @@ same-origin JSON request and the configuration revision shown when editing.
 If another process saves first, reload the settings before saving again.
 
 This is a configuration checkpoint on the v1 development branch. The complete
-runtime and Docker acceptance gates are tracked in [V1-PROGRESS.md](V1-PROGRESS.md).
+runtime and Docker acceptance gates are tracked in V1-PROGRESS.md (in the Canvas MCP repository, `deploy/selfhost/V1-PROGRESS.md`).
 
 ## Defaults and ownership
 

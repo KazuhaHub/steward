@@ -6,7 +6,7 @@ It sits between an MCP client or hub (such as [MCPHub](https://github.com/samanh
 
 - It signs users in. Local accounts, OIDC, GitHub, Google and Entra are supported, and an MCPHub session can be used too.
 - It runs the OAuth authorization server that MCP clients connect through.
-- It stores each user's credential for the upstream service, such as a Canvas LMS API token. The credential is sealed with AES-256-GCM. Steward checks it, notices when it stops working, and reminds the user before it expires.
+- It stores each user's credential for the upstream service, such as a Canvas LMS API token. The credential is sealed with AES-256-GCM, and the user is reminded before it expires. Detecting a credential that has stopped working needs an MCP server behind Steward, so it arrives with the proxy mode.
 - It lets each user switch write tools on or off, within the limit the operator sets.
 
 The hub connects the client. Steward keeps the credentials.
@@ -47,4 +47,8 @@ npm test && npm run build
 
 ## License
 
-MIT. Steward started as part of Canvas MCP, created by Vishal Sachdev, and keeps that project's copyright notice. See [LICENSE](LICENSE).
+MIT. Steward started as part of Canvas MCP, created by Vishal Sachdev, and keeps that project's copyright notice. See [LICENSE](LICENSE); `steward-core/LICENSE` is the same text, shipped with the Python package.
+
+## Custody
+
+Steward decrypts a user's stored credential only to use it for that user's request. The operator holds the keyring, so the operator can technically decrypt every stored credential: users must trust the operator, and each user acknowledges a custody notice before storing a credential.
