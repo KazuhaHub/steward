@@ -16,10 +16,8 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse, Response
 from starlette.types import ASGIApp
 
-from canvas_mcp.core.config import Config
 from steward.common.health import HEALTH_PATH, health_body
 from steward.common.logging import log_info
-from steward.credential_health import set_token_health_monitor
 from .accounts import STATUS_DISABLED, EntraClaimsPolicy, bootstrap_sign_in_gives_owner
 from .identity import IdentityService
 from .limits import RateLimiters, build_rate_limiters
@@ -92,29 +90,15 @@ def _ssrf_trust_proxy_enabled() -> bool:
     return bool(getattr(fastmcp_settings, "ssrf_trust_proxy", False))
 
 
-def validate_selfhost_startup(config: Config, settings: SelfhostSettings) -> list[str]:
+def validate_selfhost_startup(settings: SelfhostSettings) -> list[str]:
     """Every reason the server must refuse to start in this mode (empty = fine).
 
-    Messages name settings and never include their values.
+    Messages name settings and never include their values. The checks of the
+    MCP server behind Steward (no shared upstream token, no code execution,
+    the pilot profile's limits) belong to its connector; see
+    :mod:`steward.connectors.canvas.startup`.
     """
     problems: list[str] = []
-
-    if config.canvas_api_token:
-        problems.append(
-            "CANVAS_API_TOKEN must NOT be set: every user brings their own Canvas "
-            "token, and a server token could be used by mistake"
-        )
-    if config.mcp_access_keys:
-        problems.append("MCP_ACCESS_KEYS must not be set in this mode")
-    if config.entra_auth_enabled:
-        problems.append(
-            "ENTRA_AUTH_ENABLED must not be set: the Easy Auth header path is "
-            "spoofable off Azure and is never consulted in this mode"
-        )
-    if config.mcp_allow_unauthenticated:
-        problems.append("MCP_ALLOW_UNAUTHENTICATED must not be set in this mode")
-    if config.access_request_enabled:
-        problems.append("ACCESS_REQUEST_ENABLED must not be set in this mode")
 
     if _ssrf_trust_proxy_enabled():
         problems.append(
@@ -123,28 +107,6 @@ def validate_selfhost_startup(config: Config, settings: SelfhostSettings) -> lis
             "and key fetches that unauthenticated clients can trigger, and leaves "
             "that protection to an outbound proxy this server cannot verify"
         )
-
-    allowed = {
-        part.strip().lower()
-        for part in (config.allowed_write_tools or "").replace(",", " ").split()
-        if part.strip()
-    }
-    if config.execute_typescript_enabled or "execute_typescript" in allowed:
-        problems.append(
-            "EXECUTE_TYPESCRIPT_ENABLED must be false and ALLOWED_WRITE_TOOLS must "
-            "not name execute_typescript: code execution would run with users' "
-            "tokens on the shared host"
-        )
-
-    if settings.profile == "pilot":
-        if config.allowed_write_tools:
-            problems.append(
-                "SELFHOST_PROFILE=pilot requires ALLOWED_WRITE_TOOLS to be unset"
-            )
-        if settings.course_state != "request_local":
-            problems.append(
-                "SELFHOST_PROFILE=pilot requires SELFHOST_COURSE_STATE=request_local"
-            )
 
     problem = _writable_directory_problem("SELFHOST_DATA_DIR", settings.data_dir)
     if problem:
@@ -472,7 +434,6 @@ def load_account_spa(settings: SelfhostSettings) -> Any:
 def install_selfhost(
     mcp: FastMCP,
     runtime: SelfhostRuntime,
-    config: Config,
     *,
     tool_policy: ToolPolicy | None = None,
     **account_options: Any,
@@ -496,9 +457,6 @@ def install_selfhost(
         if code is not None:
             print(f"Setup URL: {settings.public_base_url}/account/setup", flush=True)
             print(f"Installation code (expires in 30 minutes): {code}", flush=True)
-    from canvas_mcp.core import course_files
-
-    course_files.ALLOW_OFF_CANVAS_DOWNLOADS = settings.profile != "pilot"
     from .login.registry import build_login_runtime
 
     login_transport = account_options.pop("login_transport", None)
@@ -525,8 +483,6 @@ def install_selfhost(
             write_ceiling=ceiling,
         )
     )
-    # The Canvas client confirms a suspected dead token through this service.
-    set_token_health_monitor(runtime.health)
 
     register_account_routes(
         mcp,
@@ -576,7 +532,6 @@ def install_selfhost(
 def build_selfhost_asgi_app(
     mcp: FastMCP,
     runtime: SelfhostRuntime,
-    config: Config,
     *,
     clock: Callable[[], float] | None = None,
 ) -> ASGIApp:

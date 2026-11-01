@@ -12,6 +12,7 @@ Controlled by:
 
 import json
 import logging
+import os
 import re
 import sys
 from collections.abc import Iterable
@@ -56,6 +57,10 @@ def _sanitize_endpoint(endpoint: str) -> str:
     return _NUMERIC_PATH_RE.sub("/***", path)
 
 
+def _bool_env(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() == "true"
+
+
 def init_audit_logging() -> None:
     """Initialize audit logging based on configuration.
 
@@ -67,12 +72,8 @@ def init_audit_logging() -> None:
     if _initialized:
         return
 
-    from canvas_mcp.core.config import get_config
-
-    config = get_config()
-
-    _access_events_enabled = config.log_access_events
-    _execution_events_enabled = config.log_execution_events
+    _access_events_enabled = _bool_env("LOG_ACCESS_EVENTS")
+    _execution_events_enabled = _bool_env("LOG_EXECUTION_EVENTS")
 
     if not _access_events_enabled and not _execution_events_enabled:
         _initialized = True
@@ -85,9 +86,9 @@ def init_audit_logging() -> None:
     _audit_logger.addHandler(stderr_handler)
 
     # File handler — rotating JSON lines file
-    audit_dir_str = config.audit_log_dir
+    audit_dir_str = os.environ.get("AUDIT_LOG_DIR", "")
     if not audit_dir_str:
-        audit_dir = Path.home() / ".canvas-mcp"
+        audit_dir = Path.home() / ".steward"
     else:
         audit_dir = Path(audit_dir_str)
 

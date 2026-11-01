@@ -1,8 +1,8 @@
 """Health of the stored Canvas tokens: confirm a dead token, record it, never guess.
 
-A Canvas 401 is only a suspicion (see :mod:`steward.credential_health`). This
-service turns a suspicion into a verdict with one probe, ``GET <school>/users/self``
-made with the very token that was rejected:
+A Canvas 401 is only a suspicion. This service turns a suspicion into a verdict
+with one probe made by the connector with the very token that was rejected (for
+Canvas, ``GET <school>/users/self``, see :mod:`steward.connectors.canvas.probe`):
 
 * the probe answers 401: Canvas really rejects the token, so the row is marked
   ``invalid`` (reason ``canvas_token_rejected``) and the caller gets the re-enroll
@@ -39,7 +39,7 @@ import httpx
 from steward import audit
 from steward.request_state import RequestCredentials
 from steward.common.logging import log_warning
-from steward.credential_health import _says_token_is_dead
+from steward.connectors import OK, REJECTED, UNKNOWN, CredentialProbe, load_connector
 from .db.workers import run_store
 from .token_store import (
     REASON_CANVAS_TOKEN_REJECTED,
@@ -51,11 +51,6 @@ PROBE_COOLDOWN_SECONDS = 60.0
 VERIFIED_WRITE_INTERVAL_SECONDS = 600.0
 PROBE_TIMEOUT_SECONDS = 10.0
 _MAX_TRACKED = 1024
-
-REJECTED = "rejected"
-OK = "ok"
-UNKNOWN = "unknown"
-
 
 @dataclass
 class _Flight:
@@ -79,8 +74,10 @@ class TokenHealth:
         probe_timeout: float = PROBE_TIMEOUT_SECONDS,
         cooldown_seconds: float = PROBE_COOLDOWN_SECONDS,
         verified_interval_seconds: float = VERIFIED_WRITE_INTERVAL_SECONDS,
+        probe: CredentialProbe | None = None,
     ) -> None:
         self._store = store
+        self._probe_credential = probe or load_connector().probe
         self._account_url = account_url
         self._clock = clock
         self._probe_timeout = probe_timeout
@@ -284,29 +281,11 @@ class TokenHealth:
         return UNKNOWN
 
     async def _probe(self, credentials: RequestCredentials) -> str:
-        """``GET /users/self`` with the rejected token; the verdict of that one answer."""
-        from canvas_mcp.core.client import _canvas_auth_headers
-
+        """Ask the connector about the rejected token; the verdict of that one answer."""
         self.probe_count += 1
-        url = credentials.api_url.rstrip("/") + "/users/self"
-        headers = _canvas_auth_headers(credentials.api_token)
-        headers["Accept"] = "application/json"
-        try:
-            async with self._client_factory() as client:
-                response = await client.get(
-                    url,
-                    headers=headers,
-                    timeout=self._probe_timeout,
-                    follow_redirects=False,
-                )
-        except (httpx.HTTPError, ValueError):
-            return UNKNOWN
-        if response.status_code == 401:
-            # Only a 401 that says the token is dead; "insufficient scope" is not.
-            return REJECTED if _says_token_is_dead(response) else UNKNOWN
-        if response.status_code == 200:
-            return OK
-        return UNKNOWN
+        return await self._probe_credential(
+            credentials, client_factory=self._client_factory, timeout=self._probe_timeout
+        )
 
     def _prune(self) -> None:
         if len(self._flights) < _MAX_TRACKED:
