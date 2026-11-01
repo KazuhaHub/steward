@@ -8,7 +8,6 @@ the installed ``mcp-steward`` distribution's.
 from __future__ import annotations
 
 import json
-
 from importlib.metadata import PackageNotFoundError, version
 
 try:

@@ -34,6 +34,7 @@ from enum import StrEnum
 from typing import Protocol
 
 from steward.connectors.canvas.tool_policy import TOOL_EFFECTS, Effect
+
 from .token_store import ToolPrefs
 
 # How the write tools are grouped on /account. Tools outside these groups (for

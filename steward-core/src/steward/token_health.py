@@ -37,9 +37,10 @@ from dataclasses import dataclass
 import httpx
 
 from steward import audit
-from steward.request_state import RequestCredentials
 from steward.common.logging import log_warning
 from steward.connectors import OK, REJECTED, UNKNOWN, CredentialProbe, load_connector
+from steward.request_state import RequestCredentials
+
 from .db.workers import run_store
 from .token_store import (
     REASON_CANVAS_TOKEN_REJECTED,

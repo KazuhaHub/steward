@@ -18,6 +18,7 @@ from starlette.types import ASGIApp
 
 from steward.common.health import HEALTH_PATH, health_body
 from steward.common.logging import log_info
+
 from .accounts import STATUS_DISABLED, EntraClaimsPolicy, bootstrap_sign_in_gives_owner
 from .identity import IdentityService
 from .limits import RateLimiters, build_rate_limiters
@@ -28,6 +29,7 @@ from .tool_prefs import ToolPrefsCache, WriteToolCatalog
 
 if TYPE_CHECKING:
     from steward.connectors.canvas.tool_policy import ToolPolicy
+
     from .authz.runtime import AuthzRuntime
     from .config_snapshot import ConfigSnapshots
     from .login.installation import InstallationAuthority

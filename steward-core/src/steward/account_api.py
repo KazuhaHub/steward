@@ -56,6 +56,7 @@ from starlette.routing import Route
 from steward import account_core as web
 from steward.account_ops import Refusal, Unlinked, WriteToolsSnapshot
 from steward.accounts import valid_account_key
+from steward.connectors.canvas.tool_policy import TOOL_EFFECTS, Effect
 from steward.schools import (
     MAX_QUERY_CHARS,
     MIN_QUERY_CHARS,
@@ -81,7 +82,6 @@ from steward.tool_prefs import (
     WRITE_TOOL_GROUPS,
     user_can_enable,
 )
-from steward.connectors.canvas.tool_policy import TOOL_EFFECTS, Effect
 
 from . import custody
 from .build_info import build_info

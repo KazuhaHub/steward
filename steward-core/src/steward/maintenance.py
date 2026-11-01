@@ -14,6 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.elements import ColumnElement
 
 from steward.common.logging import log_warning
+
 from .db import schema as s
 from .db.engine import Database
 from .db.errors import StoreUnavailable

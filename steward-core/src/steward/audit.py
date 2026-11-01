@@ -21,8 +21,13 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any
 
+from steward.common.redact import (
+    mask_named_segments,
+    scrub_event,
+    scrub_secrets,
+    strip_query,
+)
 from steward.request_state import get_request_principal
-from steward.common.redact import mask_named_segments, scrub_event, scrub_secrets, strip_query
 
 # Separate logger for audit events (not the main application logger)
 _audit_logger = logging.getLogger("steward.audit")

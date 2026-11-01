@@ -36,6 +36,9 @@ dependencies = [
     "joserfc>=1.7.2,<2",
 ]
 
+[project.scripts]
+steward = "steward.cli:main"
+
 [project.optional-dependencies]
 # psycopg[binary] ships wheels that bundle libpq, so no system packages are needed.
 postgres = ["psycopg[binary]>=3.3,<4"]
@@ -64,8 +67,24 @@ asyncio_mode = "auto"
 pythonpath = ["src", "tests"]
 
 [tool.ruff]
-line-length = 100
 target-version = "py311"
+line-length = 88
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP"]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501", # line too long
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
