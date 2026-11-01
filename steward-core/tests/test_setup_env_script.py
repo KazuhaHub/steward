@@ -18,7 +18,7 @@ import pytest
 from dotenv import dotenv_values
 
 from canvas_mcp.core.config import STUDENT_WRITE_TOOL_NAMES
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
 

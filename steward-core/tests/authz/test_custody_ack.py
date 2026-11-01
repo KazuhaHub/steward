@@ -8,9 +8,9 @@ import httpx
 import pytest
 from sqlalchemy import select, update
 
-from canvas_mcp.core.selfhost import custody
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.schools import DirectoryEntry
+from steward import custody
+from steward.db import schema as s
+from steward.schools import DirectoryEntry
 
 from .stack import ALICE, CANVAS_HOST, SESSION_SECRET, Browser, local_stack
 

@@ -20,11 +20,11 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any
 
-from .credentials import get_request_principal
-from .redact import mask_named_segments, scrub_event, scrub_secrets, strip_query
+from steward.request_state import get_request_principal
+from steward.common.redact import mask_named_segments, scrub_event, scrub_secrets, strip_query
 
 # Separate logger for audit events (not the main application logger)
-_audit_logger = logging.getLogger("canvas_mcp.audit")
+_audit_logger = logging.getLogger("steward.audit")
 _audit_logger.setLevel(logging.INFO)
 _audit_logger.propagate = False  # Don't propagate to root/parent loggers
 
@@ -67,7 +67,7 @@ def init_audit_logging() -> None:
     if _initialized:
         return
 
-    from .config import get_config
+    from canvas_mcp.core.config import get_config
 
     config = get_config()
 

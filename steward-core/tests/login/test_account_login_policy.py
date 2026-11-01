@@ -5,9 +5,9 @@ from dataclasses import replace
 import pytest
 from sqlalchemy import insert, update
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.errors import TokenStoreError
+from steward import accounts as acc
+from steward.db import schema as s
+from steward.db.errors import TokenStoreError
 
 from .test_link_store import KEY_A, KEY_B, OPEN, google, verdict_for
 from .test_link_store import store as store_fixture
@@ -74,7 +74,7 @@ def test_custom_oidc_instances_have_independent_switches(store):
 
 
 def test_google_can_associate_to_existing_entra_upn_after_account_upn_rename(store):
-    from canvas_mcp.core.selfhost.login.account_names import AccountNames
+    from steward.login.account_names import AccountNames
 
     ext = acc.ExternalClaims(
         provider_id="entra",
@@ -154,7 +154,7 @@ def test_same_canonical_subject_cannot_be_owned_by_two_accounts(store):
 
 
 def test_first_sso_lock_and_admin_unlock_preserve_identity(store):
-    from canvas_mcp.core.selfhost.login.policy_store import AccountPolicyStore
+    from steward.login.policy_store import AccountPolicyStore
 
     enable(store, "entra", False)
     with store._db.write() as conn:
@@ -206,8 +206,8 @@ def test_first_sso_lock_and_admin_unlock_preserve_identity(store):
 
 
 def test_last_administrator_allowlist_change_rolls_back(store):
-    from canvas_mcp.core.selfhost.login.policy_store import AccountPolicyStore
-    from canvas_mcp.core.selfhost.login.provider_config import (
+    from steward.login.policy_store import AccountPolicyStore
+    from steward.login.provider_config import (
         ProviderConfigurationError,
     )
 
@@ -237,8 +237,8 @@ def test_last_administrator_allowlist_change_rolls_back(store):
 def test_local_password_and_upn_rename_keep_external_account_and_identity(store):
     from types import SimpleNamespace
 
-    from canvas_mcp.core.selfhost.login.account_names import AccountNames
-    from canvas_mcp.core.selfhost.login.local_accounts import LocalAccounts
+    from steward.login.account_names import AccountNames
+    from steward.login.local_accounts import LocalAccounts
 
     first = signin(store, google())
     key = first.status.principal_key
@@ -268,7 +268,7 @@ def test_local_password_and_upn_rename_keep_external_account_and_identity(store)
         ).id
         == key
     )
-    from canvas_mcp.core.selfhost.login.provider_config import (
+    from steward.login.provider_config import (
         ProviderConfigurationError,
     )
 
@@ -282,8 +282,8 @@ def test_local_password_and_upn_rename_keep_external_account_and_identity(store)
 
 
 def test_sso_without_email_gets_system_upn_before_oauth_authorization(store):
-    from canvas_mcp.core.selfhost.authz.store import _standing_ok
-    from canvas_mcp.core.selfhost.login.account_names import AccountNames
+    from steward.authz.store import _standing_ok
+    from steward.login.account_names import AccountNames
 
     ext = acc.ExternalClaims(
         provider_id="oidc:no-email", issuer="https://no-email.test", subject="immutable"
@@ -308,9 +308,9 @@ def test_sso_without_email_gets_system_upn_before_oauth_authorization(store):
 def test_local_login_rechecks_upn_after_password_verification(store, monkeypatch):
     from types import SimpleNamespace
 
-    from canvas_mcp.core.selfhost.login import local_accounts
-    from canvas_mcp.core.selfhost.login.account_names import AccountNames
-    from canvas_mcp.core.selfhost.login.provider_config import (
+    from steward.login import local_accounts
+    from steward.login.account_names import AccountNames
+    from steward.login.provider_config import (
         ProviderConfigurationError,
     )
 
@@ -344,7 +344,7 @@ def test_local_login_rechecks_upn_after_password_verification(store, monkeypatch
 
 
 def test_block_conflicting_registration_checks_bare_upn_without_associating(store):
-    from canvas_mcp.core.selfhost.login.policy_store import AccountPolicyStore
+    from steward.login.policy_store import AccountPolicyStore
 
     enable(store, "entra", False)
     with store._db.write() as conn:
@@ -379,8 +379,8 @@ def test_block_conflicting_registration_checks_bare_upn_without_associating(stor
 
 
 def test_upn_collision_is_account_wide_and_case_insensitive(store):
-    from canvas_mcp.core.selfhost.login.account_names import AccountNames
-    from canvas_mcp.core.selfhost.login.provider_config import (
+    from steward.login.account_names import AccountNames
+    from steward.login.provider_config import (
         ProviderConfigurationError,
     )
 

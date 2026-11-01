@@ -14,18 +14,18 @@ import pytest
 from fastmcp import Client, FastMCP
 from fastmcp.server.auth import AccessToken
 
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     RequestToolPrefs,
     set_request_credentials,
     set_request_principal,
     set_request_tool_prefs,
 )
-from canvas_mcp.core.selfhost import tool_gate
-from canvas_mcp.core.selfhost.db.snapshots import McpSnapshot
-from canvas_mcp.core.selfhost.mcp_state import MCP_READ, McpRead
-from canvas_mcp.core.selfhost.tool_gate import SelfhostCredentialGate
-from canvas_mcp.core.selfhost.tool_prefs import (
+from steward import tool_gate
+from steward.db.snapshots import McpSnapshot
+from steward.mcp_state import MCP_READ, McpRead
+from steward.tool_gate import SelfhostCredentialGate
+from steward.tool_prefs import (
     prefs_unreadable_message,
     write_tool_not_offered_message,
     write_tool_off_message,
@@ -232,7 +232,7 @@ class TestCalls:
         assert result.is_error and text_of(result) == "Not signed in."
 
     async def test_a_dead_token_message_beats_the_switch(self) -> None:
-        from canvas_mcp.core.credentials import (
+        from steward.request_state import (
             clear_request_credentials,
             set_missing_credentials_message,
         )
@@ -276,7 +276,7 @@ class TestListing:
         assert await listed(server) == {*READS, "send_message"}
 
     async def test_listing_needs_no_enrollment(self) -> None:
-        from canvas_mcp.core.credentials import clear_request_credentials
+        from steward.request_state import clear_request_credentials
 
         server = build_server(ceiling=set(WRITES))
         switched_on("send_message")

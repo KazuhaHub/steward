@@ -16,13 +16,13 @@ from typing import Any
 import pytest
 from dbbackend import make_store, raw_sql
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.accounts import AccessPolicy, AccessRule
-from canvas_mcp.core.selfhost.custody import (
+from steward import accounts as acc
+from steward.accounts import AccessPolicy, AccessRule
+from steward.custody import (
     CUSTODY_NOTICE_VERSION,
     CustodyAcknowledgement,
 )
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_store import (
     DISABLE_REASON_OPERATOR,
     OPERATOR,
     Keyring,
@@ -201,7 +201,7 @@ class TestApprovalVersusEnrollment:
     def test_an_approval_by_an_owner_disabled_in_the_meantime_is_refused(
         self, pair
     ) -> None:
-        from canvas_mcp.core.selfhost.token_store import AccessActionRefused
+        from steward.token_store import AccessActionRefused
 
         one, two, _ = pair
         boss = _owner(one)

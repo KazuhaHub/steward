@@ -6,10 +6,10 @@ from pathlib import Path
 
 import pytest
 
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     AUTH_MODE_ENV,
     AUTH_MODE_SELFHOST,
     COURSE_STATE_ENV,

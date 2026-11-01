@@ -11,8 +11,8 @@ import sys
 import pytest
 from dbbackend import IS_POSTGRES, make_store, raw_connection, stack_env
 
-from canvas_mcp.core.selfhost import token_admin
-from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore, token_db_path
+from steward import token_admin
+from steward.token_store import Keyring, TokenStore, token_db_path
 
 from .conftest import acct_key, store_put
 
@@ -230,7 +230,7 @@ def test_runs_as_a_module(env) -> None:
     source = pathlib.Path(__file__).resolve().parents[2] / "src"
     child_env["PYTHONPATH"] = str(source) + os.pathsep + child_env.get("PYTHONPATH", "")
     result = subprocess.run(
-        [sys.executable, "-m", "canvas_mcp.core.selfhost.token_admin", "check"],
+        [sys.executable, "-m", "steward.token_admin", "check"],
         capture_output=True,
         text=True,
         env=child_env,
@@ -351,7 +351,7 @@ KEY_B = acct_key(OID_B)
 
 
 def test_disable_blocks_and_survives_deleting_the_enrollment(env, capsys) -> None:
-    from canvas_mcp.core.selfhost.token_store import PrincipalDisabledError
+    from steward.token_store import PrincipalDisabledError
 
     store = _seed(env)
     assert token_admin.main(["disable", KEY_A]) == 0

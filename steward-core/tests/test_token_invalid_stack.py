@@ -13,12 +13,12 @@ import pytest
 import respx
 from dbbackend import raw_connection
 
-from canvas_mcp.core.selfhost.request_context import (
+from steward.request_context import (
     token_rejected_message,
     token_revoked_message,
     unreadable_token_message,
 )
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_store import (
     REASON_CANVAS_TOKEN_REJECTED,
     REASON_DECRYPT_FAILED,
     REASON_REVOKED_BY_ADMIN,

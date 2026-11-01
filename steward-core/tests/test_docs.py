@@ -11,7 +11,7 @@ import pytest
 from dotenv import dotenv_values
 
 from canvas_mcp.core.config import STUDENT_WRITE_TOOL_NAMES
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     REMOVED_SETTINGS,
     SelfhostConfigError,
     load_selfhost_settings,
@@ -76,7 +76,7 @@ def test_unedited_template_is_refused():
 
 
 def test_filled_template_is_accepted_by_current_settings(tmp_path):
-    from canvas_mcp.core.selfhost.runtime_secrets import initialize_secrets
+    from steward.runtime_secrets import initialize_secrets
 
     values = assignments()
     values.update(

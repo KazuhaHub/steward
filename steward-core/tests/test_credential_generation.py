@@ -23,7 +23,7 @@ from fastmcp import Client, FastMCP
 from fastmcp.server.auth import AccessToken
 
 from canvas_mcp.core import anonymization, cache, course_policy
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     RequestTokenState,
     current_principal_key,
@@ -42,13 +42,13 @@ from canvas_mcp.core.credentials import (
     set_request_principal,
     set_request_token_state,
 )
-from canvas_mcp.core.selfhost import tool_gate
-from canvas_mcp.core.selfhost.db.repos import Repositories
-from canvas_mcp.core.selfhost.mcp_state import MCP_READ, McpRead
-from canvas_mcp.core.selfhost.request_context import SelfhostRequestContextMiddleware
-from canvas_mcp.core.selfhost.schools import School, SchoolPolicy
-from canvas_mcp.core.selfhost.token_health import TokenHealth
-from canvas_mcp.core.selfhost.token_store import (
+from steward import tool_gate
+from steward.db.repos import Repositories
+from steward.mcp_state import MCP_READ, McpRead
+from steward.request_context import SelfhostRequestContextMiddleware
+from steward.schools import School, SchoolPolicy
+from steward.token_health import TokenHealth
+from steward.token_store import (
     DISABLE_REASON_OPERATOR,
     OPERATOR,
     REASON_CANVAS_TOKEN_REJECTED,
@@ -57,7 +57,7 @@ from canvas_mcp.core.selfhost.token_store import (
     Keyring,
     TokenStore,
 )
-from canvas_mcp.core.selfhost.tool_gate import SelfhostCredentialGate
+from steward.tool_gate import SelfhostCredentialGate
 from canvas_mcp.core.write_confirmation import ConfirmationGuard
 from canvas_mcp.tools import discussions
 

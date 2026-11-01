@@ -3,8 +3,8 @@
 import re
 from pathlib import Path
 
-from canvas_mcp.core.selfhost.account_api import ApiApp
-from canvas_mcp.core.selfhost.routes import (
+from steward.account_api import ApiApp
+from steward.routes import (
     API_PREFIX,
     AUTH_LOGIN,
     auth_callback,

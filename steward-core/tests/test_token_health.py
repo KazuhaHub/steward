@@ -21,7 +21,7 @@ from dbbackend import make_store
 
 from canvas_mcp.core import audit, course_files
 from canvas_mcp.core import client as cm
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     RequestTokenState,
     get_request_token_state,
@@ -30,15 +30,15 @@ from canvas_mcp.core.credentials import (
     set_request_principal,
     set_request_token_state,
 )
-from canvas_mcp.core.selfhost.request_context import token_rejected_message
-from canvas_mcp.core.selfhost.token_health import TokenHealth
-from canvas_mcp.core.selfhost.token_store import (
+from steward.request_context import token_rejected_message
+from steward.token_health import TokenHealth
+from steward.token_store import (
     REASON_CANVAS_TOKEN_REJECTED,
     STATUS_ACTIVE,
     STATUS_INVALID,
     TokenStore,
 )
-from canvas_mcp.core.token_health import set_token_health_monitor
+from steward.credential_health import set_token_health_monitor
 from canvas_mcp.core.write_outcome import RequestFailure, WriteOutcome
 
 from .conftest import OID_A, TENANT, acct_key, make_principal, store_put

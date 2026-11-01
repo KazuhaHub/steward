@@ -1,6 +1,6 @@
 """Tests for the request principal, the principal key and the missing-token message."""
 
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     clear_http_request_context,
     current_principal_key,

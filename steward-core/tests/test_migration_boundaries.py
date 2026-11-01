@@ -65,7 +65,7 @@ def test_only_documented_startup_and_cli_bridges_import_upgrade_tooling():
         "token_admin.py": {
             "db.migrations.provider_environment",
             "db.migrations.cli",
-            "canvas_mcp.core.selfhost.db.migrations.transfer",
+            "steward.db.migrations.transfer",
         },
     }
     violations = []

@@ -18,12 +18,12 @@ from typing import Any
 import pytest
 from dbbackend import make_store, raw_sql
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.accounts import AccessPolicy, AccessRule, BootstrapOwner
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.identity import SignIn
-from canvas_mcp.core.selfhost.maintenance import MaintenanceRunner
-from canvas_mcp.core.selfhost.token_store import (
+from steward import accounts as acc
+from steward.accounts import AccessPolicy, AccessRule, BootstrapOwner
+from steward.custody import CustodyAcknowledgement
+from steward.identity import SignIn
+from steward.maintenance import MaintenanceRunner
+from steward.token_store import (
     OPERATOR,
     Keyring,
     PrincipalPendingError,
@@ -509,7 +509,7 @@ class TestApprovalAndPending:
         )  # no rule needed
 
     def test_only_an_owner_or_the_operator_may_decide(self, store: TokenStore) -> None:
-        from canvas_mcp.core.selfhost.token_store import AccessActionRefused
+        from steward.token_store import AccessActionRefused
 
         service = identity_service(store, policy=APPROVAL)
         key = service.sign_in(claims(OID_A)).principal_key  # type: ignore[union-attr]
@@ -768,7 +768,7 @@ class TestOperatorAccounts:
     def test_promotion_is_for_the_operator_only_and_only_for_an_active_account(
         self, store: TokenStore
     ) -> None:
-        from canvas_mcp.core.selfhost.token_store import AccessActionRefused
+        from steward.token_store import AccessActionRefused
 
         key = store.create_operator_account(
             provider_id="entra", issuer="i", subject="s", status="active"

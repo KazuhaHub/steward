@@ -21,7 +21,7 @@ def statements(dialect: str) -> tuple[str, ...]:
     if dialect not in ("sqlite", "postgresql"):
         raise TokenStoreError("unsupported baseline database backend")
     raw = (
-        files("canvas_mcp.core.selfhost.db.migrations.baselines")
+        files("steward.db.migrations.baselines")
         .joinpath(dialect + "-v1.sql")
         .read_text(encoding="utf-8")
     )

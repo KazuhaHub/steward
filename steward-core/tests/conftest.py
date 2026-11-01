@@ -6,20 +6,20 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestPrincipal,
     clear_http_request_context,
     set_request_principal,
 )
-from canvas_mcp.core.selfhost.accounts import (
+from steward.accounts import (
     EntraClaimsPolicy,
     ExternalClaims,
     Verdict,
     default_policy,
     entra_issuer,
 )
-from canvas_mcp.core.selfhost.identity import IdentityService
-from canvas_mcp.core.selfhost.token_store import PrincipalStatus
+from steward.identity import IdentityService
+from steward.token_store import PrincipalStatus
 
 TENANT = "11111111-2222-3333-4444-555555555555"
 CLIENT = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
@@ -120,7 +120,7 @@ def store_put(
     key = make_account(
         store, object_id, tenant=tenant_id, name=entra_display_name, username=entra_upn
     )
-    from canvas_mcp.core.selfhost.custody import (
+    from steward.custody import (
         CUSTODY_NOTICE_VERSION,
         CustodyAcknowledgement,
     )

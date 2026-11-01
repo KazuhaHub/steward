@@ -7,7 +7,7 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from canvas_mcp.core.selfhost.login.registry import START_BURST, START_REFILL_PER_SECOND
+from steward.login.registry import START_BURST, START_REFILL_PER_SECOND
 
 from ..authz.stack import Clock
 from .stack_providers import provider_stack

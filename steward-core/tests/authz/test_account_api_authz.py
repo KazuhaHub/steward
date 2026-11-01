@@ -14,8 +14,8 @@ from urllib.parse import parse_qs, urlsplit
 import pytest
 from dbbackend import raw_sql
 
-from canvas_mcp.core.selfhost import account_api
-from canvas_mcp.core.selfhost.account_api import API_PREFIX
+from steward import account_api
+from steward.account_api import API_PREFIX
 
 from .stack import (
     ALICE,
@@ -74,7 +74,7 @@ def open_request(
         browser.entra_login(user, login)
         me = browser.api("GET", "/me")
         if me.status_code == 200 and me.json()["account"].get("upn_required"):
-            from canvas_mcp.core.selfhost.login.account_names import AccountNames
+            from steward.login.account_names import AccountNames
 
             AccountNames(stack.store.database).save(
                 user.oid + "@example.test",
@@ -466,7 +466,7 @@ class TestDecide:
     def test_a_disabled_account_has_no_session_to_decide_with(
         self, react: Stack
     ) -> None:
-        from canvas_mcp.core.selfhost.token_store import OPERATOR
+        from steward.token_store import OPERATOR
 
         browser, txn = open_request(react)
         react.store.disable_principal(
@@ -631,7 +631,7 @@ class TestMyGrants:
         error_of(browser.api("POST", "/me/grants"), 405, "method_not_allowed")
 
     def test_a_database_error_is_a_closed_503(self, react: Stack, monkeypatch) -> None:
-        from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
+        from steward.db.errors import StoreUnavailable
 
         react.enroll(ALICE)
         browser = signed_in(react)

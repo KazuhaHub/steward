@@ -16,8 +16,8 @@ from dataclasses import replace
 import pytest
 from dbbackend import make_store
 
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.token_store import (
+from steward.custody import CustodyAcknowledgement
+from steward.token_store import (
     DISABLE_REASON_ADMIN,
     DISABLE_REASON_OPERATOR,
     OPERATOR,

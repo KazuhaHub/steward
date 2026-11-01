@@ -8,8 +8,8 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.selfhost import edge_guard
-from canvas_mcp.core.selfhost.edge_guard import SelfhostEdgeGuard
+from steward import edge_guard
+from steward.edge_guard import SelfhostEdgeGuard
 
 
 class Clock:

@@ -25,15 +25,15 @@ from canvas_mcp import server as server_module
 from canvas_mcp.core import config as config_module
 from canvas_mcp.core.config import reset_config
 from canvas_mcp.core.course_policy import reset_policy_cache
-from canvas_mcp.core.selfhost.app import (
+from steward.app import (
     apply_disabled_tools,
 )
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     DISABLED_TOOLS_ENV,
     SelfhostConfigError,
     load_selfhost_settings,
 )
-from canvas_mcp.core.tool_policy import (
+from steward.connectors.canvas.tool_policy import (
     TOOL_EFFECTS,
     Effect,
     apply_tool_policy,
@@ -200,7 +200,7 @@ class TestApply:
 
 class TestStartup:
     def test_main_removes_the_tools_and_logs_the_count(self, entra_env, caplog):  # noqa: F811
-        import canvas_mcp.core.selfhost.app as app_module
+        import steward.app as app_module
 
         mp = entra_env["monkeypatch"]
         mp.setenv("CANVAS_ROLE", "student")

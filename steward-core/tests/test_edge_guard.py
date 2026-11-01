@@ -13,10 +13,10 @@ import pytest
 from sqlalchemy import select
 
 from canvas_mcp import __version__
-from canvas_mcp.core.selfhost import edge_guard
-from canvas_mcp.core.selfhost.authz.clients import DCR_TTL_SECONDS
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.edge_guard import (
+from steward import edge_guard
+from steward.authz.clients import DCR_TTL_SECONDS
+from steward.db import schema as s
+from steward.edge_guard import (
     MAX_REGISTER_BODY_BYTES,
     PUBLIC_REQUESTS_PER_MINUTE,
     REGISTRATIONS_PER_DAY,

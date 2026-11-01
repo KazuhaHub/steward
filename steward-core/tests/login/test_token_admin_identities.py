@@ -11,17 +11,17 @@ import sys
 import pytest
 from dbbackend import make_store, stack_env
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost import token_admin
-from canvas_mcp.core.selfhost.accounts import ExternalClaims
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward import accounts as acc
+from steward import token_admin
+from steward.accounts import ExternalClaims
+from steward.db.migrations.provider_environment import (
     import_provider_settings,
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.login import registry as login_registry
-from canvas_mcp.core.selfhost.login.http import SafeHttp
-from canvas_mcp.core.selfhost.login.provider_store import ProviderConfigStore
-from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore, token_db_path
+from steward.login import registry as login_registry
+from steward.login.http import SafeHttp
+from steward.login.provider_store import ProviderConfigStore
+from steward.token_store import Keyring, TokenStore, token_db_path
 
 from ..conftest import OID_A, OID_B, acct_key, make_account, sign_in
 from .fake_idp import FakeNetwork, FakeOidcIdp, google_idp
@@ -675,7 +675,7 @@ class TestDatabaseLoginCommands:
     ):
         from sqlalchemy import select, update
 
-        from canvas_mcp.core.selfhost.db import schema
+        from steward.db import schema
 
         for name, value in env().items():
             monkeypatch.setenv(name, value)
@@ -702,7 +702,7 @@ class TestDatabaseLoginCommands:
     def test_database_inventory_excludes_legacy_environment_governance(
         self, cli_env, monkeypatch, capsys
     ):
-        from canvas_mcp.core.selfhost.db.migrations import provider_environment
+        from steward.db.migrations import provider_environment
 
         for name, value in env().items():
             monkeypatch.setenv(name, value)

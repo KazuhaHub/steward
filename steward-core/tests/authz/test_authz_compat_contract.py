@@ -55,7 +55,7 @@ from starlette.applications import Starlette
 from starlette.routing import Route
 from starlette.testclient import TestClient
 
-from canvas_mcp.core.selfhost.authz import fastmcp_compat as compat
+from steward.authz import fastmcp_compat as compat
 
 BASE = "https://canvas.example.test"
 REDIRECT = "https://claude.ai/api/mcp/auth_callback"
@@ -447,7 +447,7 @@ class TestPublicTypes:
         assert {"resource", "subject", "redirect_uri_provided_explicitly", "expires_at"} <= set(AuthorizationCode.model_fields)
 
     def test_our_refresh_token_may_declare_resource_on_either_sdk(self) -> None:
-        from canvas_mcp.core.selfhost.authz.server import LocalRefreshToken
+        from steward.authz.server import LocalRefreshToken
 
         token = LocalRefreshToken(
             token="t", client_id="c", scopes=["s"], expires_at=1, subject="acct:x", resource="r",

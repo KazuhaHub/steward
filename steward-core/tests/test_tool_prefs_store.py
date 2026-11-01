@@ -8,7 +8,7 @@ import pytest
 from dbbackend import make_store
 from sqlalchemy import inspect
 
-from canvas_mcp.core.selfhost.token_store import TokenStore
+from steward.token_store import TokenStore
 
 from .conftest import acct_key, make_account
 from .test_token_store import OID_A, OID_B, Clock, _put, _ring
@@ -158,7 +158,7 @@ class TestNativeRows:
     def test_each_enabled_tool_is_one_native_row(self, store: TokenStore, clock: Clock) -> None:
         from sqlalchemy import select
 
-        from canvas_mcp.core.selfhost.db import schema
+        from steward.db import schema
         store.set_tool_prefs(PK_A, ["send_message", "submit_assignment"])
         with store.database.read() as conn:
             rows = conn.execute(select(schema.account_write_tools).order_by(schema.account_write_tools.c.tool_name)).mappings().all()
@@ -172,7 +172,7 @@ class TestNativeRows:
         from sqlalchemy import update
         from sqlalchemy.exc import DBAPIError
 
-        from canvas_mcp.core.selfhost.db import schema
+        from steward.db import schema
         store.set_tool_prefs(PK_A, ["send_message"])
         with pytest.raises(DBAPIError):
             with store.database.engine.begin() as conn:

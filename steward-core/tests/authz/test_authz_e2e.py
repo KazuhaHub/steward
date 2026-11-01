@@ -31,7 +31,7 @@ from mcp.shared.auth import (
 )
 from pydantic import AnyUrl
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
+from steward.authz import tokens as tk
 
 from .stack import (
     ALICE,
@@ -451,7 +451,7 @@ class TestRecordedClients:
     def test_when_the_document_cannot_be_fetched_an_authorization_cannot_start_but_refresh_still_works(
         self, served: Served
     ) -> None:
-        from canvas_mcp.core.selfhost.authz import fastmcp_compat as compat
+        from steward.authz import fastmcp_compat as compat
 
         stack = served.stack
         stack.cimd.serve(

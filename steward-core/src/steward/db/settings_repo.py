@@ -17,7 +17,7 @@ from sqlalchemy.engine import Connection
 from ..server_settings import SETTINGS, validate_setting
 from .types import JsonDoc, Uuid
 
-logger = logging.getLogger("canvas_mcp.selfhost.account")
+logger = logging.getLogger("steward.account")
 
 
 class SettingsConflict(Exception):

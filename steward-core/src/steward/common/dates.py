@@ -24,7 +24,7 @@ _tz_warned: set[str] = set()
 
 def _output_tz() -> datetime.tzinfo:
     """Resolve the configured output timezone, falling back to UTC."""
-    from .config import get_config
+    from canvas_mcp.core.config import get_config
 
     name = (get_config().timezone or "UTC").strip()
     if name in _tz_cache:

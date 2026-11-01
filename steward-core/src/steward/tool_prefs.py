@@ -3,7 +3,7 @@
 Four layers decide whether a write tool can act for a user:
 
 1. the operator's ``ALLOWED_WRITE_TOOLS`` (the server ceiling): a tool that is not
-   allowed is not even registered, see :mod:`canvas_mcp.core.tool_policy`;
+   allowed is not even registered, see :mod:`steward.connectors.canvas.tool_policy`;
 2. the user's own switch, kept in the token database and changed only from the
    signed-in ``/account`` page (this module);
 3. the course policy (``agent_writes`` in the syllabus), checked at call time;
@@ -16,7 +16,7 @@ user has nothing enabled, and a tool the operator adds to ``ALLOWED_WRITE_TOOLS`
 later is not switched on for anyone; each user turns it on by name.
 
 Anything that is not a read tool counts as a write tool (a name that
-:data:`~canvas_mcp.core.tool_policy.TOOL_EFFECTS` does not know fails closed).
+:data:`~steward.connectors.canvas.tool_policy.TOOL_EFFECTS` does not know fails closed).
 Code execution can never be switched on by a user.
 
 No MCP tool reads or changes these preferences, so a prompt-injected model cannot
@@ -33,7 +33,7 @@ from collections.abc import Awaitable, Callable, Collection, Iterable
 from enum import StrEnum
 from typing import Protocol
 
-from ..tool_policy import TOOL_EFFECTS, Effect
+from steward.connectors.canvas.tool_policy import TOOL_EFFECTS, Effect
 from .token_store import ToolPrefs
 
 # How the write tools are grouped on /account. Tools outside these groups (for

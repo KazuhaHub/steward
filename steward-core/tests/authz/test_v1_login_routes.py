@@ -4,7 +4,7 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from canvas_mcp.core.selfhost.login.ceremony import FLOW_COOKIE
+from steward.login.ceremony import FLOW_COOKIE
 
 from .stack import ALICE, Browser
 
@@ -86,7 +86,7 @@ def test_entra_rejects_untrusted_identity_claims(stack, claims):
 
 
 def test_callback_exception_also_clears_flow_cookie(stack, monkeypatch):
-    from canvas_mcp.core.selfhost.account_core import AccountCore
+    from steward.account_core import AccountCore
 
     async def unavailable(self, request):
         raise RuntimeError("private backend details")

@@ -10,9 +10,9 @@ import pytest
 from PIL import Image, PngImagePlugin
 from sqlalchemy import select
 
-from canvas_mcp.core.selfhost.db import schema
-from canvas_mcp.core.selfhost.login.provider_config import ProviderConfigurationError
-from canvas_mcp.core.selfhost.login.provider_icon import (
+from steward.db import schema
+from steward.login.provider_config import ProviderConfigurationError
+from steward.login.provider_icon import (
     PREFIX,
     ProviderIconFiles,
     validate_icon,
@@ -228,7 +228,7 @@ def test_stale_and_csrf_requests_never_create_files_and_disk_failure_rolls_back(
             raise OSError("private path must not leak")
 
         monkeypatch.setattr(
-            "canvas_mcp.core.selfhost.login.provider_icon.os.replace", fail_replace
+            "steward.login.provider_icon.os.replace", fail_replace
         )
         response = client.put(route, headers=headers, json=body)
         assert response.status_code == 503

@@ -8,13 +8,13 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.selfhost.login.http import SafeHttp
-from canvas_mcp.core.selfhost.login.idtoken import (
+from steward.login.http import SafeHttp
+from steward.login.idtoken import (
     IdTokenRejected,
     peek_header,
     verify_id_token,
 )
-from canvas_mcp.core.selfhost.login.jwks import JwksCache
+from steward.login.jwks import JwksCache
 
 from .fake_idp import DELETE, FakeNetwork, FakeOidcIdp, b64url, rsa_key
 

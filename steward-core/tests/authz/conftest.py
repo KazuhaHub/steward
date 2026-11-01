@@ -16,7 +16,7 @@ import pytest
 from dbbackend import make_store
 
 import canvas_mcp
-from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore
+from steward.token_store import Keyring, TokenStore
 
 #: The checkout under test must be the code that runs (a stale site-packages copy of an
 #: older checkout would silently test the wrong implementation).

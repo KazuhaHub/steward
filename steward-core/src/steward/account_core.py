@@ -26,9 +26,9 @@ from starlette.responses import Response
 from starlette.routing import Route, request_response
 from starlette.types import Receive, Scope, Send
 
-from canvas_mcp.core import audit
-from canvas_mcp.core.dates import output_timezone
-from canvas_mcp.core.selfhost.account_ops import (
+from steward import audit
+from steward.common.dates import output_timezone
+from steward.account_ops import (
     LINK_ERROR_CODES,
     IdentityView,
     Linked,
@@ -39,7 +39,7 @@ from canvas_mcp.core.selfhost.account_ops import (
     WriteSaved,
     WriteToolsSnapshot,
 )
-from canvas_mcp.core.selfhost.accounts import (
+from steward.accounts import (
     DENY_ACCESS_DENIED,
     DENY_ACCESS_DISABLED,
     DENY_BAD_ROLES,
@@ -52,12 +52,12 @@ from canvas_mcp.core.selfhost.accounts import (
     Denied,
     valid_account_key,
 )
-from canvas_mcp.core.selfhost.identity import IdentityService, SignIn
-from canvas_mcp.core.selfhost.limits import (
+from steward.identity import IdentityService, SignIn
+from steward.limits import (
     RateLimiters,
     build_rate_limiters,
 )
-from canvas_mcp.core.selfhost.schools import (
+from steward.schools import (
     DirectoryError,
     HostResolver,
     School,
@@ -69,8 +69,8 @@ from canvas_mcp.core.selfhost.schools import (
     parse_hostname,
     system_resolve,
 )
-from canvas_mcp.core.selfhost.token_health import TokenHealth
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_health import TokenHealth
+from steward.token_store import (
     DISABLE_REASON_ADMIN,
     REASON_REVOKED_BY_ADMIN,
     STATUS_ACTIVE,
@@ -82,7 +82,7 @@ from canvas_mcp.core.selfhost.token_store import (
     TokenDecryptionError,
     TokenStore,
 )
-from canvas_mcp.core.selfhost.tool_prefs import (
+from steward.tool_prefs import (
     ToolPrefsCache,
     WriteToolCatalog,
 )
@@ -99,16 +99,16 @@ from .routes import SIGN_IN_PAGE as SIGN_IN_PATH
 if TYPE_CHECKING:
     from fastmcp import FastMCP
 
-    from canvas_mcp.core.selfhost.account_spa import SpaBundle
-    from canvas_mcp.core.selfhost.authz.models import GrantRecord
-    from canvas_mcp.core.selfhost.authz.runtime import AuthzRuntime
-    from canvas_mcp.core.selfhost.login.flows import ExternalSignIn
-    from canvas_mcp.core.selfhost.login.installation import InstallationAuthority
-    from canvas_mcp.core.selfhost.login.provider_store import ProviderConfigStore
-    from canvas_mcp.core.selfhost.login.registry import LoginRuntime
-    from canvas_mcp.core.selfhost.settings import SelfhostSettings
+    from steward.account_spa import SpaBundle
+    from steward.authz.models import GrantRecord
+    from steward.authz.runtime import AuthzRuntime
+    from steward.login.flows import ExternalSignIn
+    from steward.login.installation import InstallationAuthority
+    from steward.login.provider_store import ProviderConfigStore
+    from steward.login.registry import LoginRuntime
+    from steward.settings import SelfhostSettings
 
-logger = logging.getLogger("canvas_mcp.selfhost.account")
+logger = logging.getLogger("steward.account")
 
 
 SIGN_IN_METHODS_PATH = "/account/sign-in-methods"
@@ -403,7 +403,7 @@ class AccountCore:
         window = (rate_limiters or build_rate_limiters("memory")).sliding_window
         self.authz = authz
         self.snapshots = snapshots
-        from canvas_mcp.core.selfhost.login.flows import ExternalSignIn
+        from steward.login.flows import ExternalSignIn
 
         self._login_bundle = LoginBundle(
             None, logins, identity, ExternalSignIn(self, logins)

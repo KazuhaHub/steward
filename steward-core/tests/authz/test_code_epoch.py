@@ -15,12 +15,12 @@ from typing import Any
 import pytest
 from dbbackend import raw_sql
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.authz.consent import ConsentRedirect, ConsentRefusal
-from canvas_mcp.core.selfhost.authz.models import ExchangeOutcome as X
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.db.authz_repos import SqlAuthCodeRepo
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward.authz import tokens as tk
+from steward.authz.consent import ConsentRedirect, ConsentRefusal
+from steward.authz.models import ExchangeOutcome as X
+from steward.authz.store import AuthzStore
+from steward.db.authz_repos import SqlAuthCodeRepo
+from steward.token_store import OPERATOR
 
 from .helpers import CHALLENGE, CLIENT, REDIRECT, RESOURCE, SCOPE, Env, make_env
 from .stack import (

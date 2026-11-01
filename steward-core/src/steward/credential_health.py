@@ -13,7 +13,7 @@ nor a verified principal, a request that carries its own token (the legacy and A
 HTTP modes, where a platform injects ``X-Canvas-Token``) confirms the suspicion
 with the same probe and records nothing. The same goes for stdio mode with the token in ``CANVAS_API_TOKEN``.
 
-Within one request, a shared :class:`~canvas_mcp.core.credentials.RequestTokenState`
+Within one request, a shared :class:`~steward.request_state.RequestTokenState`
 remembers that the token was found dead, so later paginated or gathered calls
 stop at once instead of each hitting Canvas and getting another 401.
 """
@@ -29,12 +29,12 @@ from typing import Protocol
 
 import httpx
 
-from .credentials import (
+from steward.request_state import (
     RequestCredentials,
     get_request_principal,
     get_request_token_state,
 )
-from .write_outcome import RequestFailure, WriteOutcome
+from canvas_mcp.core.write_outcome import RequestFailure, WriteOutcome
 
 _DEAD_TEXT_RE = re.compile(r"invalid access token|expired", re.IGNORECASE)
 _MAX_BODY_CHARS = 4096
@@ -206,7 +206,7 @@ def _says_token_is_dead(response: httpx.Response) -> bool:
 
 async def _probe_rejects(credentials: RequestCredentials) -> bool:
     """True only if ``GET /users/self`` with this token answers 401 *and* says the token is dead."""
-    from .client import _canvas_auth_headers
+    from canvas_mcp.core.client import _canvas_auth_headers
 
     headers = _canvas_auth_headers(credentials.api_token)
     headers["Accept"] = "application/json"

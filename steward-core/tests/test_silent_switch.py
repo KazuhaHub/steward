@@ -14,22 +14,22 @@ import pathlib
 import pytest
 from dbbackend import PG_URL, reset_public_schema
 
-from canvas_mcp.core.selfhost import token_admin
-from canvas_mcp.core.selfhost.app import prepare_selfhost
-from canvas_mcp.core.selfhost.db.engine import Database
-from canvas_mcp.core.selfhost.db.migrations import runner as migrate
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward import token_admin
+from steward.app import prepare_selfhost
+from steward.db.engine import Database
+from steward.db.migrations import runner as migrate
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.db.migrations.transfer import (
+from steward.db.migrations.transfer import (
     refuse_silent_switch,
     target_holds_rows,
 )
-from canvas_mcp.core.selfhost.db.url import default_sqlite_path
-from canvas_mcp.core.selfhost.settings import (
+from steward.db.url import default_sqlite_path
+from steward.settings import (
     SelfhostConfigError,
 )
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_store import (
     Keyring,
     TokenStore,
     TokenStoreError,
@@ -276,7 +276,7 @@ class TestPostgres:
         # The import fails inside the PostgreSQL transaction. DDL is transactional
         # there, so the schema it created goes with the rows: "uninitialized" again,
         # not "current but empty". Either way the guard refuses (it counts rows).
-        from canvas_mcp.core.selfhost.db.migrations import transfer
+        from steward.db.migrations import transfer
 
         source = _disabled_legacy_file(env / "source")
 
@@ -299,7 +299,7 @@ class TestPostgres:
     ) -> None:
         # Here the schema was created before (db upgrade), so it legitimately stays:
         # "current" and empty. What matters is that no row got in and the server refuses.
-        from canvas_mcp.core.selfhost.db.migrations import transfer
+        from steward.db.migrations import transfer
 
         assert token_admin.main(["db", "upgrade"]) == 0
         source = env / "old.sqlite3"
@@ -328,6 +328,6 @@ class TestPostgres:
 
 
 def _pg() -> Database:
-    from canvas_mcp.core.selfhost.db.url import parse_database_url
+    from steward.db.url import parse_database_url
 
     return Database(parse_database_url(PG_URL, pathlib.Path("/data")))

@@ -19,7 +19,7 @@ import pytest
 from fastmcp import FastMCP
 
 from canvas_mcp.core import anonymization, cache, course_policy
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     clear_http_request_context,
     request_local_principal_state,

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
 from canvas_mcp.server import _selfhost_summary

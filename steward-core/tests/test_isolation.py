@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from canvas_mcp.core import anonymization, cache, course_policy
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     current_principal_key,
     get_request_credentials,

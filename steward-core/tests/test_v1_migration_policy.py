@@ -10,9 +10,9 @@ import pytest
 from dbbackend import IS_POSTGRES
 from sqlalchemy import event, inspect, text
 
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable, TokenStoreError
-from canvas_mcp.core.selfhost.db.migrations import runner as migrate
-from canvas_mcp.core.selfhost.db.types import new_id
+from steward.db.errors import StoreUnavailable, TokenStoreError
+from steward.db.migrations import runner as migrate
+from steward.db.types import new_id
 
 from .test_v1_migrate import db  # noqa: F401
 
@@ -61,7 +61,7 @@ def revision_graph(tmp_path, monkeypatch):
     ):
         script = f"""from alembic import op
 import sqlalchemy as sa
-from canvas_mcp.core.selfhost.db.migrations.policy import rebuild_sqlite_table, concurrent_index
+from steward.db.migrations.policy import rebuild_sqlite_table, concurrent_index
 revision = {revision!r}
 down_revision = {down!r}
 branch_labels = None
@@ -238,7 +238,7 @@ def test_contract_floor_raise_is_checked_on_each_backend(
 def test_nontransactional_failure_leaves_invalid_index_and_retry_repairs_it_under_lock(
     db, revision_graph
 ):  # noqa: F811
-    from canvas_mcp.core.selfhost.db.migrations.connections import MIGRATION_LOCK_KEY
+    from steward.db.migrations.connections import MIGRATION_LOCK_KEY
 
     migrate.ensure_ready(db)
     first, second = new_id(), new_id()

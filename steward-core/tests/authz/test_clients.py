@@ -6,14 +6,14 @@ import pytest
 from mcp.shared.auth import InvalidRedirectUriError, OAuthClientInformationFull
 from pydantic import AnyUrl
 
-from canvas_mcp.core.selfhost.authz.clients import (
+from steward.authz.clients import (
     DCR_TTL_SECONDS,
     PublicClient,
     clean_label,
     make_public,
     validate_dcr_metadata,
 )
-from canvas_mcp.core.selfhost.settings import DEFAULT_REDIRECT_URIS
+from steward.settings import DEFAULT_REDIRECT_URIS
 
 ALLOW = DEFAULT_REDIRECT_URIS
 SCOPES = ["Canvas.Access"]

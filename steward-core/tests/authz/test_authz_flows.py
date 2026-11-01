@@ -10,8 +10,8 @@ from urllib.parse import parse_qs, urlsplit
 import pytest
 from dbbackend import raw_sql
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
+from steward.authz import tokens as tk
+from steward.db.errors import StoreUnavailable
 
 from .stack import (
     ALICE,

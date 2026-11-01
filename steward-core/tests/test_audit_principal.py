@@ -5,7 +5,7 @@ import json
 import pytest
 
 from canvas_mcp.core import audit
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     set_request_credentials,
     set_request_principal,
@@ -73,7 +73,7 @@ def test_an_explicit_subject_is_preserved_for_an_owner_action(
 
 
 def test_a_token_cache_key_is_never_an_audit_identity(recorder: _Recorder) -> None:
-    from canvas_mcp.core.credentials import RequestPrincipal
+    from steward.request_state import RequestPrincipal
 
     set_request_principal(
         RequestPrincipal(key="token:opaque-cache-key", display_name="", is_owner=False)

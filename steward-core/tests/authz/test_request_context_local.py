@@ -6,16 +6,16 @@ import pytest
 from fastmcp import Client, FastMCP
 from fastmcp.server.auth import AccessToken
 
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     set_request_credentials,
     set_request_principal,
 )
-from canvas_mcp.core.selfhost import tool_gate
-from canvas_mcp.core.selfhost.accounts import Denied
-from canvas_mcp.core.selfhost.mcp_state import MCP_READ, McpRead
-from canvas_mcp.core.selfhost.request_context import LocalClaimsResolver
-from canvas_mcp.core.selfhost.tool_gate import SelfhostCredentialGate
+from steward import tool_gate
+from steward.accounts import Denied
+from steward.mcp_state import MCP_READ, McpRead
+from steward.request_context import LocalClaimsResolver
+from steward.tool_gate import SelfhostCredentialGate
 
 from ..conftest import OID_A, OID_B, acct_key, make_principal
 from ..test_request_context import CANVAS_URL, GRANT, ISSUER, _claims, native_snapshot

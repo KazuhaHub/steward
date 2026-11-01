@@ -7,8 +7,8 @@ import pathlib
 import pytest
 from dbbackend import raw_sql
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward import accounts as acc
+from steward.token_store import OPERATOR
 
 from ..authz.stack import ALICE, Browser
 from .fake_idp import GitHubUser, IdpUser

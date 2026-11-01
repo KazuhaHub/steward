@@ -52,7 +52,7 @@ STATE_PRE_V1 = "pre_v1"
 STATE_UNREADABLE = "unreadable"
 _PRE_V1_REVISIONS = {"0001_baseline_v4", "0002_accounts", "0003_oauth_authz"}
 _MIGRATIONS_DIR = pathlib.Path(__file__).parent
-logger = logging.getLogger("canvas_mcp.selfhost.account")
+logger = logging.getLogger("steward.account")
 
 
 @dataclass(frozen=True)

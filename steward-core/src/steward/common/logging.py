@@ -10,7 +10,7 @@ from urllib.parse import urlsplit, urlunsplit
 from .redact import SecretScrubFilter, mask_named_segments
 
 # Configure logger for Canvas MCP
-logger = logging.getLogger("canvas_mcp")
+logger = logging.getLogger("steward")
 logger.setLevel(logging.INFO)
 
 # Create console handler with formatting

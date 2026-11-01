@@ -99,7 +99,7 @@ def refuse_silent_switch(target: Database, sqlite_path: pathlib.Path) -> None:
     if target_holds_rows(target):
         return
     instruction = (
-        "Import it with: python -m canvas_mcp.core.selfhost.token_admin db import-sqlite PATH"
+        "Import it with: python -m steward.token_admin db import-sqlite PATH"
         if target.kind == "postgresql"
         else "Point DATABASE_URL back at the SQLite file"
     )

@@ -7,8 +7,8 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.selfhost.account_core import SESSION_COOKIE
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward.account_core import SESSION_COOKIE
+from steward.token_store import OPERATOR
 
 from .account_fixture import (  # noqa: F401
     KEY,

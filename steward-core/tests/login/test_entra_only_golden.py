@@ -6,9 +6,9 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from canvas_mcp.core.selfhost import account_core as web
-from canvas_mcp.core.selfhost.login.ceremony import FLOW_COOKIE
-from canvas_mcp.core.selfhost.login.routes import build_login_routes
+from steward import account_core as web
+from steward.login.ceremony import FLOW_COOKIE
+from steward.login.routes import build_login_routes
 
 from ..authz.stack import ALICE, Browser, Stack
 

@@ -8,14 +8,14 @@ from sqlalchemy import select
 from starlette.applications import Starlette
 from starlette.testclient import TestClient
 
-from canvas_mcp.core.selfhost.account_api import build_api_routes
-from canvas_mcp.core.selfhost.account_core import AccountConfig, build_account_app
-from canvas_mcp.core.selfhost.app import prepare_selfhost
-from canvas_mcp.core.selfhost.db import schema
-from canvas_mcp.core.selfhost.login.provider_icon import build_icon_routes
-from canvas_mcp.core.selfhost.login.registry import build_login_runtime
-from canvas_mcp.core.selfhost.login.routes import build_login_routes
-from canvas_mcp.core.selfhost.settings import load_selfhost_settings
+from steward.account_api import build_api_routes
+from steward.account_core import AccountConfig, build_account_app
+from steward.app import prepare_selfhost
+from steward.db import schema
+from steward.login.provider_icon import build_icon_routes
+from steward.login.registry import build_login_runtime
+from steward.login.routes import build_login_routes
+from steward.settings import load_selfhost_settings
 
 from ..authz.stack import (
     ALICE,

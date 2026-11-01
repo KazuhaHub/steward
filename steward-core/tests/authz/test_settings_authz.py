@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     AuthzSettings,
     SelfhostConfigError,
     format_duration,

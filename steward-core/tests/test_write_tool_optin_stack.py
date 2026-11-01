@@ -254,7 +254,7 @@ class TestServerCeiling:
     def test_switching_on_everything_exposes_exactly_what_the_operator_allows(
         self, stack
     ):
-        from canvas_mcp.core.tool_policy import SIDE_EFFECT_TOOLS
+        from steward.connectors.canvas.tool_policy import SIDE_EFFECT_TOOLS
 
         switch_on(stack, OID_A, *sorted(SIDE_EFFECT_TOOLS))
         names = tool_names(stack, "bearer-A")

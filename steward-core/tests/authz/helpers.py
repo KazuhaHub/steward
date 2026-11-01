@@ -5,11 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.settings import AuthzSettings
-from canvas_mcp.core.selfhost.token_store import TokenStore
+from steward.authz import tokens as tk
+from steward.authz.store import AuthzStore
+from steward.db.types import new_id
+from steward.settings import AuthzSettings
+from steward.token_store import TokenStore
 
 from ..conftest import OID_A, make_account
 

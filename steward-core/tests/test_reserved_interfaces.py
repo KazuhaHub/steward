@@ -5,8 +5,8 @@ from pathlib import Path
 
 from sqlalchemy import func, select
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.login.registry import EnvProviderConfigSource
+from steward.db import schema as s
+from steward.login.registry import EnvProviderConfigSource
 
 from .account_fixture import (
     OID,

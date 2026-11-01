@@ -16,10 +16,10 @@ from starlette.requests import Request
 from starlette.responses import RedirectResponse, Response
 from starlette.types import ASGIApp
 
-from ..config import Config
-from ..health import HEALTH_PATH, health_body
-from ..logging import log_info
-from ..token_health import set_token_health_monitor
+from canvas_mcp.core.config import Config
+from steward.common.health import HEALTH_PATH, health_body
+from steward.common.logging import log_info
+from steward.credential_health import set_token_health_monitor
 from .accounts import STATUS_DISABLED, EntraClaimsPolicy, bootstrap_sign_in_gives_owner
 from .identity import IdentityService
 from .limits import RateLimiters, build_rate_limiters
@@ -29,7 +29,7 @@ from .tool_gate import SelfhostCredentialGate
 from .tool_prefs import ToolPrefsCache, WriteToolCatalog
 
 if TYPE_CHECKING:
-    from ..tool_policy import ToolPolicy
+    from steward.connectors.canvas.tool_policy import ToolPolicy
     from .authz.runtime import AuthzRuntime
     from .config_snapshot import ConfigSnapshots
     from .login.installation import InstallationAuthority
@@ -237,14 +237,14 @@ def _owner_path_problem(settings: SelfhostSettings, store: TokenStore) -> str | 
             return (
                 "no owner can sign in: the account of SELFHOST_BOOTSTRAP_OWNER is disabled and "
                 "no other usable owner exists; enable it with: "
-                "python -m canvas_mcp.core.selfhost.token_admin enable ACCOUNT, or make another "
-                "account an owner with: python -m canvas_mcp.core.selfhost.token_admin "
+                "python -m steward.token_admin enable ACCOUNT, or make another "
+                "account an owner with: python -m steward.token_admin "
                 "promote-owner ACCOUNT"
             )
         return (
             "no owner can sign in: signing in as SELFHOST_BOOTSTRAP_OWNER would not give an owner "
             f"session (its account is {status.status}) and no other usable owner exists; make "
-            "another account an owner with: python -m canvas_mcp.core.selfhost.token_admin "
+            "another account an owner with: python -m steward.token_admin "
             "promote-owner ACCOUNT"
         )
     stranded = store.count_active_owners()
@@ -255,14 +255,14 @@ def _owner_path_problem(settings: SelfhostSettings, store: TokenStore) -> str | 
             "holds a role the Entra owner rule granted, which only an Entra sign-in can use; "
             "list entra again, set SELFHOST_BOOTSTRAP_OWNER to a listed provider's identity "
             "(it applies while no owner can sign in), or make another account an owner with: "
-            "python -m canvas_mcp.core.selfhost.token_admin promote-owner ACCOUNT"
+            "python -m steward.token_admin promote-owner ACCOUNT"
         )
     return (
         "no owner can be made: SELFHOST_LOGIN_PROVIDERS does not list entra, "
         "SELFHOST_BOOTSTRAP_OWNER is unset and the database has no active owner; set "
         "SELFHOST_BOOTSTRAP_OWNER to the first owner's identity (google:<subject>, "
         "github:<numeric user id> or oidc:<slug>:<subject>), or to token_admin and then run: "
-        "python -m canvas_mcp.core.selfhost.token_admin promote-owner ACCOUNT"
+        "python -m steward.token_admin promote-owner ACCOUNT"
     )
 
 
@@ -496,7 +496,7 @@ def install_selfhost(
         if code is not None:
             print(f"Setup URL: {settings.public_base_url}/account/setup", flush=True)
             print(f"Installation code (expires in 30 minutes): {code}", flush=True)
-    from .. import course_files
+    from canvas_mcp.core import course_files
 
     course_files.ALLOW_OFF_CANVAS_DOWNLOADS = settings.profile != "pilot"
     from .login.registry import build_login_runtime

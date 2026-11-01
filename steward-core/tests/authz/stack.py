@@ -38,26 +38,26 @@ from dbbackend import stack_env
 from fastmcp import FastMCP
 from starlette.testclient import TestClient
 
-from canvas_mcp.core.credentials import get_request_principal
-from canvas_mcp.core.selfhost.app import (
+from steward.request_state import get_request_principal
+from steward.app import (
     SelfhostRuntime,
     build_selfhost_asgi_app,
     install_selfhost,
     prepare_selfhost,
 )
-from canvas_mcp.core.selfhost.authz import fastmcp_compat as compat
-from canvas_mcp.core.selfhost.authz.runtime import (
+from steward.authz import fastmcp_compat as compat
+from steward.authz.runtime import (
     build_auth_provider,
     build_authz_runtime,
 )
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.custody import CustodyAcknowledgement
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     SelfhostSettings,
 )
-from canvas_mcp.core.selfhost.token_store import Keyring
+from steward.token_store import Keyring
 
 from ..conftest import CLIENT as ENTRA_CLIENT_ID
 from ..conftest import TENANT as ENTRA_TENANT
@@ -122,7 +122,7 @@ class FakeIdp:
     """Entra discovery, JWKS and a PKCE-protected token endpoint, entirely offline."""
 
     def __init__(self, clock: Clock) -> None:
-        from canvas_mcp.core.selfhost.accounts import entra_issuer
+        from steward.accounts import entra_issuer
 
         from ..login.fake_idp import FakeNetwork, FakeOidcIdp
 
@@ -639,8 +639,8 @@ def _build(
         import asyncio
 
         from canvas_mcp.core.config import get_config
-        from canvas_mcp.core.selfhost.app import apply_disabled_tools
-        from canvas_mcp.core.tool_policy import apply_tool_policy, resolve_tool_policy
+        from steward.app import apply_disabled_tools
+        from steward.connectors.canvas.tool_policy import apply_tool_policy, resolve_tool_policy
 
         config = get_config()
         register_tools(mcp)

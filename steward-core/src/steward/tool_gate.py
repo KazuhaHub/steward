@@ -36,7 +36,7 @@ from fastmcp.server.dependencies import get_access_token
 from fastmcp.server.middleware import CallNext, Middleware, MiddlewareContext
 from fastmcp.tools import Tool, ToolResult
 
-from ..credentials import (
+from steward.request_state import (
     get_request_credential_generation,
     get_request_credentials,
     get_request_principal,
@@ -45,7 +45,7 @@ from ..credentials import (
     missing_credentials_message,
     request_credential_is_stale,
 )
-from ..logging import log_error
+from steward.common.logging import log_error
 from .mcp_state import MCP_READ
 from .principal_access import (
     access_refusal_message,

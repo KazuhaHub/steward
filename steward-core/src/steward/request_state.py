@@ -261,7 +261,7 @@ def missing_credentials_code() -> str:
     middleware already answers 401), the token is missing: CREDENTIAL_INVALID.
     A custom text without a reason is an unknown refusal: PERMISSION_DENIED.
     """
-    from .error_codes import CREDENTIAL_INVALID, PERMISSION_DENIED
+    from steward.common.error_codes import CREDENTIAL_INVALID, PERMISSION_DENIED
 
     code = _missing_credentials_code.get()
     if code is not None:

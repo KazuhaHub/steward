@@ -154,7 +154,7 @@ class TestSectionN:
         [{"SELFHOST_AUTH_MODE": ""}, {"ACCESS_TOKEN_TTL": "1"}],
     )
     def test_a_bad_value_stops_the_server(self, tmp_path, monkeypatch, extra) -> None:
-        from canvas_mcp.core.selfhost.settings import SelfhostConfigError
+        from steward.settings import SelfhostConfigError
 
         with pytest.raises(SelfhostConfigError) as raised:
             with local_stack(tmp_path, monkeypatch, env=extra):

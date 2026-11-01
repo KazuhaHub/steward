@@ -11,8 +11,8 @@ from typing import Any
 import pytest
 from sqlalchemy.dialects import postgresql, sqlite
 
-from canvas_mcp.core.selfhost.db import engine as db_engine
-from canvas_mcp.core.selfhost.db.repos import Repositories
+from steward.db import engine as db_engine
+from steward.db.repos import Repositories
 
 PG = postgresql.dialect()  # type: ignore[no-untyped-call]
 LITE = sqlite.dialect()  # type: ignore[no-untyped-call]
@@ -262,7 +262,7 @@ class TestPostgresDialectSpecifics:
     def test_identifiers_are_native_uuids(self) -> None:
         from sqlalchemy.schema import CreateTable
 
-        from canvas_mcp.core.selfhost.db import schema
+        from steward.db import schema
 
         for table in (
             schema.accounts,
@@ -277,7 +277,7 @@ class TestPostgresDialectSpecifics:
 
     def test_the_writer_lock_key_is_a_fixed_signed_64_bit_integer(self) -> None:
         assert -(2**63) <= db_engine.WRITER_LOCK_KEY < 2**63
-        from canvas_mcp.core.selfhost.db.migrations.connections import (
+        from steward.db.migrations.connections import (
             MIGRATION_LOCK_KEY,
         )
 
@@ -295,7 +295,7 @@ class TestPostgresDialectSpecifics:
     def test_a_postgres_write_takes_the_lock_before_any_other_statement(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        from canvas_mcp.core.selfhost.db.url import parse_database_url
+        from steward.db.url import parse_database_url
 
         executed: list[str] = []
 

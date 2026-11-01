@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 
-from .. import __version__
+from canvas_mcp import __version__
 
 HEALTH_PATH = "/healthz"
 

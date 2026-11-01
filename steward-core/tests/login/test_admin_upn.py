@@ -2,7 +2,7 @@
 
 from sqlalchemy import select
 
-from canvas_mcp.core.selfhost.login.local_accounts import LocalAccounts
+from steward.login.local_accounts import LocalAccounts
 
 from ..authz.stack import BASE
 from ..authz.test_authz_schema import _grant_fields
@@ -82,7 +82,7 @@ def test_upn_is_admin_only_with_origin_csrf_cas_unique_names_and_revocation(tmp_
         ] == [(row.id, row.issuer, row.subject, row.provider_id) for row in identities]
         assert runtime.store.get_principal_status(user).session_epoch == epoch + 1
         with runtime.store.database.read() as conn:
-            from canvas_mcp.core.selfhost.db import schema as s
+            from steward.db import schema as s
 
             assert (
                 conn.execute(

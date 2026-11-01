@@ -1,6 +1,6 @@
 """Health of the stored Canvas tokens: confirm a dead token, record it, never guess.
 
-A Canvas 401 is only a suspicion (see :mod:`canvas_mcp.core.token_health`). This
+A Canvas 401 is only a suspicion (see :mod:`steward.credential_health`). This
 service turns a suspicion into a verdict with one probe, ``GET <school>/users/self``
 made with the very token that was rejected:
 
@@ -36,10 +36,10 @@ from dataclasses import dataclass
 
 import httpx
 
-from .. import audit
-from ..credentials import RequestCredentials
-from ..logging import log_warning
-from ..token_health import _says_token_is_dead
+from steward import audit
+from steward.request_state import RequestCredentials
+from steward.common.logging import log_warning
+from steward.credential_health import _says_token_is_dead
 from .db.workers import run_store
 from .token_store import (
     REASON_CANVAS_TOKEN_REJECTED,
@@ -285,7 +285,7 @@ class TokenHealth:
 
     async def _probe(self, credentials: RequestCredentials) -> str:
         """``GET /users/self`` with the rejected token; the verdict of that one answer."""
-        from ..client import _canvas_auth_headers
+        from canvas_mcp.core.client import _canvas_auth_headers
 
         self.probe_count += 1
         url = credentials.api_url.rstrip("/") + "/users/self"

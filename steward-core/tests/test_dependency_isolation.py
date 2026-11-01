@@ -57,18 +57,18 @@ def test_the_server_and_every_non_database_module_import_without_the_extras() ->
         """
         import canvas_mcp.server
         import canvas_mcp.tools.discovery
-        import canvas_mcp.core.selfhost.accounts
-        import canvas_mcp.core.selfhost.settings
-        import canvas_mcp.core.selfhost.token_store
-        import canvas_mcp.core.selfhost.tool_prefs
-        import canvas_mcp.core.selfhost.principal_access
-        import canvas_mcp.core.selfhost.limits
-        import canvas_mcp.core.selfhost.login_state
-        import canvas_mcp.core.selfhost.db
-        import canvas_mcp.core.selfhost.db.url
-        import canvas_mcp.core.selfhost.token_admin
-        import canvas_mcp.core.selfhost.authz
-        import canvas_mcp.core.selfhost.authz.urls
+        import steward.accounts
+        import steward.settings
+        import steward.token_store
+        import steward.tool_prefs
+        import steward.principal_access
+        import steward.limits
+        import steward.login_state
+        import steward.db
+        import steward.db.url
+        import steward.token_admin
+        import steward.authz
+        import steward.authz.urls
         assert not any(m.split(".")[0] in ("sqlalchemy", "alembic", "psycopg") for m in sys.modules)
         print("ok")
         """
@@ -95,7 +95,7 @@ def test_the_legacy_stdio_and_access_key_configuration_never_loads_the_data_laye
         reset_config()
         get_config()
 
-        from canvas_mcp.core.selfhost.settings import auth_mode
+        from steward.settings import auth_mode
         assert auth_mode({}) == "legacy"
         from canvas_mcp.server import main  # noqa: F401
         assert not any(m.split(".")[0] in ("sqlalchemy", "alembic", "psycopg") for m in sys.modules)
@@ -110,7 +110,7 @@ def test_parsing_a_database_url_needs_no_database_driver() -> None:
     result = _run(
         """
         from pathlib import Path
-        from canvas_mcp.core.selfhost.db.url import parse_database_url
+        from steward.db.url import parse_database_url
         target = parse_database_url("postgresql+psycopg://u:p@h/db", Path("/data"))
         assert target.kind == "postgresql"
         assert not any(m.split(".")[0] in ("sqlalchemy", "alembic", "psycopg") for m in sys.modules)
@@ -124,7 +124,7 @@ def test_building_a_store_without_the_extras_says_how_to_install_them() -> None:
     result = _run(
         """
         from pathlib import Path
-        from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore, TokenStoreError
+        from steward.token_store import Keyring, TokenStore, TokenStoreError
         import base64
         ring = Keyring.parse("k1:" + base64.b64encode(bytes(32)).decode())
         try:
@@ -142,8 +142,8 @@ def test_the_self_hosted_start_reports_the_missing_extra_instead_of_crashing() -
     result = _run(
         """
         import base64
-        from canvas_mcp.core.selfhost.app import prepare_selfhost
-        from canvas_mcp.core.selfhost.settings import SelfhostConfigError, load_selfhost_settings
+        from steward.app import prepare_selfhost
+        from steward.settings import SelfhostConfigError, load_selfhost_settings
         settings = load_selfhost_settings({
             "PUBLIC_BASE_URL": "https://canvas.example.test",
             "ENTRA_TENANT_ID": "11111111-2222-3333-4444-555555555555",
@@ -169,7 +169,7 @@ def test_the_operator_cli_reports_the_missing_extra_in_one_line() -> None:
         import base64, os, sys, tempfile
         os.environ["SELFHOST_DATA_DIR"] = tempfile.mkdtemp()
         os.environ["CANVAS_TOKEN_KEYS"] = "k1:" + base64.b64encode(bytes(32)).decode()
-        from canvas_mcp.core.selfhost import token_admin
+        from steward import token_admin
         for argv in (["list"], ["check"], ["db", "current"], ["db", "upgrade"]):
             code = token_admin.main(argv)
             assert code == token_admin.EXIT_CONFIG, (argv, code)

@@ -49,13 +49,13 @@ def test_the_provider_config_and_settings_import_without_joserfc_or_the_data_lay
 ):
     result = _run(
         """
-        import canvas_mcp.core.selfhost.login.config
-        import canvas_mcp.core.selfhost.accounts
-        import canvas_mcp.core.selfhost.settings
+        import steward.login.config
+        import steward.accounts
+        import steward.settings
         bad = [m for m in sys.modules if m.split(".")[0] in ("joserfc", "sqlalchemy")]
         assert not bad, bad
-        assert "canvas_mcp.core.selfhost.login.jwks" not in sys.modules
-        assert "canvas_mcp.core.selfhost.login.idtoken" not in sys.modules
+        assert "steward.login.jwks" not in sys.modules
+        assert "steward.login.idtoken" not in sys.modules
         print("ok")
         """
     )
@@ -67,7 +67,7 @@ def test_infrastructure_settings_never_import_the_relying_party_modules() -> Non
     session = base64.b64encode(bytes(range(32))).decode()
     result = _run(
         f"""
-        from canvas_mcp.core.selfhost.settings import load_selfhost_settings
+        from steward.settings import load_selfhost_settings
         settings = load_selfhost_settings({{
             "PUBLIC_BASE_URL": "https://canvas.example.test",
             "ENTRA_TENANT_ID": "11111111-2222-3333-4444-555555555555",
@@ -77,8 +77,8 @@ def test_infrastructure_settings_never_import_the_relying_party_modules() -> Non
             "CANVAS_TOKEN_KEYS": "k1:" + "A" * 43 + "=",
         }})
         assert not settings.login_providers.order
-        loaded = [m for m in sys.modules if m.startswith("canvas_mcp.core.selfhost.login")]
-        assert loaded == ["canvas_mcp.core.selfhost.login", "canvas_mcp.core.selfhost.login.config"], loaded
+        loaded = [m for m in sys.modules if m.startswith("steward.login")]
+        assert loaded == ["steward.login", "steward.login.config"], loaded
         print("ok")
         """
     )
@@ -96,9 +96,9 @@ def test_the_account_pages_load_no_relying_party_module_by_themselves() -> None:
     code = textwrap.dedent(
         """
         import sys
-        import canvas_mcp.core.selfhost.account_core
-        import canvas_mcp.core.selfhost.login.ceremony
-        loaded = sorted(m for m in sys.modules if m.startswith("canvas_mcp.core.selfhost.login"))
+        import steward.account_core
+        import steward.login.ceremony
+        loaded = sorted(m for m in sys.modules if m.startswith("steward.login"))
         heavy = {"flows", "registry", "jwks", "idtoken", "oidc", "github", "google", "http", "metadata", "linking"}
         assert not heavy & {m.rsplit(".", 1)[-1] for m in loaded}, loaded
         print("ok")

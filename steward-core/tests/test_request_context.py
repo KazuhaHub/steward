@@ -12,7 +12,7 @@ from fastmcp.server.auth import AccessToken
 from mcp.server.auth.middleware.bearer_auth import AuthenticatedUser
 from starlette.authentication import UnauthenticatedUser
 
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     current_principal_key,
     get_request_credentials,
     get_request_principal,
@@ -22,20 +22,20 @@ from canvas_mcp.core.credentials import (
     request_local_principal_state,
     uses_request_local_course_state,
 )
-from canvas_mcp.core.selfhost.config_snapshot import CURRENT_CONFIG, ConfigSnapshot
-from canvas_mcp.core.selfhost.custody import CUSTODY_NOTICE_VERSION
-from canvas_mcp.core.selfhost.db.settings_repo import TypedSettings
-from canvas_mcp.core.selfhost.db.snapshots import McpSnapshot
-from canvas_mcp.core.selfhost.mcp_state import MCP_READ, MCP_UNAVAILABLE, McpRead
-from canvas_mcp.core.selfhost.request_context import (
+from steward.config_snapshot import CURRENT_CONFIG, ConfigSnapshot
+from steward.custody import CUSTODY_NOTICE_VERSION
+from steward.db.settings_repo import TypedSettings
+from steward.db.snapshots import McpSnapshot
+from steward.mcp_state import MCP_READ, MCP_UNAVAILABLE, McpRead
+from steward.request_context import (
     LocalClaimsResolver,
     SelfhostRequestContextMiddleware,
     not_enrolled_message,
     school_not_offered_message,
     unreadable_token_message,
 )
-from canvas_mcp.core.selfhost.schools import School, SchoolPolicy
-from canvas_mcp.core.selfhost.token_store import STATUS_INVALID
+from steward.schools import School, SchoolPolicy
+from steward.token_store import STATUS_INVALID
 
 from .conftest import OID_A, OID_B, TENANT, acct_key
 

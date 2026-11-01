@@ -10,8 +10,8 @@ import pytest
 
 from canvas_mcp import server as server_module
 from canvas_mcp.core import config as config_module
-from canvas_mcp.core.selfhost.app import prepare_selfhost, validate_selfhost_startup
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.app import prepare_selfhost, validate_selfhost_startup
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
 
@@ -203,7 +203,7 @@ class TestRefusals:
         assert "SELFHOST_DATA_DIR" in caplog.text
 
     def test_the_keyring_must_cover_every_key_id_in_use(self, entra_env, caplog):
-        token_store = pytest.importorskip("canvas_mcp.core.selfhost.token_store")
+        token_store = pytest.importorskip("steward.token_store")
         settings = load_provider_environment()
         store = token_store.TokenStore(
             settings.token_db_path,
@@ -231,7 +231,7 @@ class TestRefusals:
     def test_a_corrupt_token_database_is_a_logged_refusal_not_a_traceback(
         self, entra_env, caplog
     ):
-        pytest.importorskip("canvas_mcp.core.selfhost.token_store")
+        pytest.importorskip("steward.token_store")
         db = load_provider_environment().token_db_path
         db.parent.mkdir(parents=True, exist_ok=True)
         db.write_bytes(b"this is not a database" * 100)
@@ -243,9 +243,9 @@ class TestRefusals:
     def test_prepare_selfhost_reports_a_corrupt_database_as_a_config_error(
         self, entra_env
     ):
-        pytest.importorskip("canvas_mcp.core.selfhost.token_store")
-        from canvas_mcp.core.selfhost.app import prepare_selfhost
-        from canvas_mcp.core.selfhost.settings import SelfhostConfigError
+        pytest.importorskip("steward.token_store")
+        from steward.app import prepare_selfhost
+        from steward.settings import SelfhostConfigError
 
         settings = load_provider_environment()
         settings.token_db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -261,10 +261,10 @@ class TestRefusals:
     def test_a_failed_upgrade_backup_is_not_reported_as_a_corrupt_database(
         self, entra_env, monkeypatch
     ):
-        pytest.importorskip("canvas_mcp.core.selfhost.token_store")
-        from canvas_mcp.core.selfhost.app import prepare_selfhost
-        from canvas_mcp.core.selfhost.settings import SelfhostConfigError
-        from canvas_mcp.core.selfhost.token_store import StoreUnavailable, TokenStore
+        pytest.importorskip("steward.token_store")
+        from steward.app import prepare_selfhost
+        from steward.settings import SelfhostConfigError
+        from steward.token_store import StoreUnavailable, TokenStore
 
         def refuse(self, *args, **kwargs):
             raise StoreUnavailable(kind="BackupFailed")
@@ -277,7 +277,7 @@ class TestRefusals:
         assert "backup failed" in problem and "not a valid database" not in problem
 
     def test_a_malformed_keyring(self, entra_env):
-        pytest.importorskip("canvas_mcp.core.selfhost.token_store")
+        pytest.importorskip("steward.token_store")
         entra_env["monkeypatch"].setenv("CANVAS_TOKEN_KEYS", "not a keyring")
         assert _run_main(entra_env["monkeypatch"], *HTTP).code == 1
 
@@ -365,8 +365,8 @@ class TestHappyPath:
     def test_serves_through_the_selfhost_runner_with_the_gate_installed(
         self, entra_env, caplog
     ):
-        pytest.importorskip("canvas_mcp.core.selfhost.token_store")
-        pytest.importorskip("canvas_mcp.core.selfhost.account_core")
+        pytest.importorskip("steward.token_store")
+        pytest.importorskip("steward.account_core")
         configured = prepare_selfhost(load_provider_environment())
         configured.store.close()
         mp = entra_env["monkeypatch"]
@@ -451,7 +451,7 @@ class TestLegacyUntouched:
 
 def _serve(entra_env, caplog) -> dict[str, Any]:
     """Run main() through a fake selfhost runner; returns what the runner got."""
-    pytest.importorskip("canvas_mcp.core.selfhost.token_store")
+    pytest.importorskip("steward.token_store")
     mp = entra_env["monkeypatch"]
     caplog.set_level(logging.INFO)
     captured: dict[str, Any] = {}
@@ -511,8 +511,8 @@ def test_pilot_startup_refuses_scope_expansion(entra_env, setting, value, caplog
 
 
 def test_pilot_startup_refuses_unconfigured_school_database(entra_env, caplog):
-    from canvas_mcp.core.selfhost.app import prepare_selfhost
-    from canvas_mcp.core.selfhost.settings import SelfhostConfigError
+    from steward.app import prepare_selfhost
+    from steward.settings import SelfhostConfigError
 
     monkeypatch = entra_env["monkeypatch"]
     monkeypatch.setenv("SELFHOST_PROFILE", "pilot")

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from canvas_mcp.core.selfhost.custody import CUSTODY_NOTICE_VERSION
+from steward.custody import CUSTODY_NOTICE_VERSION
 
 ROOT = Path(__file__).resolve().parents[2]
 PINS = {
