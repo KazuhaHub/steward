@@ -13,9 +13,9 @@ from dbbackend import raw_connection
 
 from canvas_mcp.tools import register_course_tools
 
-from .account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
-from .authz.stack import User
-from .conftest import OID_A, OID_B, acct_key
+from ..account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
+from ..authz.stack import User
+from ..conftest import OID_A, OID_B, acct_key
 
 BASE = "https://canvas.example.test"
 CANVAS = "https://canvas.example.edu"

@@ -9,7 +9,7 @@ import sys
 import textwrap
 from pathlib import Path
 
-SRC = Path(__file__).resolve().parents[3] / "src"
+SRC = Path(__file__).resolve().parents[2] / "src"
 
 BLOCK = textwrap.dedent(
     """

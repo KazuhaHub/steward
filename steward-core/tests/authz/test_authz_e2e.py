@@ -490,4 +490,4 @@ class TestTwoBrowsers:
 def app_src() -> str:
     import pathlib
 
-    return str(pathlib.Path(__file__).resolve().parents[3] / "src")
+    return str(pathlib.Path(__file__).resolve().parents[2] / "src")

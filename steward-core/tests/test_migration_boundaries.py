@@ -4,7 +4,7 @@ import ast
 import pathlib
 import re
 
-ROOT = pathlib.Path(__file__).resolve().parents[2] / "src/canvas_mcp/core/selfhost"
+ROOT = pathlib.Path(__file__).resolve().parents[1] / "src/steward"
 
 
 def test_upgrade_ddl_and_alembic_remain_inside_the_migration_package():

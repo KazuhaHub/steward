@@ -18,7 +18,7 @@ from typing import Any
 import httpx
 import pytest
 
-from canvas_mcp.core import audit
+from steward import audit
 from steward import account_api
 from steward import accounts as acc
 from steward.account_core import (

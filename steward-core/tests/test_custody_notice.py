@@ -19,6 +19,6 @@ PINS = {
 
 @pytest.mark.parametrize("lang", ["en", "zh"])
 def test_notice_text_pins_require_review_of_substantive_changes(lang):
-    body = json.loads((ROOT / "web" / "src" / "locales" / lang / "account.json").read_text(encoding="utf-8"))
+    body = json.loads((ROOT / "steward-web" / "src" / "locales" / lang / "account.json").read_text(encoding="utf-8"))
     notice = body["custody"][f"v{CUSTODY_NOTICE_VERSION}"]
     assert hashlib.sha256(notice.encode("utf-8")).hexdigest() == PINS[CUSTODY_NOTICE_VERSION][lang]

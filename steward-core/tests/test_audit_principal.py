@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from canvas_mcp.core import audit
+from steward import audit
 from steward.request_state import (
     RequestCredentials,
     set_request_credentials,

@@ -10,7 +10,7 @@ import pytest
 from .stack import BASE as PUBLIC_URL
 from .stack import SCOPE, local_stack
 
-SMOKE = pathlib.Path(__file__).resolve().parents[3] / "deploy" / "selfhost" / "smoke-test.sh"
+SMOKE = pathlib.Path(__file__).resolve().parents[3] / "deploy" / "smoke-test.sh"
 BASE = "http://127.0.0.1:18819"
 PUBLIC = PUBLIC_URL
 UNKNOWN = "00000000-0000-4000-8000-000000000000"

@@ -41,9 +41,9 @@ from steward.token_store import (
 from steward.credential_health import set_token_health_monitor
 from canvas_mcp.core.write_outcome import RequestFailure, WriteOutcome
 
-from .conftest import OID_A, TENANT, acct_key, make_principal, store_put
-from .test_token_store import Clock as StoreClock
-from .test_token_store import _ring
+from ..conftest import OID_A, TENANT, acct_key, make_principal, store_put
+from ..test_token_store import Clock as StoreClock
+from ..test_token_store import _ring
 
 CANVAS_HOST = "canvas.example.edu"
 API_URL = f"https://{CANVAS_HOST}/api/v1"

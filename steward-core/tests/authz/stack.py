@@ -16,6 +16,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import os
 import re
 import secrets
 import socket
@@ -604,9 +605,6 @@ def _build(
     monkeypatch.setenv("CANVAS_API_URL", f"https://{CANVAS_HOST}")
     for name in ("CANVAS_API_TOKEN", "CANVAS_ROLE", "MCP_ACCESS_KEYS"):
         monkeypatch.delenv(name, raising=False)
-    from canvas_mcp.core.config import reset_config
-
-    reset_config()
     clock = clock or Clock()
     settings = load_provider_environment(default_env(tmp_path, **dict(env or {})))
     cimd = FakeCimd()
@@ -624,7 +622,6 @@ def _build(
         fetch=cimd,
     )
     runtime = replace(runtime, authz=authz)
-    config: Any = SimpleNamespace(canvas_api_url=f"https://{CANVAS_HOST}/api/v1")
     mcp = FastMCP("local-authz", auth=build_auth_provider(settings, runtime))
     if tools:
         # A read tool by name, so the credential gate treats it like one.
@@ -638,24 +635,21 @@ def _build(
     if register_tools is not None:
         import asyncio
 
-        from canvas_mcp.core.config import get_config
         from steward.app import apply_disabled_tools
         from steward.connectors.canvas.tool_policy import apply_tool_policy, resolve_tool_policy
 
-        config = get_config()
         register_tools(mcp)
-        tool_policy = resolve_tool_policy(config.allowed_write_tools, "http")
+        tool_policy = resolve_tool_policy(os.environ.get("ALLOWED_WRITE_TOOLS"), "http")
         asyncio.run(apply_tool_policy(mcp, tool_policy))
         asyncio.run(apply_disabled_tools(mcp, settings.disabled_tools))
     install_selfhost(
         mcp,
         runtime,
-        config,
         tool_policy=tool_policy,
         clock=clock,
         **{"login_transport": idp.net.transport, **dict(account_options or {})},
     )
-    app = build_selfhost_asgi_app(mcp, runtime, config)
+    app = build_selfhost_asgi_app(mcp, runtime)
     return app, Stack(None, runtime, settings, mcp, idp, cimd, clock, tmp_path)
 
 

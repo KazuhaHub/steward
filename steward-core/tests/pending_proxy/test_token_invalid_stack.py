@@ -27,9 +27,9 @@ from steward.token_store import (
 )
 from canvas_mcp.tools import register_course_tools
 
-from .account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
-from .authz.stack import User
-from .conftest import OID_A, OID_B, acct_key
+from ..account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
+from ..authz.stack import User
+from ..conftest import OID_A, OID_B, acct_key
 from .test_selfhost_integration import call_tool, rpc, text_of
 
 BASE = "https://canvas.example.test"

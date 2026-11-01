@@ -12,7 +12,7 @@ from typing import Any
 import pytest
 from sqlalchemy import select
 
-from canvas_mcp import __version__
+from steward.common.health import __version__
 from steward import edge_guard
 from steward.authz.clients import DCR_TTL_SECONDS
 from steward.db import schema as s

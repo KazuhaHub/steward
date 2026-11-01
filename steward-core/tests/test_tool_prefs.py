@@ -6,7 +6,7 @@ import threading
 
 import pytest
 
-from canvas_mcp.core.config import STUDENT_WRITE_TOOL_NAMES
+from steward.connectors.canvas.tools import STUDENT_WRITE_TOOL_NAMES
 from steward.token_store import ToolPrefs
 from steward.tool_prefs import (
     OTHER_GROUP,

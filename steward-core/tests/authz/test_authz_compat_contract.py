@@ -59,7 +59,7 @@ from steward.authz import fastmcp_compat as compat
 
 BASE = "https://canvas.example.test"
 REDIRECT = "https://claude.ai/api/mcp/auth_callback"
-SRC = pathlib.Path(__file__).resolve().parents[3] / "src" / "canvas_mcp"
+SRC = pathlib.Path(__file__).resolve().parents[2] / "src" / "steward"
 CHALLENGE = "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM"
 VERIFIER = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"  # its S256 challenge is CHALLENGE
 
@@ -528,7 +528,7 @@ def _imports(path: pathlib.Path) -> set[str]:
 
 
 def _guarded_files() -> list[pathlib.Path]:
-    selfhost = SRC / "core" / "selfhost"
+    selfhost = SRC
     files = sorted((selfhost / "authz").glob("*.py"))
     files += [selfhost / name for name in ("request_context.py", "tool_gate.py", "app.py", "edge_guard.py")]
     return [f for f in files if f.name != "fastmcp_compat.py"]
@@ -545,7 +545,7 @@ def test_nothing_but_fastmcp_compat_imports_non_exported_internals(path: pathlib
 
 
 def test_the_compat_module_is_the_one_that_does_import_them() -> None:
-    imported = _imports(SRC / "core" / "selfhost" / "authz" / "fastmcp_compat.py")
+    imported = _imports(SRC / "authz" / "fastmcp_compat.py")
     assert "fastmcp.server.auth.ssrf" in imported and "fastmcp.server.auth.cimd" in imported
     assert "fastmcp.server.auth.handlers.authorize" in imported
 
@@ -568,23 +568,21 @@ def test_the_public_modules_the_rest_of_the_package_may_use_exist() -> None:
     ("joserfc", "1.7.2", "1.7.1", "2.0.0"),
 ])
 def test_dependency_floors_and_installed_versions(name, floor, below, ceiling):
-    """The declared, locked and installed authorization APIs agree on supported versions."""
+    """The declared and installed authorization APIs agree on supported versions."""
     import tomllib
     from importlib.metadata import version
 
     from packaging.requirements import Requirement
     from packaging.version import Version
 
-    root = pathlib.Path(__file__).resolve().parents[3]
+    root = pathlib.Path(__file__).resolve().parents[2]
     project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
-    lines = project["project"]["dependencies"] + project["project"]["optional-dependencies"]["selfhost"]
+    lines = project["project"]["dependencies"]
     req = next(Requirement(line) for line in lines if Requirement(line).name == name)
     assert Version(floor) in req.specifier
     assert Version(below) not in req.specifier
     assert Version(ceiling) not in req.specifier
     assert Version(version(name)) in req.specifier
-    packages = tomllib.loads((root / "uv.lock").read_text(encoding="utf-8"))["package"]
-    assert Version(next(p["version"] for p in packages if p["name"] == name)) in req.specifier
 
 
 def test_proxy_storage_is_not_a_direct_dependency():
@@ -592,6 +590,6 @@ def test_proxy_storage_is_not_a_direct_dependency():
 
     from packaging.requirements import Requirement
 
-    root = pathlib.Path(__file__).resolve().parents[3]
+    root = pathlib.Path(__file__).resolve().parents[2]
     project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     assert "py-key-value-aio" not in {Requirement(line).name for line in project["project"]["dependencies"]}

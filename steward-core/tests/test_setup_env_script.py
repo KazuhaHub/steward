@@ -17,7 +17,7 @@ from pathlib import Path
 import pytest
 from dotenv import dotenv_values
 
-from canvas_mcp.core.config import STUDENT_WRITE_TOOL_NAMES
+from steward.connectors.canvas.tools import STUDENT_WRITE_TOOL_NAMES
 from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
@@ -25,8 +25,8 @@ from steward.db.migrations.provider_environment import (
 from .conftest import CLIENT, TENANT
 
 SCRIPT = (
-    Path(__file__).resolve().parents[2]
-    / "src/canvas_mcp/core/selfhost/db/migrations/legacy_setup_env.sh"
+    Path(__file__).resolve().parents[1]
+    / "src/steward/db/migrations/legacy_setup_env.sh"
 )
 SECRET = "Fake~Entra.Secret_value-0123456789"
 BASE = "https://canvas.example.test"

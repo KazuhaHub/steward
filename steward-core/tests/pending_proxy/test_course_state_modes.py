@@ -32,7 +32,7 @@ from steward.request_state import (
 from canvas_mcp.tools import courses as course_tools
 from canvas_mcp.tools import discussions
 
-from .conftest import OID_A, OID_B, make_principal
+from ..conftest import OID_A, OID_B, make_principal
 
 CANVAS_URL = "https://canvas.example.test/api/v1"
 

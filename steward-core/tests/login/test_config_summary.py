@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+from steward.cli import config_summary
 from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.server import _selfhost_summary
 
 from .test_provider_settings import (
     GITHUB_SECRET,
@@ -21,21 +21,22 @@ from .test_provider_settings import (
 
 
 def test_entra_only_summary_has_no_provider_line() -> None:
-    lines = _selfhost_summary(load_provider_environment(env(SELFHOST_AUTH_MODE=None)))
+    lines = config_summary(load_provider_environment(env(SELFHOST_AUTH_MODE=None)), "canvas")
     assert not any("Sign-in providers" in line for line in lines)
     assert any(line.startswith("  Entra tenant: ") for line in lines)
     assert any(line.startswith("  Entra client: ") for line in lines)
     # Listing entra explicitly changes nothing.
-    explicit = _selfhost_summary(
+    explicit = config_summary(
         load_provider_environment(
             env(SELFHOST_AUTH_MODE=None, SELFHOST_LOGIN_PROVIDERS="entra")
-        )
+        ),
+        "canvas",
     )
     assert explicit == lines
 
 
 def test_entra_only_summary_includes_the_native_authorization_server() -> None:
-    local = _selfhost_summary(load_provider_environment(env()))
+    local = config_summary(load_provider_environment(env()), "canvas")
     assert not any("Sign-in providers" in line for line in local)
     assert any(line.startswith("  Entra tenant: ") for line in local)
     assert any(line.startswith("  Roles: user=") for line in local)
@@ -50,7 +51,7 @@ def test_multi_provider_summary_names_providers_and_no_secret() -> None:
             **oidc(),
         )
     )
-    text = "\n".join(_selfhost_summary(settings))
+    text = "\n".join(config_summary(settings, "canvas"))
     assert (
         "Sign-in providers: google (client " + GOOGLE_ID + "), entra, github (client "
         in text
@@ -72,7 +73,7 @@ def test_without_entra_the_tenant_and_client_lines_are_omitted() -> None:
             **google(),
         )
     )
-    text = "\n".join(_selfhost_summary(settings))
+    text = "\n".join(config_summary(settings, "canvas"))
     assert "Entra tenant" not in text and "Entra client" not in text
     assert "Roles:" not in text  # the Entra app roles mean nothing without Entra
     assert "Sign-in providers: google" in text
