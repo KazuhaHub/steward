@@ -1,4 +1,4 @@
-"""The Canvas launcher refuses stdio, its admin flags and unknown auth modes, and legacy startup is undisturbed."""
+"""The Canvas launcher refuses stdio and its admin flags, and legacy startup is undisturbed."""
 
 import base64
 import logging
@@ -112,11 +112,6 @@ class TestRefusals:
     def test_admin_and_test_commands_are_refused(self, entra_env, flag, caplog):
         assert _run_main(entra_env["monkeypatch"], *HTTP, *flag).code == 1
         assert "not available" in caplog.text
-
-    def test_unknown_auth_mode(self, entra_env, caplog):
-        entra_env["monkeypatch"].setenv("MCP_AUTH_MODE", "entra")
-        assert _run_main(entra_env["monkeypatch"], *HTTP).code == 1
-        assert "MCP_AUTH_MODE" in caplog.text
 
 
 class TestLegacyUntouched:

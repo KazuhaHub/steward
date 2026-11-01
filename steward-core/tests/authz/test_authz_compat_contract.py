@@ -585,6 +585,28 @@ def test_dependency_floors_and_installed_versions(name, floor, below, ceiling):
     assert Version(version(name)) in req.specifier
 
 
+@pytest.mark.parametrize("name", ["fastmcp", "mcp", "joserfc"])
+def test_locked_versions_satisfy_the_declared_ranges(name):
+    """The locked versions satisfy the ranges declared in pyproject.toml."""
+    import tomllib
+
+    from packaging.requirements import Requirement
+    from packaging.version import Version
+
+    root = pathlib.Path(__file__).resolve().parents[2]
+    lock = root / "uv.lock"
+    if not lock.exists():
+        pytest.skip("no lock file in this repository yet")
+    project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
+    req = next(
+        Requirement(line)
+        for line in project["project"]["dependencies"]
+        if Requirement(line).name == name
+    )
+    packages = tomllib.loads(lock.read_text(encoding="utf-8"))["package"]
+    assert Version(next(p["version"] for p in packages if p["name"] == name)) in req.specifier
+
+
 def test_proxy_storage_is_not_a_direct_dependency():
     import tomllib
 

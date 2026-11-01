@@ -38,7 +38,7 @@ from steward.token_store import (
     STATUS_INVALID,
     TokenStore,
 )
-from steward.credential_health import set_token_health_monitor
+from canvas_mcp.core.token_health import set_token_health_monitor
 from canvas_mcp.core.write_outcome import RequestFailure, WriteOutcome
 
 from ..conftest import OID_A, TENANT, acct_key, make_principal, store_put

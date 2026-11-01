@@ -90,6 +90,11 @@ HTTP = ("serve",)
 
 
 class TestRefusals:
+    def test_unknown_auth_mode(self, entra_env, caplog):
+        entra_env["monkeypatch"].setenv("MCP_AUTH_MODE", "entra")
+        assert _run_main(entra_env["monkeypatch"], *HTTP).code == 1
+        assert "MCP_AUTH_MODE" in caplog.text
+
     @pytest.mark.parametrize(
         "name",
         [
