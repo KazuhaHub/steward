@@ -161,7 +161,7 @@ def serve(args: argparse.Namespace) -> None:
     from .authz.runtime import build_auth_provider
 
     try:
-        # Kept from the Canvas server, where it chose the mode: a mistyped value
+        # Kept from the server Steward came from, where it chose the mode: a mistyped value
         # is refused rather than ignored.
         auth_mode()
     except SelfhostConfigError as exc:
