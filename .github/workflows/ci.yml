@@ -114,11 +114,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -e ".[postgres]"
-    # pip-audit is pinned; it audits everything installed in this environment.
+    # pip-audit goes in its own venv so it cannot mask problems in the project's
+    # environment; it audits the project's exact pinned packages (editable
+    # steward-core itself excluded) and fails on any finding.
     - name: Audit installed packages
       run: |
-        pip install pip-audit==2.10.1
-        pip-audit
+        pip freeze --exclude-editable > "$RUNNER_TEMP/requirements.txt"
+        python -m venv "$RUNNER_TEMP/audit-venv"
+        "$RUNNER_TEMP/audit-venv/bin/pip" install pip-audit==2.10.1
+        "$RUNNER_TEMP/audit-venv/bin/pip-audit" --no-deps --disable-pip -r "$RUNNER_TEMP/requirements.txt"
 
   # npm ci installs the lock file as written and --ignore-scripts keeps
   # third-party install scripts from running. check:dist asserts the production
@@ -144,9 +148,6 @@ jobs:
         cache-dependency-path: steward-web/package-lock.json
     - name: Install dependencies
       run: npm ci --ignore-scripts
-    # Fails on known high-severity advisories in production dependencies only.
-    - name: Audit production dependencies
-      run: npm audit --omit=dev --audit-level=high
     - name: Lint
       run: npm run lint
     - name: Typecheck
@@ -157,3 +158,6 @@ jobs:
       run: npm run build
     - name: Check the production build
       run: npm run check:dist
+    # Last, so a new upstream advisory does not hide the lint/typecheck/test/build results. Fails on known high-severity advisories in production dependencies only.
+    - name: Audit production dependencies
+      run: npm audit --omit=dev --audit-level=high
