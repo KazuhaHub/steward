@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pytest
 
-from canvas_mcp.core.selfhost.db.url import parse_database_url
-from canvas_mcp.core.selfhost.settings import (
+from steward.db.url import parse_database_url
+from steward.settings import (
     SelfhostConfigError,
     load_selfhost_settings,
 )
@@ -25,7 +25,7 @@ def isolate_url_parser_from_database_site_lookup(monkeypatch):
     # These tests validate/redact hypothetical connection URLs, not live databases.
     # Real persisted-origin boot and failure behavior is covered in test_site_url.
     monkeypatch.setattr(
-        "canvas_mcp.core.selfhost.site_url.saved_site_url", lambda target: None
+        "steward.site_url.saved_site_url", lambda target: None
     )
 
 
@@ -249,7 +249,7 @@ class TestStartup:
     def test_missing_data_layer_packages_are_a_startup_problem(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        from canvas_mcp.core.selfhost.app import _data_layer_problem
+        from steward.app import _data_layer_problem
 
         settings = load_selfhost_settings(_env())
         assert _data_layer_problem(settings) is None
@@ -263,7 +263,7 @@ class TestStartup:
     def test_the_url_never_reaches_the_log_or_an_error(
         self, tmp_path: Path, caplog: pytest.LogCaptureFixture
     ) -> None:
-        from canvas_mcp.core.selfhost.app import prepare_selfhost
+        from steward.app import prepare_selfhost
 
         url = f"postgresql+psycopg://canvas:{PASSWORD}@127.0.0.1:1/db?connect_timeout=1"
         settings = load_selfhost_settings(

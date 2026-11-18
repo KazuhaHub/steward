@@ -8,16 +8,16 @@ import pathlib
 import pytest
 from dbbackend import make_store
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.accounts import (
+from steward import accounts as acc
+from steward.accounts import (
     AccessPolicy,
     AccessRule,
     Denied,
     EntraClaimsPolicy,
     ExternalClaims,
 )
-from canvas_mcp.core.selfhost.identity import IdentityService, SignIn
-from canvas_mcp.core.selfhost.token_store import OPERATOR, Keyring, TokenStore
+from steward.identity import IdentityService, SignIn
+from steward.token_store import OPERATOR, Keyring, TokenStore
 
 from ..conftest import CLIENT, OID_A, TENANT, make_account
 

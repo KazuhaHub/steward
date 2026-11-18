@@ -15,14 +15,14 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from dbbackend import make_store, raw_connection
 from sqlalchemy import select, update
 
-from canvas_mcp.core.selfhost import token_store as token_store_module
-from canvas_mcp.core.selfhost.custody import (
+from steward import token_store as token_store_module
+from steward.custody import (
     CUSTODY_NOTICE_VERSION,
     CustodyAcknowledgement,
 )
-from canvas_mcp.core.selfhost.db import schema as schema
-from canvas_mcp.core.selfhost.db.migrations.runner import SCHEMA_EPOCH, head_revision
-from canvas_mcp.core.selfhost.token_store import (
+from steward.db import schema as schema
+from steward.db.migrations.runner import SCHEMA_EPOCH, head_revision
+from steward.token_store import (
     OPERATOR,
     EnrollmentInfo,
     Keyring,
@@ -586,7 +586,7 @@ class TestHostTamper:
         assert other is not None and other.api_token == TOKEN_B
 
     def test_nulling_a_host_is_rejected_by_the_database(self, store: TokenStore) -> None:
-        from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
+        from steward.db.errors import StoreUnavailable
         _put(store, canvas_host=HOST_A)
         with pytest.raises(StoreUnavailable):
             with store.database.write() as conn:
@@ -876,7 +876,7 @@ class TestStatusColumns:
 
 class TestKnownCorruptKeyringProbe:
     def test_known_corrupt_rows_still_require_their_key_and_fail_strict_verification(self, store: TokenStore) -> None:
-        from canvas_mcp.core.selfhost.db.sealed import verify
+        from steward.db.sealed import verify
         _put(store)
         with store.database.engine.begin() as conn:
             conn.execute(update(schema.canvas_credentials).values(ciphertext=bytes(32)))

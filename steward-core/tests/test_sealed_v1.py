@@ -6,11 +6,11 @@ import pytest
 from dbbackend import make_store
 from sqlalchemy import insert, select, update
 
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.sealed import SEALED, verify
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.token_store import Keyring, KeyringError
+from steward.custody import CustodyAcknowledgement
+from steward.db import schema as s
+from steward.db.sealed import SEALED, verify
+from steward.db.types import new_id
+from steward.token_store import Keyring, KeyringError
 
 NOW = 1_800_000_000
 
@@ -83,7 +83,7 @@ def populate_sealed(store, ring):
     kid, nonce, ciphertext = ring.encrypt(
         b"smtp-secret", mail.aad({"id": "smtp", "key_id": ring.active_key_id})
     )
-    from canvas_mcp.core.selfhost.mail import DEFAULTS
+    from steward.mail import DEFAULTS
 
     with store.database.write() as conn:
         conn.execute(
@@ -138,7 +138,7 @@ def test_rotation_covers_reserved_secrets_and_preserves_all_other_fields(sealed_
     store._keyring = keyring("k2", both=True)
     assert store.rotate() == 4 and store.rotate() == 0
     assert store.get(account).api_token == "pat-secret"
-    from canvas_mcp.core.selfhost.mail import MailStore
+    from steward.mail import MailStore
 
     assert MailStore(store.database, keyring("k2")).load().password == "smtp-secret"
     assert store.info(account).credential_generation == info.credential_generation
@@ -180,7 +180,7 @@ def test_startup_probes_reserved_secrets(sealed_store, table, failure):
 )
 def test_provider_secret_is_bound_to_provider_and_key(sealed_store, field, value):
     store, ring, _, _ = sealed_store
-    from canvas_mcp.core.selfhost.token_store import TokenDecryptionError
+    from steward.token_store import TokenDecryptionError
 
     entry = next(item for item in SEALED if item.table is s.login_providers)
     with store.database.read() as conn:

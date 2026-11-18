@@ -3,14 +3,14 @@
 import pytest
 from sqlalchemy import delete, select, update
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.mail import (
+from steward.db import schema as s
+from steward.mail import (
     DEFAULTS,
     MailStore,
     email_address,
     validate_config,
 )
-from canvas_mcp.core.selfhost.token_reminders import ReminderRunner
+from steward.token_reminders import ReminderRunner
 
 from .authz.stack import ALICE, OWNER, Browser, local_stack
 
@@ -251,8 +251,8 @@ def test_real_api_requires_fresh_owner_for_smtp_and_csrf_for_user_opt_in(running
 
 @pytest.mark.parametrize("sender_name", ["Canvas MCP", '\u6821\u56ed, "Canvas"', ""])
 def test_smtp_uses_verified_starttls_and_auth_before_sending(monkeypatch, sender_name):
-    from canvas_mcp.core.selfhost import mail as module
-    from canvas_mcp.core.selfhost.mail import SmtpSettings, send_message
+    from steward import mail as module
+    from steward.mail import SmtpSettings, send_message
 
     calls = []
 
@@ -472,7 +472,7 @@ def test_two_workers_share_one_delivery_claim_and_reject_stale_mail_settings(run
 
 
 def test_smtp_probe_errors_are_redacted_at_real_api_boundary(running, monkeypatch):
-    from canvas_mcp.core.selfhost import mail as module
+    from steward import mail as module
 
     configure(running)
     browser = Browser(running)

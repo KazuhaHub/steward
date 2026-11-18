@@ -2,7 +2,7 @@
 
 import pytest
 
-from canvas_mcp.core.selfhost.accounts import (
+from steward.accounts import (
     DENY_BAD_ROLES,
     DENY_BAD_SUBJECT,
     DENY_WRONG_TENANT,

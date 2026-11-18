@@ -24,7 +24,7 @@ import pathlib
 import sqlite3
 from dataclasses import dataclass
 
-from canvas_mcp.core.selfhost.token_store import Keyring
+from steward.token_store import Keyring
 
 SHAPES = ("v1", "v2a", "v2b", "v2c", "v3", "v4")
 

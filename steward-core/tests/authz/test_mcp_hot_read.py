@@ -6,12 +6,12 @@ from contextlib import contextmanager
 import pytest
 from sqlalchemy import event, update
 
-from canvas_mcp.core.selfhost import custody
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
-from canvas_mcp.core.selfhost.maintenance import MaintenanceScheduler
-from canvas_mcp.core.selfhost.mcp_state import MCP_READ
+from steward import custody
+from steward.authz.store import AuthzStore
+from steward.db import schema as s
+from steward.db.errors import StoreUnavailable
+from steward.maintenance import MaintenanceScheduler
+from steward.mcp_state import MCP_READ
 
 from .stack import ALICE
 

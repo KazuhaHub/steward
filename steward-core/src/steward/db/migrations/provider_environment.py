@@ -223,7 +223,7 @@ def _listed_providers(store: TokenStore) -> frozenset[str] | None:
     unlink separately preserve an owner under each real list in their writer
     transaction. Startup reconciles the inventory before checking owner access.
     """
-    from canvas_mcp.core.selfhost.login.config import LOGIN_PROVIDERS_ENV
+    from steward.login.config import LOGIN_PROVIDERS_ENV
 
     recorded = store.recorded_login_providers()
     named = bool((os.environ.get(LOGIN_PROVIDERS_ENV) or "").strip())
@@ -243,11 +243,11 @@ def _listed_providers(store: TokenStore) -> frozenset[str] | None:
 
 def _environment_providers() -> frozenset[str] | None:
     """The provider ids this environment's settings name; None when they cannot be read."""
-    from canvas_mcp.core.selfhost.login.config import (
+    from steward.login.config import (
         LOGIN_PROVIDERS_ENV,
         parse_login_providers,
     )
-    from canvas_mcp.core.selfhost.settings import (
+    from steward.settings import (
         SelfhostConfigError,
     )
 
@@ -299,7 +299,7 @@ def _quiet_login_config() -> Iterator[None]:
     """
     import logging
 
-    from canvas_mcp.core.selfhost.login import config as login_config
+    from steward.login import config as login_config
 
     class _Stray(logging.Filter):
         def filter(self, record: logging.LogRecord) -> bool:

@@ -5,15 +5,15 @@ from __future__ import annotations
 import pytest
 from dbbackend import raw_sql
 
-from canvas_mcp.core.selfhost.account_core import (
+from steward.account_core import (
     AccountConfig,
     _Session,
     build_account_app,
 )
-from canvas_mcp.core.selfhost.account_ops import Refusal
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
-from canvas_mcp.core.selfhost.login.registry import build_login_runtime
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward.account_ops import Refusal
+from steward.db.errors import StoreUnavailable
+from steward.login.registry import build_login_runtime
+from steward.token_store import OPERATOR
 
 from .stack import ALICE, BOB, OWNER, Stack, local_stack
 

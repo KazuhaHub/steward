@@ -8,12 +8,12 @@ import pathlib
 import pytest
 from dbbackend import PG_URL, make_store, raw_sql, reset_public_schema
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.db import schema
-from canvas_mcp.core.selfhost.db.migrations import runner as migrate
-from canvas_mcp.core.selfhost.db.migrations import transfer
-from canvas_mcp.core.selfhost.db.repos import SIGN_IN_SURFACES, Repositories
-from canvas_mcp.core.selfhost.token_store import (
+from steward import accounts as acc
+from steward.db import schema
+from steward.db.migrations import runner as migrate
+from steward.db.migrations import transfer
+from steward.db.repos import SIGN_IN_SURFACES, Repositories
+from steward.token_store import (
     AUDIT_ACTIONS,
     OPERATOR,
     Keyring,
@@ -245,8 +245,8 @@ class TestTransferToPostgres:
     def test_registered_clients_grants_and_refresh_tokens_move_and_codes_do_not(
         self, tmp_path: pathlib.Path, keyring: Keyring
     ) -> None:
-        from canvas_mcp.core.selfhost.db.engine import Database
-        from canvas_mcp.core.selfhost.db.url import parse_database_url
+        from steward.db.engine import Database
+        from steward.db.url import parse_database_url
 
         source = tmp_path / "src.sqlite3"
         # Always a SQLite file, whatever backend the run selected: it is the import source.
@@ -292,7 +292,7 @@ class TestTransferToPostgres:
                 created_at=1,
                 expires_at=2,
             )
-        from canvas_mcp.core.selfhost.authz.store import AuthzStore
+        from steward.authz.store import AuthzStore
 
         authz = AuthzStore(store.database)
         authz.bump_jwt_epoch()

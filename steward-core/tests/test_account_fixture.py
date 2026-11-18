@@ -2,8 +2,8 @@
 
 import pytest
 
-from canvas_mcp.core.selfhost.accounts import AccessPolicy, AccessRule
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward.accounts import AccessPolicy, AccessRule
+from steward.token_store import OPERATOR
 
 from .account_fixture import (
     CANVAS_TOKEN,

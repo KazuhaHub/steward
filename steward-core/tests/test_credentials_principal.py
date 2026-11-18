@@ -1,6 +1,6 @@
 """Tests for the request principal, the principal key and the missing-token message."""
 
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     clear_http_request_context,
     current_principal_key,
@@ -135,9 +135,9 @@ class TestMissingCredentialsMessage:
     def test_can_be_set_and_reset_with_its_token(self):
         token = set_missing_credentials_message("Enroll at https://x.test/account")
         assert missing_credentials_message() == "Enroll at https://x.test/account"
-        from canvas_mcp.core import credentials
+        from steward import request_state
 
-        credentials._missing_credentials_message.reset(token)
+        request_state._missing_credentials_message.reset(token)
         assert missing_credentials_message() == LEGACY_TEXT
 
     def test_none_restores_the_default(self):
@@ -160,31 +160,3 @@ class TestClear:
         assert get_request_principal() is None
         assert missing_credentials_message() == LEGACY_TEXT
         assert current_principal_key() == "local"
-
-
-class TestClientUsesTheMessage:
-    async def test_client_fails_closed_with_the_selfhost_text(self):
-        from canvas_mcp.core.client import make_canvas_request
-
-        set_http_request_active(True)
-        set_missing_credentials_message("Enroll at https://x.test/account")
-        assert await make_canvas_request("get", "/users/self") == {
-            "error": "Enroll at https://x.test/account"
-        }
-
-    async def test_client_keeps_the_legacy_text_by_default(self):
-        from canvas_mcp.core.client import make_canvas_request
-
-        set_http_request_active(True)
-        assert await make_canvas_request("get", "/users/self") == {"error": LEGACY_TEXT}
-
-    async def test_authenticated_client_raises_the_message(self):
-        import pytest
-
-        from canvas_mcp.core.client import canvas_authenticated_client
-
-        set_http_request_active(True)
-        set_missing_credentials_message("Enroll at https://x.test/account")
-        with pytest.raises(PermissionError, match="Enroll at https://x.test/account"):
-            async with canvas_authenticated_client():
-                pass

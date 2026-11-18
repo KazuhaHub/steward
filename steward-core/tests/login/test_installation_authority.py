@@ -7,9 +7,9 @@ from concurrent.futures import ThreadPoolExecutor
 import pytest
 from sqlalchemy import update
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.login.installation import InstallationAuthority
-from canvas_mcp.core.selfhost.login.provider_config import ProviderConfigurationError
+from steward.db import schema as s
+from steward.login.installation import InstallationAuthority
+from steward.login.provider_config import ProviderConfigurationError
 
 from .test_database_provider_config import (  # noqa: F401
     CONFIG,

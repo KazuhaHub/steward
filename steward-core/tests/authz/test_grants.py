@@ -4,10 +4,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.authz.grants import GrantService
-from canvas_mcp.core.selfhost.authz.models import GrantStatus
-from canvas_mcp.core.selfhost.settings import AuthzSettings
+from steward.authz import tokens as tk
+from steward.authz.grants import GrantService
+from steward.authz.models import GrantStatus
+from steward.settings import AuthzSettings
 
 from .helpers import CLIENT, Env, make_env
 from .test_tokens import AUDIENCE, ISSUER

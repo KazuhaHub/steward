@@ -17,14 +17,14 @@ from typing import Any
 import httpx
 import pytest
 
-from canvas_mcp.core.selfhost import account_core
-from canvas_mcp.core.selfhost.accounts import AccessPolicy, default_policy
-from canvas_mcp.core.selfhost.config_store import ConfigStore
-from canvas_mcp.core.selfhost.custody import (
+from steward import account_core
+from steward.accounts import AccessPolicy, default_policy
+from steward.config_store import ConfigStore
+from steward.custody import (
     CUSTODY_NOTICE_VERSION,
     CustodyAcknowledgement,
 )
-from canvas_mcp.core.selfhost.schools import School, SchoolPolicy
+from steward.schools import School, SchoolPolicy
 
 from .authz.stack import BASE, CANVAS_HOST, Browser, User, local_stack
 from .conftest import acct_key, make_account

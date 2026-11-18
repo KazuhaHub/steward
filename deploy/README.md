@@ -1,5 +1,11 @@
 # Canvas MCP v1 self-host deployment
 
+> **Not yet adapted to Steward.** These deployment files and notes were carried
+> over from the Canvas MCP self-hosted mode. The images, Compose files and
+> scripts here still describe that monolithic server and do not start Steward.
+> Do not deploy from them; they will be replaced as the proxy mode lands
+> (see [../docs/DESIGN.md](../docs/DESIGN.md), section 6).
+
 This is an independent fork of [vishalsachdev/canvas-mcp](https://github.com/vishalsachdev/canvas-mcp),
 not endorsed by upstream. The project keeps the name `canvas-mcp`; only small
 core improvements are offered upstream. The fork's hosting stack stays here.
@@ -8,7 +14,7 @@ This fork provides a multi-user Canvas MCP service with a built-in OAuth
 authorization server, explicit per-user Canvas credentials and a mandatory React
 account panel. All account, grant and protocol state lives in one SQL database.
 Run one process and one replica. This is the v1 development deployment guide;
-[V1-PROGRESS.md](V1-PROGRESS.md) records unfinished validation and release gates.
+V1-PROGRESS.md (in the Canvas MCP repository, `deploy/selfhost/V1-PROGRESS.md`) records unfinished validation and release gates.
 
 Use a fresh v1 database. Pre-v1 files are refused. Upgrade, backup and transfer
 instructions are kept separately in [the migration package](../../src/canvas_mcp/core/selfhost/db/migrations/README.md).
@@ -283,15 +289,15 @@ Fill in versions, date, tester and a secret-free evidence reference during stagi
 
 | Client/surface | Client version | Server version/image digest | Date | Tester | Result | Evidence | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| claude.ai web | Web; build not exposed | 1.14.0-beta.8, revision 85ffeca7 (operator output) | 2026-10-12 | Owner/live web check | Partial | [Live checkpoint](V1-PROGRESS.md#historical-beta8-staging-image) | Real CIMD/OAuth, 48 read-only tools, missing-token refusal and successful get_my_profile after enrollment. Consecutive-day refresh and broader acceptance pending. |
-| Claude Desktop (shared remote connector) | Desktop build not separately observed | Shared web acceptance; no separate server observation | 2026-10-13 | Owner acceptance decision | Partial | [Acceptance scope](V1-PROGRESS.md#shared-remote-connector-acceptance) | Owner accepts the existing claude.ai remote-service evidence for the shared connector and waives a duplicate Desktop call. Desktop UI and build compatibility were not separately tested. |
-| Claude Code | 2.1.285, Windows, HTTP | Beta.10, then version-endpoint-confirmed beta.11 | 2026-10-13 | Owner/local client check | Partial | [Live checkpoint](V1-PROGRESS.md#claude-code-read-only-acceptance) | Real OAuth and one successful get_my_profile call per check with Sonnet; the beta.11 call reused the existing grant without interactive reauthorization. No other tools or writes. Earlier beta.8 next-request grant revocation passed. Consecutive-day refresh and broader acceptance remain pending; the temporary project connection is retained for that check. |
+| claude.ai web | Web; build not exposed | 1.14.0-beta.8, revision 85ffeca7 (operator output) | 2026-10-12 | Owner/live web check | Partial | Live checkpoint (in the Canvas MCP repository, `deploy/selfhost/V1-PROGRESS.md`) | Real CIMD/OAuth, 48 read-only tools, missing-token refusal and successful get_my_profile after enrollment. Consecutive-day refresh and broader acceptance pending. |
+| Claude Desktop (shared remote connector) | Desktop build not separately observed | Shared web acceptance; no separate server observation | 2026-10-13 | Owner acceptance decision | Partial | Acceptance scope (in the Canvas MCP repository, `deploy/selfhost/V1-PROGRESS.md`) | Owner accepts the existing claude.ai remote-service evidence for the shared connector and waives a duplicate Desktop call. Desktop UI and build compatibility were not separately tested. |
+| Claude Code | 2.1.285, Windows, HTTP | Beta.10, then version-endpoint-confirmed beta.11 | 2026-10-13 | Owner/local client check | Partial | Live checkpoint (in the Canvas MCP repository, `deploy/selfhost/V1-PROGRESS.md`) | Real OAuth and one successful get_my_profile call per check with Sonnet; the beta.11 call reused the existing grant without interactive reauthorization. No other tools or writes. Earlier beta.8 next-request grant revocation passed. Consecutive-day refresh and broader acceptance remain pending; the temporary project connection is retained for that check. |
 | Claude mobile | - | - | - | - | Not tested | - | Support is not claimed |
 
 The owner accepts web and Desktop as one remote-service acceptance scope for
 the existing account-managed Canvas MCP connector; a duplicate Desktop call
 is no longer a HANDOFF gate. Current
-[client guidance](DEVELOPMENT.md#612-live-live-verification-checklist)
+client guidance (in the Canvas MCP repository, `deploy/selfhost/DEVELOPMENT.md`)
 explains the shared account and cloud request path. This scope decision does
 not add a separately observed Desktop UI or build result, a local stdio result,
 or mobile acceptance. Claude Code retains its separate real HTTP-client evidence.

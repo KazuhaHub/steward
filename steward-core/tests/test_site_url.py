@@ -3,17 +3,17 @@
 import pytest
 from sqlalchemy import insert, select, update
 
-from canvas_mcp.core.selfhost.app import prepare_selfhost
-from canvas_mcp.core.selfhost.config_store import ConfigStore
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
-from canvas_mcp.core.selfhost.db.settings_repo import save_setting
-from canvas_mcp.core.selfhost.login.local_accounts import LocalAccounts
-from canvas_mcp.core.selfhost.settings import (
+from steward.app import prepare_selfhost
+from steward.config_store import ConfigStore
+from steward.db import schema as s
+from steward.db.errors import StoreUnavailable
+from steward.db.settings_repo import save_setting
+from steward.login.local_accounts import LocalAccounts
+from steward.settings import (
     SelfhostConfigError,
     load_selfhost_settings,
 )
-from canvas_mcp.core.selfhost.site_url import SITE_URL_KEY, validate_site_url
+from steward.site_url import SITE_URL_KEY, validate_site_url
 
 from .authz.stack import BASE, SESSION_SECRET, TOKEN_KEYS
 from .authz.test_authz_schema import _grant_fields

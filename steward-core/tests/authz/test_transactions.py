@@ -8,8 +8,8 @@ import json
 import pytest
 from dbbackend import raw_sql
 
-from canvas_mcp.core.selfhost.authz import transactions as tx
-from canvas_mcp.core.selfhost.login_state import (
+from steward.authz import transactions as tx
+from steward.login_state import (
     InMemoryLoginStateStore,
     LoginStateStore,
 )

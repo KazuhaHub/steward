@@ -5,22 +5,22 @@ from dataclasses import FrozenInstanceError
 import pytest
 from sqlalchemy import event, insert, select, update
 
-from canvas_mcp.core.selfhost.config_snapshot import (
+from steward.config_snapshot import (
     CURRENT_CONFIG,
     ConfigSnapshots,
     school_display_name,
 )
-from canvas_mcp.core.selfhost.config_store import ConfigStore, SchoolRemovalConfirmation
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
-from canvas_mcp.core.selfhost.db.repos import SqlProviderRepo
-from canvas_mcp.core.selfhost.db.settings_repo import (
+from steward.config_store import ConfigStore, SchoolRemovalConfirmation
+from steward.db import schema as s
+from steward.db.errors import StoreUnavailable
+from steward.db.repos import SqlProviderRepo
+from steward.db.settings_repo import (
     SettingsAccessDenied,
     SettingsConflict,
 )
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.login.config import LoginProvidersConfig
-from canvas_mcp.core.selfhost.schools import School
+from steward.db.types import new_id
+from steward.login.config import LoginProvidersConfig
+from steward.schools import School
 
 from .authz.stack import ALICE, CANVAS_HOST, OWNER, Browser, local_stack
 from .test_server_settings import db  # noqa: F401
@@ -476,8 +476,8 @@ def test_cli_uses_governed_repositories_for_names_retention_and_private_schools(
 ):
     import base64
 
-    from canvas_mcp.core.selfhost import config_cli, token_admin
-    from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore
+    from steward import config_cli, token_admin
+    from steward.token_store import Keyring, TokenStore
 
     snapshots, _ = config
     store = TokenStore(
@@ -630,7 +630,7 @@ def test_school_api_keeps_private_exceptions_readonly_and_settings_body_bounded(
 def test_other_instance_school_policy_is_applied_before_decrypt_and_restores_access(
     stack, monkeypatch
 ):
-    from canvas_mcp.core.selfhost.maintenance import MaintenanceScheduler
+    from steward.maintenance import MaintenanceScheduler
 
     from .authz.test_mcp_hot_read import payload, statements
 
@@ -686,7 +686,7 @@ def test_other_instance_school_policy_is_applied_before_decrypt_and_restores_acc
 
 
 def test_pilot_config_writes_are_atomic_and_out_of_process_changes_fail_closed(config):
-    from canvas_mcp.core.selfhost.profile import PilotProfileViolation
+    from steward.profile import PilotProfileViolation
 
     snapshots, store = config
     revision = snapshots.current.revision
@@ -761,8 +761,8 @@ def test_pilot_cli_refuses_enabling_search_reset_and_second_school(
 ):
     import base64
 
-    from canvas_mcp.core.selfhost import config_cli, token_admin
-    from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore
+    from steward import config_cli, token_admin
+    from steward.token_store import Keyring, TokenStore
 
     snapshots, config_store = config
     revision, _ = config_store.schools(

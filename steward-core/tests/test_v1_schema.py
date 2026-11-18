@@ -5,10 +5,10 @@ from dbbackend import IS_POSTGRES, pg_database
 from sqlalchemy import func, select, text
 from sqlalchemy.exc import IntegrityError
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.engine import Database
-from canvas_mcp.core.selfhost.db.migrations import runner as migrate
-from canvas_mcp.core.selfhost.db.types import new_id
+from steward.db import schema as s
+from steward.db.engine import Database
+from steward.db.migrations import runner as migrate
+from steward.db.types import new_id
 
 
 @pytest.fixture

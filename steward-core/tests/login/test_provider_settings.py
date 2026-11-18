@@ -7,17 +7,17 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.login.config import (
+from steward.login.config import (
     LoginProvidersConfig,
     OidcConfig,
     blocked_host,
     env_prefix,
     parse_login_providers,
 )
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     SelfhostConfigError,
     SelfhostSettings,
 )

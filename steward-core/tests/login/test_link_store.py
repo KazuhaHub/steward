@@ -11,14 +11,14 @@ from typing import Any
 import pytest
 from dbbackend import make_store
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.accounts import (
+from steward import accounts as acc
+from steward.accounts import (
     AccessPolicy,
     ExternalClaims,
     Verdict,
     evaluate_admission,
 )
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_store import (
     OPERATOR,
     AccessActionRefused,
     Keyring,

@@ -75,7 +75,7 @@ def run(db: Database, args: argparse.Namespace) -> int:
             print(f"backup written to {backup}")
         return 0
     if command == "import-sqlite":
-        from canvas_mcp.core.selfhost.db.migrations.transfer import import_sqlite
+        from steward.db.migrations.transfer import import_sqlite
 
         from ...token_store import Keyring
 

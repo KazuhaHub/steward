@@ -6,7 +6,7 @@ import sys
 
 import pytest
 
-from canvas_mcp.core.selfhost import build_info as metadata
+from steward import build_info as metadata
 
 
 def test_source_build_is_honestly_dev(monkeypatch):

@@ -8,11 +8,11 @@ import pathlib
 import pytest
 from dbbackend import make_store, raw_sql, stack_env
 
-from canvas_mcp.core.selfhost import token_admin
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.token_store import Keyring, token_db_path
+from steward import token_admin
+from steward.authz import tokens as tk
+from steward.authz.store import AuthzStore
+from steward.db.types import new_id
+from steward.token_store import Keyring, token_db_path
 
 from ..conftest import OID_A, OID_B, make_account
 from .helpers import CHALLENGE, CLIENT, REDIRECT, RESOURCE, SCOPE

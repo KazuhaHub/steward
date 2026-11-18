@@ -9,10 +9,10 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from canvas_mcp.core.selfhost.login.config import GitHubConfig
-from canvas_mcp.core.selfhost.login.github import GitHubLoginProvider
-from canvas_mcp.core.selfhost.login.http import SafeHttp
-from canvas_mcp.core.selfhost.login.protocol import SignInRejected
+from steward.login.config import GitHubConfig
+from steward.login.github import GitHubLoginProvider
+from steward.login.http import SafeHttp
+from steward.login.protocol import SignInRejected
 
 from .fake_idp import FakeGitHub, FakeNetwork, GitHubUser, s256
 

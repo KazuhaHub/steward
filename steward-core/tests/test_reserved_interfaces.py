@@ -5,8 +5,8 @@ from pathlib import Path
 
 from sqlalchemy import func, select
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.login.registry import EnvProviderConfigSource
+from steward.db import schema as s
+from steward.login.registry import EnvProviderConfigSource
 
 from .account_fixture import (
     OID,
@@ -38,7 +38,7 @@ def test_native_login_enrollment_and_grants_leave_reserved_tables_empty(tmp_path
 
 
 def test_application_repositories_do_not_insert_or_update_reserved_tables():
-    root = Path(__file__).resolve().parents[2] / "src/canvas_mcp/core/selfhost"
+    root = Path(__file__).resolve().parents[1] / "src/steward"
     reserved = {"canvas_oauth_apps", "web_sessions", "account_quotas"}
     violations = []
     for path in root.rglob("*.py"):

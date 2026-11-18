@@ -34,7 +34,7 @@ from .jwks import JwksCache
 from .metadata import DiscoveryCache, ProviderMetadata, ProviderUnavailable
 from .protocol import ProviderDisplay, SignInRejected
 
-logger = logging.getLogger("canvas_mcp.selfhost.login")
+logger = logging.getLogger("steward.login")
 
 _MAX_CLAIM_NAMES = 32
 _MAX_CLAIM_VALUES = 64

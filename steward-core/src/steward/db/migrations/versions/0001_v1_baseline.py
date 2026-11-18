@@ -7,7 +7,7 @@ from uuid import uuid4
 
 from alembic import op
 
-from canvas_mcp.core.selfhost.db.migrations import baseline_v1
+from steward.db.migrations import baseline_v1
 
 revision = "0001_v1_baseline"
 down_revision = None

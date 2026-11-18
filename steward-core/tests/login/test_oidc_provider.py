@@ -10,13 +10,13 @@ from urllib.parse import parse_qs, unquote_plus, urlsplit
 
 import pytest
 
-from canvas_mcp.core.selfhost.accounts import GOOGLE_ISSUER
-from canvas_mcp.core.selfhost.login.config import GoogleConfig, OidcConfig
-from canvas_mcp.core.selfhost.login.google import build_google_provider
-from canvas_mcp.core.selfhost.login.http import SafeHttp
-from canvas_mcp.core.selfhost.login.metadata import ProviderUnavailable
-from canvas_mcp.core.selfhost.login.oidc import OidcLoginProvider, build_oidc_provider
-from canvas_mcp.core.selfhost.login.protocol import SignInRejected
+from steward.accounts import GOOGLE_ISSUER
+from steward.login.config import GoogleConfig, OidcConfig
+from steward.login.google import build_google_provider
+from steward.login.http import SafeHttp
+from steward.login.metadata import ProviderUnavailable
+from steward.login.oidc import OidcLoginProvider, build_oidc_provider
+from steward.login.protocol import SignInRejected
 
 from .fake_idp import DELETE, FakeNetwork, FakeOidcIdp, IdpUser, google_idp, s256
 

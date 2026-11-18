@@ -7,9 +7,9 @@ import pytest
 from dbbackend import make_store
 from sqlalchemy import select
 
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.token_store import (
+from steward.custody import CustodyAcknowledgement
+from steward.db import schema as s
+from steward.token_store import (
     Keyring,
     TokenDecryptionError,
     credential_aad,

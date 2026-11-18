@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     AuthzSettings,
     SelfhostConfigError,
     format_duration,
@@ -208,24 +208,24 @@ class TestRedirectAllowlist:
 
 class TestSummary:
     def test_the_default_summary_names_the_built_in_server(self):
-        from canvas_mcp.server import _selfhost_summary
+        from steward.cli import config_summary
 
         (line,) = [
             entry
-            for entry in _selfhost_summary(_load())
+            for entry in config_summary(_load(), "canvas")
             if "MCP authorization" in entry
         ]
         assert "built-in authorization server" in line and "ignored" not in line
 
     def test_the_local_mode_shows_the_tunables(self) -> None:
-        from canvas_mcp.server import _selfhost_summary
+        from steward.cli import config_summary
 
         settings = _load(
             ACCESS_TOKEN_TTL="30m", CIMD_ENABLED="false", REFRESH_REUSE_GRACE_S="0"
         )
         (line,) = [
             entry
-            for entry in _selfhost_summary(settings)
+            for entry in config_summary(settings, "canvas")
             if "MCP authorization" in entry
         ]
         assert line.startswith("  MCP authorization: built-in authorization server (")
@@ -233,7 +233,7 @@ class TestSummary:
         assert "grace 0s" in line and "upstream age 14d" in line
 
     def test_no_secret_is_in_the_summary(self) -> None:
-        from canvas_mcp.server import _selfhost_summary
+        from steward.cli import config_summary
 
-        text = "\n".join(_selfhost_summary(_load()))
+        text = "\n".join(config_summary(_load(), "canvas"))
         assert "entra-client-secret" not in text and "jwt-signing" not in text

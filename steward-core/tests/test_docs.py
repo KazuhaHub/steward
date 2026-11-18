@@ -10,15 +10,15 @@ from urllib.parse import urlsplit
 import pytest
 from dotenv import dotenv_values
 
-from canvas_mcp.core.config import STUDENT_WRITE_TOOL_NAMES
-from canvas_mcp.core.selfhost.settings import (
+from steward.connectors.canvas.tools import STUDENT_WRITE_TOOL_NAMES
+from steward.settings import (
     REMOVED_SETTINGS,
     SelfhostConfigError,
     load_selfhost_settings,
 )
 
-ROOT = Path(__file__).resolve().parents[1]
-SELFHOST = ROOT / "deploy/selfhost"
+ROOT = Path(__file__).resolve().parents[2]
+SELFHOST = ROOT / "deploy"
 
 
 def text(name):
@@ -76,7 +76,7 @@ def test_unedited_template_is_refused():
 
 
 def test_filled_template_is_accepted_by_current_settings(tmp_path):
-    from canvas_mcp.core.selfhost.runtime_secrets import initialize_secrets
+    from steward.runtime_secrets import initialize_secrets
 
     values = assignments()
     values.update(
@@ -100,10 +100,10 @@ def test_commented_student_write_tools_match_the_server_allowlist():
 
 
 def test_all_current_settings_reads_are_documented():
-    source = (ROOT / "src/canvas_mcp/core/selfhost/settings.py").read_text(
+    source = (ROOT / "steward-core/src/steward/settings.py").read_text(
         encoding="utf-8"
     )
-    account_source = (ROOT / "src/canvas_mcp/core/selfhost/accounts.py").read_text(
+    account_source = (ROOT / "steward-core/src/steward/accounts.py").read_text(
         encoding="utf-8"
     )
     names = set(re.findall(r'get\("([A-Z][A-Z0-9_]+)"\)', source))
@@ -131,7 +131,7 @@ def test_deployment_examples_are_neutral_and_english():
         for path in SELFHOST.iterdir()
         if path.is_file() and path.name not in {"DEVELOPMENT.md", "V1-DESIGN.md"}
     ]
-    paths.append(ROOT / "web/README.md")
+    paths.append(ROOT / "steward-web/README.md")
     for path in paths:
         content = path.read_text(encoding="utf-8")
         assert not re.search(r"[\u4e00-\u9fff]", content)
@@ -165,33 +165,6 @@ def test_deployment_examples_are_neutral_and_english():
                 )
 
 
-def test_independent_fork_notice_and_unclaimed_client_table():
-    content = text("README.md")
-    opening = content.split("## ")[0]
-    assert "independent fork" in opening and "not endorsed" in opening
-    assert "vishalsachdev/canvas-mcp" in opening and "small" in opening
-    assert (
-        "independent fork"
-        in (ROOT / "README.md").read_text(encoding="utf-8").split("## ")[0]
-    )
-    table = content.split("### Tested clients", 1)[1].split(
-        "### Staging acceptance", 1
-    )[0]
-    assert "Only `Passed` rows" in table
-    results = {"Not tested", "Passed", "Partial", "Failed"}
-    rows = [
-        line
-        for line in table.splitlines()
-        if line.startswith("| claude.ai web") or line.startswith("| Claude ")
-    ]
-    assert len(rows) == 4
-    for row in rows:
-        columns = [value.strip() for value in row.strip("|").split("|")]
-        assert len(columns) == 8 and columns[5] in results
-        if columns[5] != "Not tested":
-            assert all(columns[index] not in {"", "-"} for index in (1, 2, 3, 4, 6))
-    assert "OPERATOR.md" in content
-    assert "db/migrations/README.md" in text("OPERATOR.md")
 
 
 def test_readme_explains_image_selection_and_recreation():
@@ -245,7 +218,7 @@ def test_operator_guide_covers_security_and_staging_limits():
 
 def test_setup_and_smoke_scripts_disable_tracing_and_preserve_secrets():
     setup = (
-        ROOT / "src/canvas_mcp/core/selfhost/db/migrations/legacy_setup_env.sh"
+        ROOT / "steward-core/src/steward/db/migrations/legacy_setup_env.sh"
     ).read_text(encoding="utf-8")
     smoke = text("smoke-test.sh")
     assert "set +x" in setup and "set +x" in smoke
@@ -291,11 +264,3 @@ def test_caddy_redacts_oauth_and_credential_values():
         assert expected in content
 
 
-def test_custody_documentation_explains_the_operator_decryption_boundary():
-    content = text("README.md")
-    assert "## Custody and privacy boundary" in content
-    assert "decrypt every" in content and "compromised" in content
-    assert "plaintext SQL" in content and "audit history" in content
-    assert "ACCOUNT_SESSION_SECRET" in content and "AES-256-GCM" in content
-    root = (ROOT / "README.md").read_text(encoding="utf-8")
-    assert "README.md#custody-and-privacy-boundary" in root

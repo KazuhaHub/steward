@@ -8,9 +8,9 @@ import pathlib
 import pytest
 from dbbackend import make_store, stack_env
 
-from canvas_mcp.core.selfhost import token_admin
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore, token_db_path
+from steward import token_admin
+from steward.custody import CustodyAcknowledgement
+from steward.token_store import Keyring, TokenStore, token_db_path
 
 from .conftest import TENANT as CONFTEST_TENANT
 from .conftest import acct_key, make_account

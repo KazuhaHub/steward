@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from canvas_mcp.core import anonymization, cache, course_policy
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     current_principal_key,
     get_request_credentials,
@@ -20,7 +20,7 @@ from canvas_mcp.core.credentials import (
 from canvas_mcp.core.write_confirmation import ConfirmationGuard
 from canvas_mcp.tools import discussions
 
-from .conftest import OID_A, OID_B, make_principal
+from ..conftest import OID_A, OID_B, make_principal
 
 CANVAS_URL = "https://canvas.example.test/api/v1"
 

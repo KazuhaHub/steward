@@ -7,15 +7,15 @@ import dataclasses
 import pytest
 from dbbackend import raw_sql
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.authz.models import (
+from steward.authz import tokens as tk
+from steward.authz.models import (
     ExchangeOutcome as X,
 )
-from canvas_mcp.core.selfhost.authz.models import (
+from steward.authz.models import (
     RotateOutcome as R,
 )
-from canvas_mcp.core.selfhost.settings import AuthzSettings
-from canvas_mcp.core.selfhost.token_store import OPERATOR, AccessActionRefused
+from steward.settings import AuthzSettings
+from steward.token_store import OPERATOR, AccessActionRefused
 
 from ..conftest import OID_B, make_account
 from .helpers import CLIENT, Env, make_env
@@ -575,7 +575,7 @@ class TestEpochAndClientsAndCulling:
     async def test_culling_retains_refresh_rows_until_the_grant_retention_ends(
         self, env: Env, clock
     ):
-        from canvas_mcp.core.selfhost.maintenance import MaintenanceRunner
+        from steward.maintenance import MaintenanceRunner
 
         runner = MaintenanceRunner(
             env.tokens.database, cimd_stale_max=7 * 86400, now=clock
@@ -613,7 +613,7 @@ class TestEpochAndClientsAndCulling:
     async def test_revoked_grants_keep_their_family_until_thirty_day_retention(
         self, env: Env, clock
     ):
-        from canvas_mcp.core.selfhost.maintenance import MaintenanceRunner
+        from steward.maintenance import MaintenanceRunner
 
         runner = MaintenanceRunner(
             env.tokens.database, cimd_stale_max=7 * 86400, now=clock
@@ -633,7 +633,7 @@ class TestEpochAndClientsAndCulling:
 
 
 def test_results_are_immutable() -> None:
-    from canvas_mcp.core.selfhost.authz.models import ExchangeResult
+    from steward.authz.models import ExchangeResult
 
     with pytest.raises(dataclasses.FrozenInstanceError):
         ExchangeResult(X.DEAD).outcome = X.WON  # type: ignore[misc]

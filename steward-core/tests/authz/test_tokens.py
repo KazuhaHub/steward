@@ -11,8 +11,8 @@ import pytest
 from joserfc import jwt
 from joserfc.jwk import OctKey, RSAKey
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.token_store import Keyring
+from steward.authz import tokens as tk
+from steward.token_store import Keyring
 
 ISSUER = "https://canvas.example.test/"
 AUDIENCE = "https://canvas.example.test/mcp"

@@ -155,7 +155,7 @@ def _text(value: object) -> str:
 
 
 class SqlLoginStateStore:
-    """The :class:`~canvas_mcp.core.selfhost.login_state.LoginStateStore` over ``login_states``.
+    """The :class:`~steward.login_state.LoginStateStore` over ``login_states``.
 
     Rows hold the SHA-256 of the id (a database dump does not yield usable ids), the
     SHA-256 of the binding, a UTF-8 text payload and the expiry. ``pop`` is one conditional

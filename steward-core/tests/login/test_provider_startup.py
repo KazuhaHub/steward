@@ -6,16 +6,16 @@ import pathlib
 
 import pytest
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.accounts import ExternalClaims
-from canvas_mcp.core.selfhost.app import prepare_selfhost
-from canvas_mcp.core.selfhost.db.migrations.provider_environment import (
+from steward import accounts as acc
+from steward.accounts import ExternalClaims
+from steward.app import prepare_selfhost
+from steward.db.migrations.provider_environment import (
     load_provider_environment,
 )
-from canvas_mcp.core.selfhost.settings import (
+from steward.settings import (
     SelfhostConfigError,
 )
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward.token_store import OPERATOR
 
 from ..authz.stack import default_env
 from ..conftest import OID_A, acct_key, make_account, sign_in

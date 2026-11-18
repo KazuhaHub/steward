@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from alembic import context
 
-from canvas_mcp.core.selfhost.db import schema
+from steward.db import schema
 
 config = context.config
 target_metadata = schema.metadata

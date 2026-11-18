@@ -10,11 +10,11 @@ from urllib.parse import urlparse
 import httpx
 import pytest
 
-from canvas_mcp.core.selfhost import account_spa
-from canvas_mcp.core.selfhost.account_core import SESSION_COOKIE, sanitize_return_to
-from canvas_mcp.core.selfhost.account_spa import CSP, SpaBundle, SpaBundleError
-from canvas_mcp.core.selfhost.accounts import Denied
-from canvas_mcp.core.selfhost.login.ceremony import FLOW_COOKIE
+from steward import account_spa
+from steward.account_core import SESSION_COOKIE, sanitize_return_to
+from steward.account_spa import CSP, SpaBundle, SpaBundleError
+from steward.accounts import Denied
+from steward.login.ceremony import FLOW_COOKIE
 
 from .authz.stack import ALICE, BASE, Browser, Stack, local_stack
 from .login.test_entra_only_golden import account_app

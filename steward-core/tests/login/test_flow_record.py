@@ -7,7 +7,7 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.selfhost.login.ceremony import (
+from steward.login.ceremony import (
     FLOW_COOKIE,
     FLOW_KIND,
     FLOW_TTL_S,

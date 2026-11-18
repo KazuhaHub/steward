@@ -354,7 +354,7 @@ succeeded using its existing grant. Remaining controlled HANDOFF scenarios,
 including actual refresh protocol traces and eligible scheduled mail delivery,
 remain open; production account moderation, linking or revocation was not
 performed merely to complete a UI checklist. Full combined observations are in
-[V1-PROGRESS.md](V1-PROGRESS.md#beta17-combined-deployed-acceptance--october-15-utc).
+V1-PROGRESS.md (in the Canvas MCP repository, `deploy/selfhost/V1-PROGRESS.md`).
 
 The subsequent operator-authorized VM round exercised the released API and
 two synthetic Canvas HTTPS upstreams on SQLite and PostgreSQL. Custody/token

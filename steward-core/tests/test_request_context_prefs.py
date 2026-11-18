@@ -7,8 +7,8 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.credentials import RequestToolPrefs, get_request_tool_prefs
-from canvas_mcp.core.selfhost.request_context import SelfhostRequestContextMiddleware
+from steward.request_state import RequestToolPrefs, get_request_tool_prefs
+from steward.request_context import SelfhostRequestContextMiddleware
 
 from .conftest import OID_A, OID_B, acct_key
 from .test_request_context import (

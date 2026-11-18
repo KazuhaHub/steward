@@ -7,15 +7,15 @@ import time
 
 import pytest
 
-from canvas_mcp.core.selfhost.authz import clients
-from canvas_mcp.core.selfhost.authz import fastmcp_compat as compat
-from canvas_mcp.core.selfhost.authz.clients import (
+from steward.authz import clients
+from steward.authz import fastmcp_compat as compat
+from steward.authz.clients import (
     CIMD_BUDGET,
     CimdResolver,
     ClientDirectory,
     cimd_url_ok,
 )
-from canvas_mcp.core.selfhost.settings import AuthzSettings
+from steward.settings import AuthzSettings
 
 from .helpers import Env, make_env
 from .stack import FakeCimd, cimd_document

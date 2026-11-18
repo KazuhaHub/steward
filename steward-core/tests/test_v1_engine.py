@@ -7,9 +7,9 @@ import pytest
 from dbbackend import pg_available
 from sqlalchemy.pool import QueuePool
 
-from canvas_mcp.core.selfhost.db.engine import SQLITE_APPLICATION_ID, Database
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable, TokenStoreError
-from canvas_mcp.core.selfhost.db.migrations.connections import sqlite_migration
+from steward.db.engine import SQLITE_APPLICATION_ID, Database
+from steward.db.errors import StoreUnavailable, TokenStoreError
+from steward.db.migrations.connections import sqlite_migration
 
 
 def test_new_file_has_incremental_vacuum_before_wal_and_checked_pragmas(tmp_path):
@@ -118,7 +118,7 @@ def test_governance_waiters_queue_before_pool_checkout(tmp_path):
 
     from dbbackend import PG_URL
 
-    from canvas_mcp.core.selfhost.db.url import parse_database_url
+    from steward.db.url import parse_database_url
 
     db = Database(parse_database_url(PG_URL, Path("/data")))
     entered = Event()

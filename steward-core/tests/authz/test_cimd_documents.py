@@ -21,9 +21,9 @@ import pathlib
 
 import pytest
 
-from canvas_mcp.core.selfhost.authz import fastmcp_compat as compat
-from canvas_mcp.core.selfhost.authz.clients import CimdResolver, ClientDirectory
-from canvas_mcp.core.selfhost.settings import AuthzSettings
+from steward.authz import fastmcp_compat as compat
+from steward.authz.clients import CimdResolver, ClientDirectory
+from steward.settings import AuthzSettings
 
 from .helpers import Env, make_env
 from .stack import FakeCimd

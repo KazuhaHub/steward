@@ -9,12 +9,12 @@ import pytest
 from dbbackend import IS_POSTGRES, pg_database
 from sqlalchemy import insert, inspect, select, text
 
-from canvas_mcp.core.selfhost.db import schema
-from canvas_mcp.core.selfhost.db.engine import Database
-from canvas_mcp.core.selfhost.db.errors import TokenStoreError
-from canvas_mcp.core.selfhost.db.migrations import baseline_v1
-from canvas_mcp.core.selfhost.db.migrations import runner as migrate
-from canvas_mcp.core.selfhost.db.types import new_id
+from steward.db import schema
+from steward.db.engine import Database
+from steward.db.errors import TokenStoreError
+from steward.db.migrations import baseline_v1
+from steward.db.migrations import runner as migrate
+from steward.db.types import new_id
 
 
 @pytest.fixture

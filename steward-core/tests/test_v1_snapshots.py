@@ -6,11 +6,11 @@ import pytest
 from dbbackend import IS_POSTGRES, pg_database
 from sqlalchemy import event, text
 
-from canvas_mcp.core.selfhost.db.engine import Database
-from canvas_mcp.core.selfhost.db.migrations import baseline_v1
-from canvas_mcp.core.selfhost.db.migrations.connections import sqlite_migration
-from canvas_mcp.core.selfhost.db.snapshots import mcp_snapshot, session_snapshot
-from canvas_mcp.core.selfhost.db.types import new_id
+from steward.db.engine import Database
+from steward.db.migrations import baseline_v1
+from steward.db.migrations.connections import sqlite_migration
+from steward.db.snapshots import mcp_snapshot, session_snapshot
+from steward.db.types import new_id
 
 
 @pytest.fixture

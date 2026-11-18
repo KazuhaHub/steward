@@ -8,7 +8,7 @@ from urllib.parse import parse_qs, urlsplit
 
 import pytest
 
-from canvas_mcp.core.selfhost.authz.server import EXPECTED_ROUTES
+from steward.authz.server import EXPECTED_ROUTES
 
 from .stack import (
     ALICE,
@@ -153,7 +153,7 @@ class TestOneIssuerString:
 class TestRouteTables:
     def test_the_local_route_table(self, stack) -> None:
         table = route_table(stack)
-        from canvas_mcp.core.selfhost.account_api import ApiApp
+        from steward.account_api import ApiApp
 
         from ..login.test_entra_only_golden import LOGIN_PATHS, account_app
 

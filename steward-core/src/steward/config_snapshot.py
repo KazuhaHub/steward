@@ -35,7 +35,7 @@ from .schools import (
 )
 from .server_settings import SETTINGS, provider_display_name, validate_setting
 
-logger = logging.getLogger("canvas_mcp.selfhost.account")
+logger = logging.getLogger("steward.account")
 
 
 @dataclass(frozen=True)

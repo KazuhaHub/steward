@@ -27,8 +27,8 @@ from starlette.testclient import TestClient
 
 from canvas_mcp.core import cache
 from canvas_mcp.core.config import reset_config
-from canvas_mcp.core.selfhost.token_store import OPERATOR
-from canvas_mcp.core.tool_policy import TOOL_EFFECTS, Effect
+from steward.token_store import OPERATOR
+from steward.connectors.canvas.tool_policy import TOOL_EFFECTS, Effect
 from canvas_mcp.core.write_confirmation import (
     ConfirmationGuard,
     preview_with_token,
@@ -613,7 +613,7 @@ class TestStdioModeUnchanged:
 
         from canvas_mcp.core import client as canvas_client
         from canvas_mcp.core.cache import current_cache_state, reset_course_cache
-        from canvas_mcp.core.credentials import (
+        from steward.request_state import (
             current_principal_key,
             is_http_request_active,
         )

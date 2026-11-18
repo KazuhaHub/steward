@@ -3,10 +3,10 @@
 import pytest
 from sqlalchemy import insert, select, update
 
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.login.local_accounts import LocalAccounts
-from canvas_mcp.core.selfhost.login.provider_config import ProviderConfigurationError
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward.db import schema as s
+from steward.login.local_accounts import LocalAccounts
+from steward.login.provider_config import ProviderConfigurationError
+from steward.token_store import OPERATOR
 
 from ..authz.stack import BASE
 from ..authz.test_authz_schema import _grant_fields
@@ -292,7 +292,7 @@ def test_login_origin_rate_limit_and_transaction_binding(tmp_path):
 def test_password_verified_before_concurrent_reset_cannot_create_new_session(
     tmp_path, monkeypatch
 ):
-    from canvas_mcp.core.selfhost.login import local_accounts
+    from steward.login import local_accounts
 
     with installation(tmp_path) as (client, runtime, code):
         assert initialize(client, code).status_code == 200
@@ -334,8 +334,8 @@ def test_local_registration_without_password_has_no_secret_and_cannot_be_linked(
 def test_local_login_completes_pkce_consent_and_password_change_revokes_mcp(
     tmp_path, monkeypatch
 ):
-    from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-    from canvas_mcp.core.selfhost.settings import load_selfhost_settings
+    from steward.custody import CustodyAcknowledgement
+    from steward.settings import load_selfhost_settings
 
     from ..authz import stack as stack_module
     from ..authz.stack import (
@@ -421,7 +421,7 @@ def test_local_login_completes_pkce_consent_and_password_change_revokes_mcp(
 
 def _waiting_app(tmp_path, monkeypatch):
     """A local-only installation with an app waiting for the sign-in: yields (stack, txn)."""
-    from canvas_mcp.core.selfhost.settings import load_selfhost_settings
+    from steward.settings import load_selfhost_settings
 
     from ..authz import stack as stack_module
     from ..authz.stack import Browser, local_stack, pkce, query_of

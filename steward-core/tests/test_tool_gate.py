@@ -8,17 +8,17 @@ import pytest
 from fastmcp import Client, FastMCP
 from fastmcp.server.auth import AccessToken
 
-from canvas_mcp.core.credentials import (
+from steward.request_state import (
     RequestCredentials,
     set_missing_credentials_message,
     set_request_credentials,
     set_request_principal,
 )
-from canvas_mcp.core.selfhost import tool_gate
-from canvas_mcp.core.selfhost.db.snapshots import McpSnapshot
-from canvas_mcp.core.selfhost.mcp_state import MCP_READ, McpRead
-from canvas_mcp.core.selfhost.request_context import not_enrolled_message
-from canvas_mcp.core.selfhost.tool_gate import SelfhostCredentialGate
+from steward import tool_gate
+from steward.db.snapshots import McpSnapshot
+from steward.mcp_state import MCP_READ, McpRead
+from steward.request_context import not_enrolled_message
+from steward.tool_gate import SelfhostCredentialGate
 
 from .conftest import OID_A, OID_B, acct_key, make_principal
 
@@ -250,7 +250,7 @@ class TestSupersededCredentialInProcess:
     async def test_a_lagging_cache_does_not_let_the_old_generation_through(
         self, verified_oid
     ):
-        from canvas_mcp.core.credentials import (
+        from steward.request_state import (
             note_credential_generation,
             set_request_credential_generation,
         )

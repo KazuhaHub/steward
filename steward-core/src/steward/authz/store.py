@@ -1,6 +1,6 @@
 """The transactions of the authorization server, over the repositories.
 
-Like :class:`~canvas_mcp.core.selfhost.token_store.TokenStore`, this class owns every
+Like :class:`~steward.token_store.TokenStore`, this class owns every
 transaction boundary of its tables (the repositories never begin or commit), so the
 race-sensitive reasoning is in one reviewable place. All methods are synchronous and
 thread-safe (one connection per call); async callers use ``anyio.to_thread.run_sync``.

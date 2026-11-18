@@ -7,7 +7,7 @@ import time
 import anyio
 import pytest
 
-from canvas_mcp.core.selfhost.db.workers import STORE_LIMITER, run_store
+from steward.db.workers import STORE_LIMITER, run_store
 
 
 async def test_burst_queues_at_the_ten_connection_budget():

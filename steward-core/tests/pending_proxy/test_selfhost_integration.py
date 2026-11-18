@@ -13,9 +13,9 @@ from dbbackend import raw_connection
 
 from canvas_mcp.tools import register_course_tools
 
-from .account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
-from .authz.stack import User
-from .conftest import OID_A, OID_B, acct_key
+from ..account_fixture import _display_in_utc, build_harness, put_row  # noqa: F401
+from ..authz.stack import User
+from ..conftest import OID_A, OID_B, acct_key
 
 BASE = "https://canvas.example.test"
 CANVAS = "https://canvas.example.edu"
@@ -187,7 +187,7 @@ class TestDisablement:
 
     @staticmethod
     def _disable(stack, oid: str = OID_A) -> None:
-        from canvas_mcp.core.selfhost.token_store import (
+        from steward.token_store import (
             DISABLE_REASON_OPERATOR,
             OPERATOR,
         )
@@ -226,7 +226,7 @@ class TestDisablement:
     def test_a_change_without_cache_invalidation_is_noticed_on_the_next_request(
         self, stack
     ):
-        from canvas_mcp.core.selfhost.token_store import (
+        from steward.token_store import (
             DISABLE_REASON_OPERATOR,
             OPERATOR,
         )
@@ -240,7 +240,7 @@ class TestDisablement:
         assert stack.seen == []
 
     def test_enabling_requires_a_new_grant_and_keeps_the_enrollment(self, stack):
-        from canvas_mcp.core.selfhost.token_store import OPERATOR
+        from steward.token_store import OPERATOR
 
         self._disable(stack)
         stack.runtime.store.enable_principal(acct_key(OID_A), actor=OPERATOR)

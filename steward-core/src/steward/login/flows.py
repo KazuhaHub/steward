@@ -54,7 +54,7 @@ from .protocol import LoginProvider, SignInRejected
 if TYPE_CHECKING:
     from .registry import LoginRuntime
 
-logger = logging.getLogger("canvas_mcp.selfhost.account")
+logger = logging.getLogger("steward.account")
 
 _ERROR_CODE_RE = re.compile(r"^[a-z_]{1,64}$")
 _CLOCK_SKEW_S = 60

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
     from ..config_snapshot import CURRENT_CONFIG
 from ..account_core import AccountCore
 
-logger = logging.getLogger("canvas_mcp.selfhost.account")
+logger = logging.getLogger("steward.account")
 
 
 def build_login_routes(app: AccountCore) -> list[Route]:

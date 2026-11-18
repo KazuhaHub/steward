@@ -8,13 +8,13 @@ import pytest
 from fastmcp.server.auth import OAuthProvider
 from mcp.server.auth.provider import OAuthAuthorizationServerProvider
 
-from canvas_mcp.core.selfhost.authz import server as authz_server
-from canvas_mcp.core.selfhost.authz.server import (
+from steward.authz import server as authz_server
+from steward.authz.server import (
     EXPECTED_ROUTES,
     LocalAuthorizationServer,
     assert_route_table,
 )
-from canvas_mcp.core.selfhost.settings import SelfhostConfigError
+from steward.settings import SelfhostConfigError
 
 from .stack import Stack, local_stack
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from canvas_mcp.core.selfhost.authz import urls
+from steward.authz import urls
 
 BASE = "https://canvas.example.test"
 

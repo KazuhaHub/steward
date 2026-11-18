@@ -3,7 +3,7 @@
 import httpx
 import pytest
 
-from canvas_mcp.core.selfhost.canvas_expiry import fetch_expiry
+from steward.canvas_expiry import fetch_expiry
 
 TOKEN = "123~abcDE" + "x" * 59
 
@@ -228,7 +228,7 @@ def test_legacy_manual_date_is_preserved_but_never_displayed_or_used(tmp_path):
 
 @pytest.mark.parametrize("known", [False, True])
 def test_missing_metadata_and_explicit_no_expiry_are_distinct(tmp_path, known):
-    from canvas_mcp.core.selfhost.account_core import CanvasIdentity
+    from steward.account_core import CanvasIdentity
 
     from .account_fixture import CANVAS_TOKEN, build_harness, sign_in
     from .test_account_api import ACKNOWLEDGED, Api
@@ -249,7 +249,7 @@ def test_missing_metadata_and_explicit_no_expiry_are_distinct(tmp_path, known):
 def test_existing_active_token_can_read_expiry_without_replacement_or_revocation(
     tmp_path,
 ):
-    from canvas_mcp.core.selfhost.account_core import CanvasIdentity
+    from steward.account_core import CanvasIdentity
 
     from .account_fixture import CANVAS_TOKEN, KEY, OID, build_harness, put_row, sign_in
     from .test_account_api import Api
@@ -276,7 +276,7 @@ def test_existing_active_token_can_read_expiry_without_replacement_or_revocation
 
 
 def test_active_check_never_writes_metadata_for_a_replaced_token(tmp_path):
-    from canvas_mcp.core.selfhost.account_core import CanvasIdentity
+    from steward.account_core import CanvasIdentity
 
     from .account_fixture import CANVAS_TOKEN, KEY, OID, build_harness, put_row, sign_in
     from .test_account_api import NEW_TOKEN, Api

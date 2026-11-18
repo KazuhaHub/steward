@@ -28,7 +28,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.routing import Route
 
-from canvas_mcp.core.selfhost.account_core import any_method_route
+from steward.account_core import any_method_route
 
 ASSETS_PREFIX = "/account/assets/"
 BASE_PATH = "/account"

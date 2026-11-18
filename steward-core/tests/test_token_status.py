@@ -7,7 +7,7 @@ import pathlib
 import pytest
 from dbbackend import make_store
 
-from canvas_mcp.core.selfhost.token_store import (
+from steward.token_store import (
     INVALID_REASONS,
     KEEP_EXPIRY_HINT,
     REASON_CANVAS_TOKEN_REJECTED,

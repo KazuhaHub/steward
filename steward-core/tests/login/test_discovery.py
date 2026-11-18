@@ -7,8 +7,8 @@ from typing import Any
 
 import pytest
 
-from canvas_mcp.core.selfhost.login.http import SafeHttp
-from canvas_mcp.core.selfhost.login.metadata import (
+from steward.login.http import SafeHttp
+from steward.login.metadata import (
     DiscoveryCache,
     ProviderUnavailable,
     cache_ttl,

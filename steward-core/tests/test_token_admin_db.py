@@ -10,13 +10,13 @@ import pytest
 from dbbackend import PG_URL, reset_public_schema
 from sqlalchemy import func, inspect, select, text, update
 
-from canvas_mcp.core.selfhost import token_admin
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.engine import Database
-from canvas_mcp.core.selfhost.db.migrations import runner as migrate
-from canvas_mcp.core.selfhost.db.migrations import transfer
-from canvas_mcp.core.selfhost.db.url import parse_database_url
-from canvas_mcp.core.selfhost.token_store import Keyring, TokenStore, TokenStoreError
+from steward import token_admin
+from steward.db import schema as s
+from steward.db.engine import Database
+from steward.db.migrations import runner as migrate
+from steward.db.migrations import transfer
+from steward.db.url import parse_database_url
+from steward.token_store import Keyring, TokenStore, TokenStoreError
 
 from . import legacy_schemas as legacy
 from .test_transfer_v1 import source as source  # shared native, fully populated fixture

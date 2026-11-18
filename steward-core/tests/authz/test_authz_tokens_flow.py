@@ -9,9 +9,9 @@ import pytest
 from dbbackend import raw_sql
 from fastmcp.server.auth.jwt_issuer import JWTIssuer, derive_jwt_key
 
-from canvas_mcp.core.selfhost.authz import tokens as tk
-from canvas_mcp.core.selfhost.db.errors import StoreUnavailable
-from canvas_mcp.core.selfhost.token_store import OPERATOR
+from steward.authz import tokens as tk
+from steward.db.errors import StoreUnavailable
+from steward.token_store import OPERATOR
 
 from .stack import (
     ALICE,
@@ -474,7 +474,7 @@ class TestMcpEndpoint:
             assert stack.mcp_status(tokens["access_token"]) == 200
             grant_id = grant_rows(stack)[0][0]
             # another process: a second store on the same database, which cannot reach our cache
-            from canvas_mcp.core.selfhost.authz.store import AuthzStore
+            from steward.authz.store import AuthzStore
 
             other = AuthzStore(stack.store.database)
             assert other.revoke_own_grant(grant_id, alice)

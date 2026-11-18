@@ -7,10 +7,10 @@ from dataclasses import FrozenInstanceError
 import pytest
 from sqlalchemy import delete, event, insert
 
-from canvas_mcp.core.selfhost.authz.store import AuthzStore
-from canvas_mcp.core.selfhost.db import schema as s
-from canvas_mcp.core.selfhost.db.types import new_id
-from canvas_mcp.core.selfhost.pagination import decode_cursor, make_page, page_limit
+from steward.authz.store import AuthzStore
+from steward.db import schema as s
+from steward.db.types import new_id
+from steward.pagination import decode_cursor, make_page, page_limit
 
 from .authz.stack import ALICE, OWNER, Browser, local_stack
 from .test_v1_store import account, put, stores  # noqa: F401
@@ -248,7 +248,7 @@ def test_owner_api_pages_counts_names_and_credentials_without_pending_pseudo_enr
 
 
 def test_operator_lists_past_200_and_counts_without_loading_all_records(stores, capsys):  # noqa: F811
-    from canvas_mcp.core.selfhost.token_admin import _build_parser, _run
+    from steward.token_admin import _build_parser, _run
 
     one, _, _ = stores
     first = account(one, "operator-list")
@@ -309,7 +309,7 @@ def test_operator_requires_canonical_account_ids_and_does_not_preblock_identitie
     capsys,
     form,
 ):  # noqa: F811
-    from canvas_mcp.core.selfhost.token_admin import _build_parser, _run
+    from steward.token_admin import _build_parser, _run
 
     one, _, _ = stores
     key = account(one, "operator-target")
@@ -336,7 +336,7 @@ def test_operator_requires_canonical_account_ids_and_does_not_preblock_identitie
 
 
 def test_operator_can_read_retained_audit_after_account_deletion(stores, capsys):  # noqa: F811
-    from canvas_mcp.core.selfhost.token_admin import _build_parser, _run
+    from steward.token_admin import _build_parser, _run
 
     one, _, _ = stores
     key = account(one, "deleted-history")

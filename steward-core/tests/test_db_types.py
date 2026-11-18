@@ -8,7 +8,7 @@ from sqlalchemy import CheckConstraint, Column, MetaData, Table, create_engine, 
 from sqlalchemy.dialects import postgresql, sqlite
 from sqlalchemy.schema import CreateTable
 
-from canvas_mcp.core.selfhost.db import types
+from steward.db import types
 
 
 def portable_table():

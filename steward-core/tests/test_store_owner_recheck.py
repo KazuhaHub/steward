@@ -13,9 +13,9 @@ import pathlib
 import pytest
 from dbbackend import make_store
 
-from canvas_mcp.core.selfhost import accounts as acc
-from canvas_mcp.core.selfhost.custody import CustodyAcknowledgement
-from canvas_mcp.core.selfhost.token_store import (
+from steward import accounts as acc
+from steward.custody import CustodyAcknowledgement
+from steward.token_store import (
     OPERATOR,
     AccessActionRefused,
     Keyring,

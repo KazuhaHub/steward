@@ -6,9 +6,9 @@ import threading
 
 import pytest
 
-from canvas_mcp.core.config import STUDENT_WRITE_TOOL_NAMES
-from canvas_mcp.core.selfhost.token_store import ToolPrefs
-from canvas_mcp.core.selfhost.tool_prefs import (
+from steward.connectors.canvas.tools import STUDENT_WRITE_TOOL_NAMES
+from steward.token_store import ToolPrefs
+from steward.tool_prefs import (
     OTHER_GROUP,
     WRITE_TOOL_GROUPS,
     ToolPrefsCache,
@@ -23,7 +23,7 @@ from canvas_mcp.core.selfhost.tool_prefs import (
     write_tool_not_offered_message,
     write_tool_off_message,
 )
-from canvas_mcp.core.tool_policy import TOOL_EFFECTS, Effect
+from steward.connectors.canvas.tool_policy import TOOL_EFFECTS, Effect
 
 READS = sorted(name for name, effect in TOOL_EFFECTS.items() if effect is Effect.READ)
 WRITES = sorted(

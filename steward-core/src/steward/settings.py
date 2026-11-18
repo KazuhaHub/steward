@@ -19,7 +19,8 @@ from pathlib import Path, PurePosixPath
 from typing import ClassVar, Literal
 from urllib.parse import urlsplit
 
-from ..tool_policy import TOOL_EFFECTS
+from steward.connectors.canvas.tool_policy import TOOL_EFFECTS
+
 from .accounts import AccessPolicy, default_policy, parse_access_settings
 from .db.url import (
     ALLOW_OUTSIDE_ENV,

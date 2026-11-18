@@ -182,7 +182,7 @@ class SelfhostEdgeGuard:
                 try:
                     enabled = await self.reminders.enabled()
                 except Exception:  # noqa: BLE001 - unavailable mail must not prevent startup
-                    from ..logging import log_warning
+                    from steward.common.logging import log_warning
 
                     log_warning("Canvas expiry reminder startup check failed")
                     enabled = False

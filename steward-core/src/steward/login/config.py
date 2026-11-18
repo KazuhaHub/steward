@@ -66,7 +66,7 @@ _OIDC_SUFFIXES = (
 _SCOPE_TOKEN_RE = re.compile(r"^[\x21\x23-\x5b\x5d-\x7e]{1,128}$")
 _VISIBLE_ASCII_RE = re.compile(r"^[\x21-\x7e]+$")
 
-logger = logging.getLogger("canvas_mcp.selfhost.account")
+logger = logging.getLogger("steward.account")
 
 _TRUE_WORDS = frozenset({"true", "1", "yes"})
 _FALSE_WORDS = frozenset({"", "false", "0", "no"})
