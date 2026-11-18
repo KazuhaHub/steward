@@ -1,14 +1,20 @@
 name: CI
 
+# Pushes run only on main; every other branch is covered by its pull request,
+# so a PR branch does not run twice. Stacked PRs (not targeting main) run too.
 on:
   push:
-    branches: [ main, 'feat/**', 'fix/**', 'docs/**', 'refactor/**' ]
-  pull_request:
     branches: [ main ]
+  pull_request:
   workflow_dispatch:
 
-permissions:
-  contents: read
+# Jobs get no token permissions by default; each job opts in to what it needs.
+permissions: {}
+
+# A new push to a pull request cancels its stale run; each main push gets its own group and is never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   # steward-core may name Canvas only in the files listed in
@@ -16,33 +22,50 @@ jobs:
   # connector (steward/connectors/canvas/) is exempt.
   boundary:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Set up Python
       uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: '3.14'
     - name: Check the connector boundary
       run: python scripts/check_canvas_boundary.py
+    # Lints the workflow files themselves (and runs shellcheck on run: blocks); Go is preinstalled on ubuntu-latest.
+    - name: Lint workflows
+      run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
 
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: steward-core
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Set up Python
       uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: '3.14'
+    # Ruff is pinned so a new release cannot turn CI red without a code change.
     - name: Install Ruff
-      run: python -m pip install ruff
+      run: python -m pip install ruff==0.17.5
     - name: Run Ruff
       run: ruff check src/
 
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     env:
       # FastMCP 4 temporarily bridges MCP SDK v1 camelCase attribute reads.
       # Keep the bridge off in CI so new code must use the v2 snake_case API.
@@ -56,6 +79,8 @@ jobs:
         python-version: ['3.11', '3.12', '3.13', '3.14']
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
@@ -68,17 +93,49 @@ jobs:
     - name: Run the test suite
       run: python -m pytest -q
 
+  # Checks the installed Python dependencies against known vulnerabilities.
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: steward-core
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - name: Set up Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: '3.14'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[postgres]"
+    # pip-audit is pinned; it audits everything installed in this environment.
+    - name: Audit installed packages
+      run: |
+        pip install pip-audit==2.10.1
+        pip-audit
+
   # npm ci installs the lock file as written and --ignore-scripts keeps
   # third-party install scripts from running. check:dist asserts the production
   # build has no inline script, no remote URL, no eval and none of the dev-only
   # mock server.
   web:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: steward-web
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Set up Node
       uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
@@ -87,6 +144,9 @@ jobs:
         cache-dependency-path: steward-web/package-lock.json
     - name: Install dependencies
       run: npm ci --ignore-scripts
+    # Fails on known high-severity advisories in production dependencies only.
+    - name: Audit production dependencies
+      run: npm audit --omit=dev --audit-level=high
     - name: Lint
       run: npm run lint
     - name: Typecheck
